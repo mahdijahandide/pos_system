@@ -53,7 +53,7 @@ class SaleHistory extends GetView<OrderController> {
       body: Obx(() {
         return ListView.builder(
           shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
+          physics: const BouncingScrollPhysics(),
           itemCount: controller.orderFilteredList.value.length,
           itemBuilder: (context, index) {
             var currentItem = controller.orderFilteredList.value[index];
