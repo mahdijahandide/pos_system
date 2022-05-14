@@ -9,6 +9,7 @@ import 'package:pos_system/services/controller/customer_controller.dart';
 import 'package:pos_system/services/controller/product_controller.dart';
 import 'package:pos_system/services/controller/user_controller.dart';
 import 'package:pos_system/services/remotes/api_routes.dart';
+import 'package:pos_system/services/remotes/local_storage.dart';
 import 'package:pos_system/views/dialogs/loading_dialogs.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:xid/xid.dart';
@@ -21,7 +22,7 @@ import 'dart:html' as html;
 class AuthController extends GetxController {
   // Holds the text that user typed.
   String text = '';
-  String token = '';
+  String token = LocalStorageHelper.getValue('token');
 
   // True if shift enabled.
   bool shiftEnabled = false;
@@ -51,6 +52,7 @@ class AuthController extends GetxController {
       Get.back();
       var jsonObject = convert.jsonDecode(response.body);
       token=jsonObject['token'];
+      LocalStorageHelper.saveValue('token', token);
       Get.find<UserController>().name=jsonObject['user']['name'];
       Get.find<UserController>().email=jsonObject['user']['email'];
       Get.find<UserController>().mobile=jsonObject['user']['mobile'];
