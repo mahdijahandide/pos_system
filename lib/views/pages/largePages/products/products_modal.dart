@@ -58,7 +58,7 @@ class ProductsModal extends StatelessWidget {
                       if(ontap==true){
                         Get.find<ProductController>().getProductDetails(productId: currentItem.id,showDetails: true);
                       }else if (currentItem.isAttribute == 0) {
-                        var contain = Get.find<CartController>().addToCartList.where((element) => element.id == currentItem.id);
+                        var contain = Get.find<CartController>().addToCartList.value.where((element) => element.id == currentItem.id);
                         if(contain.isEmpty){
                           Get.find<CartController>().addToCart(optionSc: '0',
                               productId: currentItem.id.toString(),

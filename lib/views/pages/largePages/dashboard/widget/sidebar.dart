@@ -43,7 +43,7 @@ class DashboardSidebar {
                     child: InkWell(
                   onTap: () {
                     if (Get.find<CartController>()
-                        .addToCartList
+                        .addToCartList.value
                         .where((element) => element.isSelected == true)
                         .toList()
                         .isEmpty) {
@@ -51,12 +51,12 @@ class DashboardSidebar {
                           tempUniqueId: Get.find<CartController>().uniqueId);
                     } else {
                       var item = Get.find<CartController>()
-                          .addToCartList
+                          .addToCartList.value
                           .where((element) => element.isSelected == true)
                           .first;
                       Get.find<CartController>().removeCartProductItem(
                           index: Get.find<CartController>()
-                              .addToCartList
+                              .addToCartList.value
                               .indexWhere(
                                   (element) => element.isSelected == true),
                           id: item.productId.toString(),
@@ -96,7 +96,7 @@ class DashboardSidebar {
                     child: InkWell(
                   onTap: () {
                     if (Get.find<CartController>()
-                        .addToCartList
+                        .addToCartList.value
                         .where((element) => element.isSelected == true)
                         .toList()
                         .isEmpty) {
@@ -107,7 +107,7 @@ class DashboardSidebar {
                       EditQtyDialog.showCustomDialog(
                           title: 'enter new quantity',
                           productId: Get.find<CartController>()
-                              .addToCartList
+                              .addToCartList.value
                               .where((element) => element.isSelected == true)
                               .toList()
                               .first
@@ -165,12 +165,12 @@ class DashboardSidebar {
                     children: [
                       ListView.separated(
                         itemCount:
-                            Get.find<CartController>().addToCartList.length,
+                            Get.find<CartController>().addToCartList.value.length,
                         shrinkWrap: true,
                         physics: const AlwaysScrollableScrollPhysics(),
                         itemBuilder: (BuildContext context, int index) {
                           var currentItem =
-                              Get.find<CartController>().addToCartList[index];
+                              Get.find<CartController>().addToCartList.value[index];
                           double itemQty =
                               double.parse(currentItem.quantity.toString());
                           double itemPrc =
@@ -182,12 +182,12 @@ class DashboardSidebar {
                                 currentItem.isSelected = false;
                                 controller.update();
                               } else {
-                                if (controller.addToCartList
+                                if (controller.addToCartList.value
                                     .where(
                                         (element) => element.isSelected == true)
                                     .toList()
                                     .isNotEmpty) {
-                                  controller.addToCartList
+                                  controller.addToCartList.value
                                       .where((element) =>
                                           element.isSelected == true)
                                       .first
@@ -377,7 +377,7 @@ class DashboardSidebar {
                     flex: 2,
                     child: InkWell(
                       onTap: () {
-                        if(Get.find<CartController>().addToCartList.isNotEmpty){
+                        if(Get.find<CartController>().addToCartList.value.isNotEmpty){
                           Get.bottomSheet(
                             CheckoutModal(title: 'Checkout'),
                             isScrollControlled: true,
