@@ -291,7 +291,7 @@ class DashboardMain {
                   } :() {
                     if (currentItem.isAttribute == 0) {
                       var contain = Get.find<CartController>()
-                          .addToCartList
+                          .addToCartList.value
                           .where((element) => element.id == currentItem.id);
                       if (contain.isEmpty) {
                         if(Get.isSnackbarOpen){
@@ -314,7 +314,7 @@ class DashboardMain {
                       }
                     } else {
                       var contain = Get.find<CartController>()
-                          .addToCartList
+                          .addToCartList.value
                           .where((element) => element.id == currentItem.id);
                       if (contain.isEmpty) {
                         Get.find<ProductController>().getProductDetails(

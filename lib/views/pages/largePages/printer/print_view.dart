@@ -41,9 +41,9 @@ class PrintView extends StatelessWidget {
               pw.SizedBox(
                 width: double.infinity,
                   child: pw.ListView.separated(
-                    itemCount: Get.find<CartController>().addToCartList.length, itemBuilder: (pw.Context context, int index) {
+                    itemCount: Get.find<CartController>().addToCartList.value.length, itemBuilder: (pw.Context context, int index) {
                     var currentItem =
-                    Get.find<CartController>().addToCartList[index];
+                    Get.find<CartController>().addToCartList.value[index];
                     double itemQty =
                     double.parse(currentItem.quantity.toString());
                     double itemPrc =

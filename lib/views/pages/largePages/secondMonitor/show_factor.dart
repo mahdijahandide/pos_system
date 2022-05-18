@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:pos_system/views/components/snackbar/snackbar.dart';
+import 'package:pos_system/services/remotes/local_storage.dart';
 
 import '../../../../services/controller/cart_controller.dart';
 import '../../../../services/model/cart_product_model.dart';
@@ -22,7 +22,7 @@ class _ShowFactorState extends State<ShowFactor> {
   @override
   void initState() {
     super.initState();
-    timer = Timer.periodic(const Duration(seconds: 3), (Timer t) => Snack().createSnack(title: Uri.base.queryParameters["?params"],msg: ''));
+    timer = Timer.periodic(const Duration(seconds: 1), (Timer t) => Get.find<CartController>().addToCartList.value=LocalStorageHelper.getValue('cartData') as List<CartProductModel>);
   }
   @override
   Widget build(BuildContext context) {
@@ -34,12 +34,12 @@ class _ShowFactorState extends State<ShowFactor> {
           child: ListView(
             children: [
           ListView.separated(
-          itemCount: Get.find<CartController>().addToCartList.length,
+          itemCount: Get.find<CartController>().addToCartList.value.length,
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
             itemBuilder: (BuildContext context, int index) {
               var currentItem =
-              Get.find<CartController>().addToCartList[index];
+              Get.find<CartController>().addToCartList.value[index];
               double itemQty =
               double.parse(currentItem.quantity.toString());
               double itemPrc =

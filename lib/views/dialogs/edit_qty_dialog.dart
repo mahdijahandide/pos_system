@@ -37,7 +37,7 @@ class EditQtyDialog {
                   controller: qtyController,
                   onSubmitted: (_)async{
                     var current = Get.find<CartController>()
-                        .addToCartList
+                        .addToCartList.value
                         .where((element) =>
                     element.productId == productId.toString())
                         .toList()[0];
@@ -48,7 +48,7 @@ class EditQtyDialog {
                           tempId: current.productId,
                           quantity: qtyController.text,
                           tempUniqueId: Get.find<CartController>().uniqueId,
-                          index: Get.find<CartController>().addToCartList.indexWhere(
+                          index: Get.find<CartController>().addToCartList.value.indexWhere(
                                   (element) => element.productId == current.productId));
                     }
                   }
@@ -68,7 +68,7 @@ class EditQtyDialog {
       confirm: InkWell(
         onTap: (){
           var current = Get.find<CartController>()
-              .addToCartList
+              .addToCartList.value
               .where((element) =>
           element.productId == productId.toString())
               .toList()[0];
@@ -79,7 +79,7 @@ class EditQtyDialog {
                 tempId: current.productId,
                 quantity: qtyController.text,
                 tempUniqueId: Get.find<CartController>().uniqueId,
-                index: Get.find<CartController>().addToCartList.indexWhere(
+                index: Get.find<CartController>().addToCartList.value.indexWhere(
                         (element) => element.productId == current.productId));
           }
         },

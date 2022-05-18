@@ -9,6 +9,7 @@ import 'package:http/http.dart' as http;
 import 'package:pos_system/services/model/cart_product_model.dart';
 import 'package:pos_system/services/model/province_model.dart';
 import 'package:pos_system/services/remotes/api_routes.dart';
+import 'package:pos_system/services/remotes/local_storage.dart';
 import 'package:pos_system/services/remotes/remote_status_handler.dart';
 import 'package:pos_system/views/components/snackbar/snackbar.dart';
 import 'package:pos_system/views/dialogs/area_province_dialog.dart';
@@ -36,7 +37,7 @@ class CartController extends GetxController {
   String selectedProvinceId = '';
   String selectedAreaId = '';
 
-  List<CartProductModel> addToCartList = [];
+  Rx<List<CartProductModel>> addToCartList = Rx<List<CartProductModel>>([]);
   List<CartProductModel> addToCartListForPrint = [];
   List<TempOrderModel> openCartsUDID = [];
   List<ProvinceModel> countryList = [];
@@ -81,7 +82,7 @@ class CartController extends GetxController {
       audioPlayer.play(alarmAudioPath);
 
       var jsonObject = convert.jsonDecode(response.body);
-      addToCartList.add(CartProductModel(
+      addToCartList.value.add(CartProductModel(
           mId: int.parse(productId),
           mPrice: price,
           mQuantity: quantity,
@@ -90,6 +91,7 @@ class CartController extends GetxController {
           pId: jsonObject['data']['cart_item_id']));
       totalAmount = double.parse(jsonObject['data']['total_amount'].toString());
       update();
+      LocalStorageHelper.saveValue('cartData', addToCartList.value.toString());
       Fluttertoast.showToast(
           msg: "item added to cart successfully",  // message
           toastLength: Toast.LENGTH_SHORT, // length
@@ -126,10 +128,10 @@ class CartController extends GetxController {
       var jsonObject = convert.jsonDecode(response.body);
       Get.log(jsonObject.toString());
 
-      if (addToCartList[index].quantity == '0') {
-        addToCartList.removeAt(index);
+      if (addToCartList.value[index].quantity == '0') {
+        addToCartList.value.removeAt(index);
       } else {
-        addToCartList[index].quantity = quantity.toString();
+        addToCartList.value[index].quantity = quantity.toString();
       }
       totalAmount = double.parse(jsonObject['data']['total_amount'].toString());
 
@@ -162,11 +164,11 @@ class CartController extends GetxController {
     if (response.statusCode == 200) {
       var jsonObject = convert.jsonDecode(response.body);
       Get.log(jsonObject.toString());
-      double itemQty = double.parse(addToCartList[index].quantity.toString());
-      double itemPrc = double.parse(addToCartList[index].price.toString());
+      double itemQty = double.parse(addToCartList.value[index].quantity.toString());
+      double itemPrc = double.parse(addToCartList.value[index].price.toString());
       double itemPrice = itemQty * itemPrc;
       totalAmount = totalAmount - itemPrice;
-      addToCartList.removeAt(int.parse(index.toString()));
+      addToCartList.value.removeAt(int.parse(index.toString()));
 
       update();
       Get.find<CartController>().update();
@@ -197,7 +199,7 @@ class CartController extends GetxController {
       var jsonObject = convert.jsonDecode(response.body);
       Get.log(jsonObject.toString());
 
-      addToCartList.clear();
+      addToCartList.value.clear();
       totalAmount = 0.0;
 
       update();
@@ -266,16 +268,16 @@ class CartController extends GetxController {
       var jsonObject = convert.jsonDecode(response.body);
       Get.log(jsonObject.toString());
 
-      for(int i =0;i<addToCartList.length;i++){
-        addToCartListForPrint.add(CartProductModel(mId: addToCartList[i].id, pId: addToCartList[i].productId, mPrice: addToCartList[i].price,
-            mQuantity: addToCartList[i].quantity, mTitle: addToCartList[i].title, mTempUniqueId: addToCartList[i].tempUniqueId));
+      for(int i =0;i<addToCartList.value.length;i++){
+        addToCartListForPrint.add(CartProductModel(mId: addToCartList.value[i].id, pId: addToCartList.value[i].productId, mPrice: addToCartList.value[i].price,
+            mQuantity: addToCartList.value[i].quantity, mTitle: addToCartList.value[i].title, mTempUniqueId: addToCartList.value[i].tempUniqueId));
       }
 
       totalAmountForPrint=totalAmount;
       deliveryAmountForPrint=deliveryAmount;
       discountAmountForPrint=discountAmount;
 
-      addToCartList.clear();
+      addToCartList.value.clear();
       totalAmount = 0.0;
       deliveryAmount = 0.0;
       discountAmount = 0.0;
@@ -331,9 +333,9 @@ class CartController extends GetxController {
         deliveryAmount = openCartsUDID[index].delivery!.toDouble();
       }
 
-      addToCartList.clear();
+      addToCartList.value.clear();
       temps.forEach((element) {
-        addToCartList.add(CartProductModel(
+        addToCartList.value.add(CartProductModel(
             mId: element['id'],
             mPrice: element['unitprice'].toString(),
             mQuantity: element['quantity'].toString(),
@@ -356,20 +358,20 @@ class CartController extends GetxController {
   }
 
   void newSale() {
-    if (addToCartList.isNotEmpty) {
+    if (addToCartList.value.isNotEmpty) {
       openCartsUDID.add(TempOrderModel(mId: uniqueId));
       totalAmount = 0.0;
       deliveryAmount = 0.0;
       discountAmount = 0.0;
       uniqueId = 'pos${Xid()}';
-      addToCartList.clear();
+      addToCartList.value.clear();
       update();
     } else {
       totalAmount = 0.0;
       deliveryAmount = 0.0;
       discountAmount = 0.0;
       uniqueId = 'pos${Xid()}';
-      addToCartList.clear();
+      addToCartList.value.clear();
       update();
     }
   }

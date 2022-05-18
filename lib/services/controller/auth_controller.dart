@@ -9,6 +9,7 @@ import 'package:pos_system/services/controller/customer_controller.dart';
 import 'package:pos_system/services/controller/product_controller.dart';
 import 'package:pos_system/services/controller/user_controller.dart';
 import 'package:pos_system/services/remotes/api_routes.dart';
+import 'package:pos_system/services/remotes/local_storage.dart';
 import 'package:pos_system/views/dialogs/loading_dialogs.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:xid/xid.dart';
@@ -21,7 +22,7 @@ import 'dart:html' as html;
 class AuthController extends GetxController {
   // Holds the text that user typed.
   String text = '';
-  String token = '';
+  String token = LocalStorageHelper.getValue('token');
 
   // True if shift enabled.
   bool shiftEnabled = false;
@@ -51,6 +52,7 @@ class AuthController extends GetxController {
       Get.back();
       var jsonObject = convert.jsonDecode(response.body);
       token=jsonObject['token'];
+      LocalStorageHelper.saveValue('token', token);
       Get.find<UserController>().name=jsonObject['user']['name'];
       Get.find<UserController>().email=jsonObject['user']['email'];
       Get.find<UserController>().mobile=jsonObject['user']['mobile'];
@@ -60,11 +62,11 @@ class AuthController extends GetxController {
       Get.find<CustomerController>().getCustomers(doInBackground: true,hasLoading: false);
       Get.find<CartController>().getAreas(doInBackground: true,hasLoading: false);
 
-      // html.WindowBase _popup = html.window
-      //     .open('https://possystem.gulfweb.ir/#/showFactor/?params=${Get.find<CartController>().uniqueId}', 'Pos system', 'left=100,top=100,width=800,height=600');
-      // if (_popup.closed!) {
-      //   throw("Popups blocked");
-      // }
+      html.WindowBase _popup = html.window
+          .open('https://possystem.gulfweb.ir/#/showFactor', 'Pos system', 'left=100,top=100,width=800,height=600');
+      if (_popup.closed!) {
+        throw("Popups blocked");
+      }
 
     } else {
       Get.back();
@@ -103,7 +105,7 @@ class AuthController extends GetxController {
     //cart controller
     Get.find<CartController>().uniqueId='';
     Get.find<CartController>(). cartPrice.value='';
-    Get.find<CartController>().addToCartList = [];
+    Get.find<CartController>().addToCartList.value = [];
     //category controller
     Get.find<CategoryController>().categoryList = [];
     Get.find<CategoryController>().categoryProductList = [];

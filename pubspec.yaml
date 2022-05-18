@@ -50,8 +50,8 @@ dependencies:
   fluttertoast: ^8.0.9
   audioplayers: ^0.20.1
   web_date_picker: ^1.0.0+3
-
   simple_autocomplete_formfield: ^0.3.0
+  universal_html: ^2.0.8
 
 dev_dependencies:
   flutter_test:
