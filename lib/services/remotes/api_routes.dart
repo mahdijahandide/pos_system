@@ -25,3 +25,4 @@ const String CHECKOUT_CART = BASE_URL + 'checkoutConfirm';
 const String ADD_NEW_CUSTOMER = BASE_URL + 'AddNewCustomer';
 const String GET_ORDERS = BASE_URL + 'getOrders';
 const String GET_ORDER_ITEMS = BASE_URL + 'getOrderItems';
+const String CASH_IN_OUT = BASE_URL + 'cash/change';
