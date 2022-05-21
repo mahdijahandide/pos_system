@@ -7,6 +7,7 @@ import 'package:pos_system/services/controller/customer_controller.dart';
 import 'package:pos_system/services/controller/dashboard_controller.dart';
 import 'package:pos_system/services/controller/order_controller.dart';
 import 'package:pos_system/services/controller/product_controller.dart';
+import 'package:pos_system/services/controller/shift_controller.dart';
 import 'package:pos_system/services/controller/user_controller.dart';
 import 'package:pos_system/services/internationalization/messages.dart';
 import 'package:pos_system/views/pages/largePages/cash/cash_in_out.dart';
@@ -38,6 +39,7 @@ class MyApp extends StatelessWidget {
     Get.put(CartController());
     Get.put(OrderController());
     Get.put(CustomerController());
+    Get.put(ShiftController());
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'POS System',
