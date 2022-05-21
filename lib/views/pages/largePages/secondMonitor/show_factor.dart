@@ -195,7 +195,7 @@ class _ShowFactorState extends State<ShowFactor> {
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(
-        builder: (context) => ShowFactor(),
+        builder: (context) => const ShowFactor(),
       ),
     ).then((value) => null);
   }

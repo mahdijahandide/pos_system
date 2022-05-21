@@ -1,15 +1,10 @@
-import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:get/get_utils/src/extensions/internacionalization.dart';
 import 'package:pos_system/services/controller/auth_controller.dart';
 import 'package:pos_system/services/controller/customer_controller.dart';
 import 'package:pos_system/services/controller/dashboard_controller.dart';
 import 'package:pos_system/services/controller/order_controller.dart';
-import 'package:pos_system/services/controller/user_controller.dart';
 import 'package:pos_system/views/components/texts/customText.dart';
-import 'package:pos_system/views/pages/largePages/dashboard/widget/iconTextBox.dart';
 
 class DashboardDrawer {
   Widget createDrawer() {

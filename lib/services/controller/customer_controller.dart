@@ -38,10 +38,6 @@ class CustomerController extends GetxController {
     foundPlayers.value = customerList;
   }
 
-  @override
-  void onReady() {
-    super.onReady();
-  }
 
   @override
   void onClose() {}

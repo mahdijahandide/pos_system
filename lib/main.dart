@@ -39,7 +39,6 @@ class MyApp extends StatelessWidget {
     Get.put(CartController());
     Get.put(OrderController());
     Get.put(CustomerController());
-    Get.put(ShiftController());
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'POS System',

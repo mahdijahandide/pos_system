@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 import 'package:pos_system/services/controller/auth_controller.dart';
 import 'package:pos_system/views/components/textfields/textfield.dart';
 import 'package:pos_system/views/components/texts/customText.dart';
-import 'package:vk/vk.dart';
 
 
 class TabletLogin extends StatelessWidget {

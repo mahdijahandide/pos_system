@@ -22,14 +22,16 @@ class ShiftController extends GetxController{
   RxDouble totalRefund=0.0.obs;
   RxDouble total=0.0.obs;
 
-  // @override
-  // void onInit(){
-  //   super.onInit();
-  //   shiftDetailsRequest();
-  // }
+  RxBool selectStartShift=true.obs;
+  RxBool showLoading=true.obs;
+
+  @override
+  void onInit(){
+    super.onInit();
+    shiftDetailsRequest();
+  }
 
   Future<void> shiftDetailsRequest() async {
-    LoadingDialog.showCustomDialog(msg: 'loading'.tr);
     var url = SHIFT_DETAILS;
     final http.Response response = await http.get(
       Uri.parse(url),
@@ -39,7 +41,6 @@ class ShiftController extends GetxController{
       },
     );
     if (response.statusCode == 200) {
-      Get.back();
       var jsonObject = convert.jsonDecode(response.body);
       existCash.value=double.parse(jsonObject['data']['existCash'].toString());
       shouldExistCash.value=double.parse(jsonObject['data']['shouldExistCash'].toString());
@@ -51,6 +52,7 @@ class ShiftController extends GetxController{
       refundCard.value=double.parse(jsonObject['data']['refundCard'].toString());
       totalRefund.value=double.parse(jsonObject['data']['totalRefund'].toString());
       total.value=double.parse(jsonObject['data']['total'].toString());
+      showLoading.value=false;
     } else {
       Get.back();
       RemoteStatusHandler().errorHandler(code: response.statusCode);

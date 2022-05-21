@@ -11,12 +11,10 @@ import 'package:pos_system/services/controller/user_controller.dart';
 import 'package:pos_system/services/remotes/api_routes.dart';
 import 'package:pos_system/services/remotes/local_storage.dart';
 import 'package:pos_system/views/dialogs/loading_dialogs.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:xid/xid.dart';
 
 import 'category_controller.dart';
 import 'dashboard_controller.dart';
-import 'dart:js' as js;
 import 'dart:html' as html;
 
 class AuthController extends GetxController {

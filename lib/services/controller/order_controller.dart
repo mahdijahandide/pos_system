@@ -11,7 +11,6 @@ import '../../views/dialogs/loading_dialogs.dart';
 import 'dart:convert' as convert;
 import 'package:http/http.dart' as http;
 
-import '../../views/pages/largePages/modals/cash_modal.dart';
 import '../remotes/remote_status_handler.dart';
 import 'auth_controller.dart';
 

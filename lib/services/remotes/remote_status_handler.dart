@@ -1,5 +1,4 @@
 import 'package:get/get.dart';
-import 'package:flutter/material.dart';
 import 'package:pos_system/services/controller/auth_controller.dart';
 
 import '../../views/components/snackbar/snackbar.dart';

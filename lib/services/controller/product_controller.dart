@@ -149,7 +149,7 @@ class ProductController extends GetxController {
             var othersObj = optionsArray['others'];
             var title=othersObj['title'];
             var type=othersObj['type'];
-            var is_required=othersObj['is_required'];
+            var isRequired=othersObj['is_required'];
             var otherId=othersObj['id'];
             var valuesArray=othersObj['values'];
             productOthersList.clear();
@@ -158,9 +158,9 @@ class ProductController extends GetxController {
             });
             selectedValue = 'select value'.obs;selectedValueId='';
             if(type=="radio"||type=="select"){
-              ProductTypeSelect.showCustomDialog(title: title,productId: productId, isRequired: is_required, type: type, otherId: otherId,);
+              ProductTypeSelect.showCustomDialog(title: title,productId: productId, isRequired: isRequired, type: type, otherId: otherId,);
             }else if(type=="checkbox"){
-              ProductTypeSelect.showCustomDialog(title: title,productId: productId, isRequired: is_required, type: type, otherId: otherId,);
+              ProductTypeSelect.showCustomDialog(title: title,productId: productId, isRequired: isRequired, type: type, otherId: otherId,);
             }
             break;
           default:

@@ -1,12 +1,9 @@
-import 'dart:io';
-import 'dart:typed_data';
 
 import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pos_system/services/controller/cart_controller.dart';
 import 'package:pos_system/services/controller/customer_controller.dart';
-import 'package:pos_system/services/remotes/api_routes.dart';
 import 'package:pos_system/views/components/snackbar/snackbar.dart';
 import 'package:pos_system/views/components/texts/customText.dart';
 import 'package:pos_system/views/dialogs/discount_dialog.dart';
@@ -14,18 +11,9 @@ import 'package:pos_system/views/dialogs/edit_qty_dialog.dart';
 import 'package:pos_system/views/pages/largePages/dashboard/widget/iconTextBox.dart';
 import 'package:pos_system/views/pages/largePages/modals/checkout_modal.dart';
 import 'package:pos_system/views/pages/largePages/modals/temp_orders_modal.dart';
-import 'dart:typed_data';
 
-import 'package:flutter/material.dart';
-import 'package:pdf/pdf.dart';
-import 'package:pdf/widgets.dart' as pw;
-import 'package:pos_system/views/pages/largePages/printer/print_view.dart';
-import 'package:printing/printing.dart';
 
 import 'package:url_launcher/url_launcher.dart';
-import 'package:pdf/pdf.dart';
-import 'package:pdf/widgets.dart' as pw;
-import 'package:printing/printing.dart';
 
 import '../../../../dialogs/area_province_dialog.dart';
 import '../../../../dialogs/customer_autocomplete_dialog.dart';

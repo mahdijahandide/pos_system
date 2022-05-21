@@ -9,7 +9,6 @@ import 'package:http/http.dart' as http;
 import 'package:pos_system/services/remotes/api_routes.dart';
 import 'package:pos_system/views/dialogs/loading_dialogs.dart';
 import 'package:pos_system/views/pages/largePages/products/products_modal.dart';
-import 'package:responsive_builder/responsive_builder.dart';
 
 import '../remotes/remote_status_handler.dart';
 

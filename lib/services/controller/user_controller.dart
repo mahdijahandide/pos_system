@@ -1,12 +1,10 @@
 import 'dart:convert';
-import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'dart:convert' as convert;
 import 'package:http/http.dart' as http;
 import 'package:pos_system/services/controller/auth_controller.dart';
-import 'package:pos_system/services/controller/product_controller.dart';
 import 'package:pos_system/services/remotes/api_routes.dart';
 import 'package:pos_system/views/dialogs/loading_dialogs.dart';
 

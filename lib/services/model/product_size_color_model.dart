@@ -1,5 +1,4 @@
 import 'package:pos_system/services/model/product_color_model.dart';
-import 'package:pos_system/services/model/product_model.dart';
 
 class ProductSizeColorModel {
   int? sizeId;

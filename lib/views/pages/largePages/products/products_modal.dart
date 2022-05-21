@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pos_system/services/controller/cart_controller.dart';
 import 'package:pos_system/services/controller/product_controller.dart';
-import 'package:pos_system/services/model/product_model.dart';
 import 'package:pos_system/views/components/texts/customText.dart';
 import 'package:pos_system/views/dialogs/loading_dialogs.dart';
 

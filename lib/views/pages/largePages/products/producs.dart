@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:pos_system/views/pages/largePages/products/all_products.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 

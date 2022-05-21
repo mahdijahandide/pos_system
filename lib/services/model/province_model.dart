@@ -1,4 +1,3 @@
-import 'package:pos_system/services/model/area_model.dart';
 import 'package:pos_system/services/model/city_model.dart';
 
 class ProvinceModel {

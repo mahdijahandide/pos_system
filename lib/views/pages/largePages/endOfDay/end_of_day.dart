@@ -12,7 +12,8 @@ class EndOfDay extends GetView<ShiftController> {
 
   @override
   Widget build(BuildContext context) {
-    controller.shiftDetailsRequest();
+    Get.put(ShiftController());
+
     return Scaffold(
       appBar: AppBar(
         centerTitle: true, backgroundColor: Colors.grey.withOpacity(0.5),
@@ -42,7 +43,7 @@ class EndOfDay extends GetView<ShiftController> {
         ],
       ),
       body: Obx(() {
-        return Padding(
+        return controller.showLoading.isTrue?const Center(child: CircularProgressIndicator(),): Padding(
           padding: const EdgeInsets.all(12.0),
           child: Center(
             child: Container(
@@ -69,14 +70,17 @@ class EndOfDay extends GetView<ShiftController> {
                           height: 150,
                           child: CustomTextButton().createTextButton(
                             buttonText: 'Cash out',
-                            buttonColor: Colors.white,
-                            textColor: Colors.black,
-                            textSize: 17,
+                            buttonColor:controller.selectStartShift.value==false?Colors.teal: Colors.white,
+                            textColor: controller.selectStartShift.value==false?Colors.white:Colors.black,
+                            textSize: controller.selectStartShift.value==false?20:17,
                             elevation: 6.0,
-                            icon: const Icon(
-                              Icons.person,
-                              size: 40,
+                            icon: Icon(
+                              Icons.money_off,color: controller.selectStartShift.value==false?Colors.white:Colors.black,
+                              size: controller.selectStartShift.value==false?45:40,
                             ),
+                            onPress: (){
+                              controller.selectStartShift.value=false;
+                            }
                           ),
                         ),
                       ),
@@ -88,81 +92,89 @@ class EndOfDay extends GetView<ShiftController> {
                           height: 150,
                           child: CustomTextButton().createTextButton(
                             buttonText: 'Start Cash',
-                            buttonColor: Colors.white,
-                            textSize: 17,
-                            textColor: Colors.black,
+                            buttonColor: controller.selectStartShift.value==true?Colors.teal:Colors.white,
+                            textSize: controller.selectStartShift.value==true?20:17,
+                            textColor: controller.selectStartShift.value==true?Colors.white:Colors.black,
                             elevation: 6.0,
-                            icon: const Icon(
-                              Icons.start,
-                              size: 40,
+                            icon:  Icon(
+                              Icons.money,color: controller.selectStartShift.value==true?Colors.white:Colors.black,
+                              size: controller.selectStartShift.value==true?45:40,
                             ),
+                            onPress: (){
+                              controller.selectStartShift.value=true;
+                            }
                           ),
                         ),
                       ),
                     ],
                   ),
-                      CustomText().createSpaceKeyVal(
-                          keyText: 'existCash', valText: '${controller.existCash
-                          .value}', valFontWeight: FontWeight.bold),
-                      const SizedBox(
-                        height: 15,
-                      ),
-                      CustomText().createSpaceKeyVal(
-                          keyText: 'shouldExistCash',
-                          valText: '${controller.shouldExistCash.value}',
-                          valFontWeight: FontWeight.bold),
-                      const SizedBox(
-                        height: 15,
-                      ),
-                      CustomText().createSpaceKeyVal(
-                          keyText: 'startCash', valText: '${controller.startCash
-                          .value}', valFontWeight: FontWeight.bold),
-                      const SizedBox(
-                        height: 15,
-                      ),
-                      CustomText().createSpaceKeyVal(
-                          keyText: 'sellCash', valText: '${controller.sellCash
-                          .value}', valFontWeight: FontWeight.bold),
-                      const SizedBox(
-                        height: 15,
-                      ),
-                      CustomText().createSpaceKeyVal(
-                          keyText: 'sellCard', valText: '${controller.sellCard
-                          .value}', valFontWeight: FontWeight.bold),
-                      const SizedBox(
-                        height: 15,
-                      ),
-                      CustomText().createSpaceKeyVal(
-                          keyText: 'totalSell', valText: '${controller.totalSell
-                          .value}', valFontWeight: FontWeight.bold),
-                      const SizedBox(
-                        height: 15,
-                      ),
-                      CustomText().createSpaceKeyVal(
-                          keyText: 'refundCash', valText: '${controller
-                          .refundCash.value}', valFontWeight: FontWeight.bold),
-                      const SizedBox(
-                        height: 15,
-                      ),
-                      CustomText().createSpaceKeyVal(
-                          keyText: 'refundCard', valText: '${controller
-                          .refundCard.value}', valFontWeight: FontWeight.bold),
-                      const SizedBox(
-                        height: 15,
-                      ),
-                      CustomText().createSpaceKeyVal(
-                          keyText: 'totalRefund', valText: '${controller
-                          .totalRefund.value}', valFontWeight: FontWeight.bold),
-                      const SizedBox(
-                        height: 15,
-                      ),
+                      const SizedBox(height: 20,),
+                      Expanded(child: ListView(children: [
+                        CustomText().createSpaceKeyVal(
+                            keyText: 'existCash', valText: '${controller.existCash
+                            .value}', valFontWeight: FontWeight.bold),
+                        const SizedBox(
+                          height: 15,
+                        ),
+                        CustomText().createSpaceKeyVal(
+                            keyText: 'shouldExistCash',
+                            valText: '${controller.shouldExistCash.value}',
+                            valFontWeight: FontWeight.bold),
+                        const SizedBox(
+                          height: 15,
+                        ),
+                        CustomText().createSpaceKeyVal(
+                            keyText: 'startCash', valText: '${controller.startCash
+                            .value}', valFontWeight: FontWeight.bold),
+                        const SizedBox(
+                          height: 15,
+                        ),
+                        CustomText().createSpaceKeyVal(
+                            keyText: 'sellCash', valText: '${controller.sellCash
+                            .value}', valFontWeight: FontWeight.bold),
+                        const SizedBox(
+                          height: 15,
+                        ),
+                        CustomText().createSpaceKeyVal(
+                            keyText: 'sellCard', valText: '${controller.sellCard
+                            .value}', valFontWeight: FontWeight.bold),
+                        const SizedBox(
+                          height: 15,
+                        ),
+                        CustomText().createSpaceKeyVal(
+                            keyText: 'totalSell', valText: '${controller.totalSell
+                            .value}', valFontWeight: FontWeight.bold),
+                        const SizedBox(
+                          height: 15,
+                        ),
+                        CustomText().createSpaceKeyVal(
+                            keyText: 'refundCash', valText: '${controller
+                            .refundCash.value}', valFontWeight: FontWeight.bold),
+                        const SizedBox(
+                          height: 15,
+                        ),
+                        CustomText().createSpaceKeyVal(
+                            keyText: 'refundCard', valText: '${controller
+                            .refundCard.value}', valFontWeight: FontWeight.bold),
+                        const SizedBox(
+                          height: 15,
+                        ),
+                        CustomText().createSpaceKeyVal(
+                            keyText: 'totalRefund', valText: '${controller
+                            .totalRefund.value}', valFontWeight: FontWeight.bold),
+                        const SizedBox(
+                          height: 15,
+                        ),
 
-                      const Divider(),
-                      CustomText().createSpaceKeyVal(
-                          keyText: 'Total Amount', valText: '${controller.total
-                          .value}', valFontWeight: FontWeight.bold),
+                        const Divider(),
+                        CustomText().createSpaceKeyVal(
+                            keyText: 'Total Amount', valText: '${controller.total
+                            .value}', valFontWeight: FontWeight.bold),
 
-                  const Expanded(child: SizedBox()),
+                        const Expanded(child: SizedBox()),
+
+                      ],)),
+
                   SizedBox(
                       height: 50,
                       width: Get.width / 2,

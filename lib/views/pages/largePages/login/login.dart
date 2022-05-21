@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:pos_system/services/controller/auth_controller.dart';
 import 'package:pos_system/views/pages/largePages/login/desktop_login.dart';
 import 'package:pos_system/views/pages/largePages/login/mobile_login.dart';
 import 'package:pos_system/views/pages/largePages/login/tablet_login.dart';

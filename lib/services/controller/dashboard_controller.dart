@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:pos_system/services/model/product_model.dart';
 
 class DashboardController extends GetxController{
   RxBool isShowKeyboard=false.obs;

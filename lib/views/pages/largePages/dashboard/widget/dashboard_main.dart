@@ -3,14 +3,11 @@ import 'package:get/get.dart';
 import 'package:pos_system/services/controller/cart_controller.dart';
 import 'package:pos_system/services/controller/dashboard_controller.dart';
 import 'package:pos_system/services/controller/product_controller.dart';
-import 'package:pos_system/services/model/cart_product_model.dart';
 import 'package:pos_system/views/components/snackbar/snackbar.dart';
 import 'package:pos_system/views/components/textfields/textfield.dart';
 import 'package:pos_system/views/components/texts/customText.dart';
 import 'package:pos_system/views/dialogs/loading_dialogs.dart';
 import 'package:pos_system/views/pages/largePages/dashboard/widget/category_widget.dart';
-import 'package:pos_system/views/pages/largePages/products/product_details.dart';
-import 'package:xid/xid.dart';
 
 class DashboardMain {
   Widget createMain({required gridCnt, dynamic key, dynamic isLarge , dynamic noSideBar,dynamic ontap}) {

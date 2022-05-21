@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pos_system/views/pages/largePages/dashboard/widget/dashboard_main.dart';
 import 'package:responsive_builder/responsive_builder.dart';
-import '../../../../services/controller/product_controller.dart';
 import '../../../components/texts/customText.dart';
 
 class AllProduct extends StatelessWidget {

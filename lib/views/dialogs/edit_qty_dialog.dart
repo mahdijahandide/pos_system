@@ -1,11 +1,8 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:pos_system/services/controller/cart_controller.dart';
 import 'package:pos_system/services/controller/product_controller.dart';
-import 'package:pos_system/services/model/product_color_model.dart';
-import 'package:pos_system/services/model/product_size_model.dart';
 import 'package:pos_system/views/components/snackbar/snackbar.dart';
 import 'package:pos_system/views/components/textfields/textfield.dart';
 import 'package:pos_system/views/components/texts/customText.dart';

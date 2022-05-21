@@ -1,7 +1,5 @@
-import 'package:get/get_rx/src/rx_types/rx_types.dart';
 import 'package:universal_html/html.dart';
 
-import '../model/cart_product_model.dart';
 
 
 class LocalStorageHelper{

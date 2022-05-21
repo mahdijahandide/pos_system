@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pos_system/services/controller/order_controller.dart';
 import 'package:web_date_picker/web_date_picker.dart';
-import '../../../../services/controller/product_controller.dart';
 import '../../../components/texts/customText.dart';
 import 'package:intl/intl.dart';
 

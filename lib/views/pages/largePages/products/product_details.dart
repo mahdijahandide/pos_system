@@ -114,7 +114,7 @@ class ProductDetails extends StatelessWidget {
         var othersObj = Get.arguments['options']['others'];
         String title='';
         var type=othersObj['type'];
-        var is_required=othersObj['is_required'];
+        var isRequired=othersObj['is_required'];
         var otherId=othersObj['id'];
         var valuesArray=othersObj['values'];
         Get.find<ProductController>().productOthersList.clear();

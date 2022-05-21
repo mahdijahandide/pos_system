@@ -33,7 +33,7 @@ class DesktopProfile extends StatelessWidget {
                 },
                 child: Padding(
                   padding:const EdgeInsets.symmetric(horizontal: 15),
-                  child:Get.find<UserController>().hasEdit.isFalse ?Icon(Icons.edit):Icon(Icons.check),
+                  child:Get.find<UserController>().hasEdit.isFalse ?const Icon(Icons.edit):const Icon(Icons.check),
                 ),
               )
             ],

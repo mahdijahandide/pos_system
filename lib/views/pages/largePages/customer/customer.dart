@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pos_system/services/controller/customer_controller.dart';
-import 'package:pos_system/views/components/buttons/custom_text_button.dart';
-import 'package:pos_system/views/components/textfields/textfield.dart';
 import 'package:pos_system/views/pages/largePages/customer/add_customer_modal.dart';
 
-import '../../../../helper/autocomplete_helper.dart';
 import '../../../components/texts/customText.dart';
 
 class Customer extends GetView<CustomerController> {
