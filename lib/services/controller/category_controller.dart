@@ -39,7 +39,7 @@ class CategoryController extends GetxController {
       update();
     } else {
       Get.back();
-      RemoteStatusHandler().errorHandler(code: response.statusCode);
+      RemoteStatusHandler().errorHandler(code: response.statusCode,error:convert.jsonDecode(response.body));
       print(response.body);
     }
   }
@@ -84,7 +84,7 @@ class CategoryController extends GetxController {
       update();
     } else {
       Get.back();
-      RemoteStatusHandler().errorHandler(code: response.statusCode);
+      RemoteStatusHandler().errorHandler(code: response.statusCode,error:convert.jsonDecode(response.body));
       print(response.body);
     }
   }

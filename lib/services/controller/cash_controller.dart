@@ -37,7 +37,7 @@ class CashController extends GetxController{
       Snack().createSnack(title: 'success',msg: 'request recorded successfully');
     } else {
       Get.back();
-      RemoteStatusHandler().errorHandler(code: response.statusCode);
+      RemoteStatusHandler().errorHandler(code: response.statusCode,error:convert.jsonDecode(response.body));
     }
   }
 }

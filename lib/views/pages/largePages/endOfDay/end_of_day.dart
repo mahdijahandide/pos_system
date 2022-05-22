@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_simple_calculator/flutter_simple_calculator.dart';
 import 'package:get/get.dart';
 import 'package:pos_system/services/controller/shift_controller.dart';
+import 'package:pos_system/views/dialogs/cash_starter_dialog.dart';
 
 import '../../../components/buttons/custom_text_button.dart';
 import '../../../components/texts/customText.dart';
@@ -108,8 +109,13 @@ class EndOfDay extends GetView<ShiftController> {
                       ),
                     ],
                   ),
+
                       const SizedBox(height: 20,),
-                      Expanded(child: ListView(children: [
+
+                      Expanded(
+                          child: ListView(
+                            shrinkWrap: true,
+                            children: [
                         CustomText().createSpaceKeyVal(
                             keyText: 'existCash', valText: '${controller.existCash
                             .value}', valFontWeight: FontWeight.bold),
@@ -171,9 +177,11 @@ class EndOfDay extends GetView<ShiftController> {
                             keyText: 'Total Amount', valText: '${controller.total
                             .value}', valFontWeight: FontWeight.bold),
 
-                        const Expanded(child: SizedBox()),
+
 
                       ],)),
+
+                  const Expanded(child: SizedBox()),
 
                   SizedBox(
                       height: 50,
@@ -182,7 +190,15 @@ class EndOfDay extends GetView<ShiftController> {
                           buttonText: 'Save',
                           buttonColor: Colors.teal,
                           textColor: Colors.white,
-                          elevation: 6.0))
+                          elevation: 6.0,
+                          onPress: (){
+                              if(controller.selectStartShift.isTrue){
+                                  CashStarterDialog.showCustomDialog(title: 'starter Value');
+                              }else{
+                                  controller.endCashRequest();
+                              }
+                          }
+                      ))
                 ],
               ),
             ),

@@ -8,10 +8,10 @@ import '../../views/components/snackbar/snackbar.dart';
 
 
 class RemoteStatusHandler{
-  void errorHandler({required code}){
+  void errorHandler({required code,required error}){
     switch(code){
       case 400:
-        Snack().createSnack(title: 'Bad Request',msg: 'Request parameters not correct');
+        Snack().createSnack(title: 'Bad Request',msg: '${error['data']}');
         break;
       case 401:
         if(Get.find<AuthController>().token.isEmpty){

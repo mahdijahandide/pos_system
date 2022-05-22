@@ -88,7 +88,7 @@ class ProductController extends GetxController {
       update();
     } else {
       Get.back();
-      RemoteStatusHandler().errorHandler(code: response.statusCode);
+      RemoteStatusHandler().errorHandler(code: response.statusCode,error:convert.jsonDecode(response.body));
       print(response.statusCode);
     }
   }
@@ -171,7 +171,7 @@ class ProductController extends GetxController {
       }
     } else {
       Get.back();
-      RemoteStatusHandler().errorHandler(code: response.statusCode);
+      RemoteStatusHandler().errorHandler(code: response.statusCode,error:convert.jsonDecode(response.body));
       print(response.statusCode);
     }
   }

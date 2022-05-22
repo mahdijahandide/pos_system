@@ -100,7 +100,7 @@ class CartController extends GetxController {
 
     }else {
       Get.back();
-      RemoteStatusHandler().errorHandler(code: response.statusCode);
+      RemoteStatusHandler().errorHandler(code: response.statusCode,error:convert.jsonDecode(response.body));
       print(response.statusCode);
     }
   }
@@ -138,7 +138,7 @@ class CartController extends GetxController {
       update();
     } else {
       Get.back();
-      RemoteStatusHandler().errorHandler(code: response.statusCode);
+      RemoteStatusHandler().errorHandler(code: response.statusCode,error:convert.jsonDecode(response.body));
       print(response.statusCode);
     }
   }
@@ -175,7 +175,7 @@ class CartController extends GetxController {
       update();
     } else {
       Get.back();
-      RemoteStatusHandler().errorHandler(code: response.statusCode);
+      RemoteStatusHandler().errorHandler(code: response.statusCode,error:convert.jsonDecode(response.body));
       print(response.statusCode);
     }
   }
@@ -207,7 +207,7 @@ class CartController extends GetxController {
       update();
     } else {
       Get.back();
-      RemoteStatusHandler().errorHandler(code: response.statusCode);
+      RemoteStatusHandler().errorHandler(code: response.statusCode,error:convert.jsonDecode(response.body));
       print(response.statusCode);
     }
   }
@@ -240,7 +240,7 @@ class CartController extends GetxController {
       Get.find<CartController>().update();
     } else {
       Get.back();
-      RemoteStatusHandler().errorHandler(code: response.statusCode);
+      RemoteStatusHandler().errorHandler(code: response.statusCode,error:convert.jsonDecode(response.body));
       print(response.statusCode);
     }
   }
@@ -300,7 +300,7 @@ class CartController extends GetxController {
       Get.back();
     } else {
       Get.back();
-      RemoteStatusHandler().errorHandler(code: response.statusCode);
+      RemoteStatusHandler().errorHandler(code: response.statusCode,error:convert.jsonDecode(response.body));
       print(response.statusCode);
       print(response.body);
     }
@@ -350,7 +350,7 @@ class CartController extends GetxController {
       update();
     } else {
       Get.back();
-      RemoteStatusHandler().errorHandler(code: response.statusCode);
+      RemoteStatusHandler().errorHandler(code: response.statusCode,error:convert.jsonDecode(response.body));
       print(response.statusCode);
     }
   }

@@ -27,3 +27,5 @@ const String GET_ORDERS = BASE_URL + 'getOrders';
 const String GET_ORDER_ITEMS = BASE_URL + 'getOrderItems';
 const String CASH_IN_OUT = BASE_URL + 'cash/change';
 const String SHIFT_DETAILS = BASE_URL + 'shift/details';
+const String SHIFT_START = BASE_URL + 'shift/start';
+const String SHIFT_END = BASE_URL + 'shift/end';

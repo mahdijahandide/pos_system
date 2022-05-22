@@ -43,7 +43,7 @@ class OrderController  extends GetxController{
         Get.toNamed('/saleHistory');
     } else {
       Get.back();
-      RemoteStatusHandler().errorHandler(code: response.statusCode);
+      RemoteStatusHandler().errorHandler(code: response.statusCode,error:convert.jsonDecode(response.body));
       print(response.statusCode);
     }
   }
@@ -79,7 +79,7 @@ class OrderController  extends GetxController{
 
     } else {
       Get.back();
-      RemoteStatusHandler().errorHandler(code: response.statusCode);
+      RemoteStatusHandler().errorHandler(code: response.statusCode,error:convert.jsonDecode(response.body));
       print(response.statusCode);
     }
   }

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:get/get.dart';
 import 'dart:convert' as convert;
 import 'package:http/http.dart' as http;
@@ -55,7 +57,48 @@ class ShiftController extends GetxController{
       showLoading.value=false;
     } else {
       Get.back();
-      RemoteStatusHandler().errorHandler(code: response.statusCode);
+      RemoteStatusHandler().errorHandler(code: response.statusCode,error: convert.jsonDecode(response.body));
+    }
+  }
+
+  Future<void> startCashRequest({required starterValue}) async {
+    LoadingDialog.showCustomDialog(msg: 'loading'.tr);
+    var url = SHIFT_START;
+    final http.Response response = await http.post(
+      Uri.parse(url),
+      headers: <String,String>{
+        'Content-Type':'application/json',
+        'Authorization':'Bearer ${Get.find<AuthController>().token}'
+      },
+      body: jsonEncode(<String , String>{
+        'startCash':'$starterValue'
+      })
+    );
+    if (response.statusCode == 200) {
+      var jsonObject = convert.jsonDecode(response.body);
+      Get.back();
+    } else {
+      Get.back();
+      RemoteStatusHandler().errorHandler(code: response.statusCode,error: convert.jsonDecode(response.body));
+    }
+  }
+
+  Future<void> endCashRequest() async {
+    LoadingDialog.showCustomDialog(msg: 'loading'.tr);
+    var url = SHIFT_END;
+    final http.Response response = await http.post(
+      Uri.parse(url),
+      headers: <String,String>{
+        'Content-Type':'application/json',
+        'Authorization':'Bearer ${Get.find<AuthController>().token}'
+      },
+    );
+    if (response.statusCode == 200) {
+      var jsonObject = convert.jsonDecode(response.body);
+      Get.back();
+    } else {
+      Get.back();
+      RemoteStatusHandler().errorHandler(code: response.statusCode,error: convert.jsonDecode(response.body));
     }
   }
 }
