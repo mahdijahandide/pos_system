@@ -17,15 +17,17 @@ import 'auth_controller.dart';
 
 class OrderController  extends GetxController{
 
-  List<OrderModel>orderList=[];
+  Rx<List<OrderModel>>orderList=Rx<List<OrderModel>>([]);
   Rx<List<OrderModel>>orderFilteredList=Rx<List<OrderModel>>([]);
   List<OrderItemsModel>orderItemsList=[];
 
   late OrderModel selectedItem;
 
+  RxBool hasList=false.obs;
+
   Future<void> getOrders() async {
-    orderList.clear();
-    LoadingDialog.showCustomDialog(msg: 'Please wait ...');
+    orderList.value.clear();
+    //LoadingDialog.showCustomDialog(msg: 'Please wait ...');
     var url = GET_ORDERS;
     final http.Response response =
     await http.post(Uri.parse(url), headers: <String, String>{
@@ -36,11 +38,12 @@ class OrderController  extends GetxController{
       var jsonObject = convert.jsonDecode(response.body);
       Get.log(jsonObject.toString());
       jsonObject['data']['orders'].forEach((element) {
-        orderList.add(OrderModel(data: element));
+        orderList.value.add(OrderModel(data: element));
       });
-      orderFilteredList.value=orderList;
-      Get.back();
-        Get.toNamed('/saleHistory');
+      orderFilteredList.value=orderList.value;
+      hasList.value=true;
+      //Get.back();
+        //Get.toNamed('/saleHistory');
     } else {
       Get.back();
       RemoteStatusHandler().errorHandler(code: response.statusCode,error:convert.jsonDecode(response.body));

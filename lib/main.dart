@@ -37,7 +37,7 @@ class MyApp extends StatelessWidget {
     Get.put(UserController());
     Get.put(CategoryController());
     Get.put(CartController());
-    Get.put(OrderController());
+
     Get.put(CustomerController());
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
@@ -60,7 +60,7 @@ class MyApp extends StatelessWidget {
         GetPage(name: '/cashInOut',page: ()=>const CashInOut()),
         GetPage(name: '/endOfDay',page: ()=>const EndOfDay()),
         GetPage(name: '/print',page: ()=>const PrintView()),
-        GetPage(name: '/showFactor',page: ()=>const ShowFactor()),
+        GetPage(name: '/showFactor',page: ()=> ShowFactor()),
       ],
       initialRoute: '/login',
       unknownRoute: GetPage(name: '/nothingFound', page: () => const MyApp()),

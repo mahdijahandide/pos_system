@@ -33,6 +33,7 @@ class CategoryController extends GetxController {
       hasCategory.value = true;
       var jsonObject = convert.jsonDecode(response.body);
       var categoryArray = jsonObject['data'];
+      categoryList.clear();
       categoryArray.forEach((element) {
         categoryList.add((CategoryModel(data: element)));
       });

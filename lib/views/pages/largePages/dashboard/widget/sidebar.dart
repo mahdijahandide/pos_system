@@ -11,6 +11,8 @@ import 'package:pos_system/views/dialogs/edit_qty_dialog.dart';
 import 'package:pos_system/views/pages/largePages/dashboard/widget/iconTextBox.dart';
 import 'package:pos_system/views/pages/largePages/modals/checkout_modal.dart';
 import 'package:pos_system/views/pages/largePages/modals/temp_orders_modal.dart';
+import 'package:pos_system/views/pages/largePages/secondMonitor/show_factor.dart';
+import 'package:universal_html/html.dart' as html;
 
 
 import 'package:url_launcher/url_launcher.dart';
@@ -326,14 +328,11 @@ class DashboardSidebar {
                       icon: Icons.money,
                       title: 'cash_drawer'.tr,
                       onTap: ()  {
-
-                        //js.context.callMethod("open", ["http://localhost:8080/#/showFactor/?params=${Get.find<CartController>().uniqueId}"]);
-
-                        // html.WindowBase _popup = html.window
-                        //     .open('http://localhost:8080/#/showFactor', 'Pos system', 'left=100,top=100,width=800,height=600');
-                        // if (_popup.closed!) {
-                        //   throw("Popups blocked");
-                        // }
+                        html.WindowBase _popup = html.window
+                            .open('http://localhost:53094/#/showFactor', 'Pos system', 'left=100,top=100,width=800,height=600');
+                        if (_popup.closed!) {
+                          throw("Popups blocked");
+                        }
                       }),
                 ),
                 const SizedBox(

@@ -91,6 +91,7 @@ class DiscountDialog {
             Get.find<CartController>().discountAmount=(Get.find<CartController>().totalAmount*double.parse(discountController.text.toString()))/100;
           }
           Get.find<CartController>().getTempOrders(cartId: Get.find<CartController>().uniqueId.toString(),areaId: Get.find<CartController>().selectedAreaId.toString(),userDiscount: Get.find<CartController>().discountAmount.toString());
+          Get.find<CartController>().saveCartForSecondMonitor();
           // Get.back();
           // Get.find<CartController>().update();
         },

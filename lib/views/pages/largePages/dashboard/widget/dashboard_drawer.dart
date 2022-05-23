@@ -22,7 +22,8 @@ class DashboardDrawer {
           // ListTile(leading: const Icon(Icons.vpn_key_rounded),title: CustomText().createText(title: 'Management'),onTap: (){},),
           // const Divider(),
           ListTile(leading: const Icon(Icons.history),title: CustomText().createText(title: 'View Sales history'),onTap: (){
-            Get.find<OrderController>().getOrders();
+            //Get.find<OrderController>().getOrders();
+            Get.toNamed('/saleHistory');
           },),
           ListTile(leading: const Icon(Icons.group),title: CustomText().createText(title: 'View Customers'),onTap: (){
             // Get.find<CustomerController>().getCustomers(hasOpenPage: true);

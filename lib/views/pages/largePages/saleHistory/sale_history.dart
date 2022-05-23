@@ -12,6 +12,8 @@ class SaleHistory extends GetView<OrderController> {
 
   @override
   Widget build(BuildContext context) {
+    Get.put(OrderController());
+    controller.getOrders();
     return Scaffold(
       appBar: AppBar(
         centerTitle: true, backgroundColor: Colors.grey.withOpacity(0.5),
@@ -22,7 +24,7 @@ class SaleHistory extends GetView<OrderController> {
             title: 'Select Date',
               cancel: InkWell(
                 onTap: () {
-                  controller.orderFilteredList.value = controller.orderList;
+                  controller.orderFilteredList.value = controller.orderList.value;
                   Get.back();
                 },
                 child: Container(
@@ -39,7 +41,7 @@ class SaleHistory extends GetView<OrderController> {
                 onChange: (value) {
                   final DateFormat formatter = DateFormat('yyyy-MM-dd');
                   RxString date = formatter.format(value!).obs;
-                  controller.orderFilteredList.value = controller.orderList
+                  controller.orderFilteredList.value = controller.orderList.value
                       .where((element) =>
                   element.deliveryDate.toString() == date.value).toList();
                   Get.back();
@@ -50,7 +52,9 @@ class SaleHistory extends GetView<OrderController> {
         ],
       ),
       body: Obx(() {
-        return ListView.builder(
+        return
+          controller.hasList.isFalse?const Center(child: CircularProgressIndicator(),):
+          ListView.builder(
           shrinkWrap: true,
           physics: const BouncingScrollPhysics(),
           itemCount: controller.orderFilteredList.value.length,

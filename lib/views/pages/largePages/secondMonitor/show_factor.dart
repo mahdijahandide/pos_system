@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/material.dart';
@@ -10,123 +11,130 @@ import '../../../../services/model/cart_product_model.dart';
 import '../../../components/texts/customText.dart';
 
 
-class ShowFactor extends StatefulWidget {
-  const ShowFactor({Key? key}) : super(key: key);
-
-  @override
-  State<ShowFactor> createState() => _ShowFactorState();
-}
-
-class _ShowFactorState extends State<ShowFactor> {
+class ShowFactor extends StatelessWidget {
   Timer? timer;
-  @override
-  void initState() {
-    super.initState();
-    timer = Timer.periodic(const Duration(seconds: 1), (Timer t) => Get.find<CartController>().addToCartList.value=LocalStorageHelper.getValue('cartData') as List<CartProductModel>);
-  }
+
   @override
   Widget build(BuildContext context) {
+    CartController controller=Get.put(CartController());
+    timer = Timer.periodic(const Duration(seconds: 1), (Timer t) => _refresh());
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      body: GetBuilder(builder: (CartController controller) {
+      body: GetBuilder(builder:(CartController controller) {
         return Padding(
           padding: const EdgeInsets.all(12.0),
           child: ListView(
             children: [
-          ListView.separated(
-          itemCount: Get.find<CartController>().addToCartList.value.length,
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            itemBuilder: (BuildContext context, int index) {
-              var currentItem =
-              Get.find<CartController>().addToCartList.value[index];
-              double itemQty =
-              double.parse(currentItem.quantity.toString());
-              double itemPrc =
-              double.parse(currentItem.price.toString());
-              double itemPrice = itemQty * itemPrc;
-              return Container(
-                color:
-                     Colors.grey.withOpacity(0.1),
-                child: Row(
-                  children: [
-                    Expanded(
-                      flex: 1,
-                      child: Column(
-                        crossAxisAlignment:
-                        CrossAxisAlignment.start,
-                        children: [
-                          FittedBox(
-                            child: CustomText().createText(
-                                title: currentItem.title,
-                                fontWeight: FontWeight.bold,
-                                size: 18),
-                          ),
-                          const SizedBox(
-                            height: 8,
-                          ),
-                          Row(
+              ListView.separated(
+                itemCount: Get
+                    .find<CartController>()
+                    .addToCartList
+                    .value
+                    .length,
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemBuilder: (BuildContext context, int index) {
+                  var currentItem =
+                  Get
+                      .find<CartController>()
+                      .addToCartList
+                      .value[index];
+                  double itemQty =
+                  double.parse(currentItem.quantity.toString());
+                  double itemPrc =
+                  double.parse(currentItem.price.toString());
+                  double itemPrice = itemQty * itemPrc;
+                  return Container(
+                    color:
+                    Colors.grey.withOpacity(0.1),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          flex: 1,
+                          child: Column(
+                            crossAxisAlignment:
+                            CrossAxisAlignment.start,
                             children: [
-                              CustomText().createText(
-                                  title: '#${index + 1}'),
-                              const SizedBox(
-                                width: 5,
+                              FittedBox(
+                                child: CustomText().createText(
+                                    title: currentItem.title,
+                                    fontWeight: FontWeight.bold,
+                                    size: 18),
                               ),
-                              CustomText().createText(title: ''),
                               const SizedBox(
-                                width: 8,
+                                height: 8,
                               ),
-                              CustomText().createText(
-                                  title: '${currentItem.price}',
-                                  fontWeight: FontWeight.bold),
-                              const SizedBox(
-                                width: 5,
-                              ),
-                              CustomText().createText(
-                                  title: itemPrice.toString(),
-                                  fontWeight: FontWeight.bold),
+                              Row(
+                                children: [
+                                  CustomText().createText(
+                                      title: '#${index + 1}'),
+                                  const SizedBox(
+                                    width: 5,
+                                  ),
+                                  CustomText().createText(title: ''),
+                                  const SizedBox(
+                                    width: 8,
+                                  ),
+                                  CustomText().createText(
+                                      title: '${currentItem.price}',
+                                      fontWeight: FontWeight.bold),
+                                  const SizedBox(
+                                    width: 5,
+                                  ),
+                                  CustomText().createText(
+                                      title: itemPrice.toString(),
+                                      fontWeight: FontWeight.bold),
+                                ],
+                              )
                             ],
-                          )
-                        ],
-                      ),
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 4,
+                        ),
+                        FittedBox(
+                            fit: BoxFit.scaleDown,
+                            alignment: AlignmentDirectional.centerEnd,
+                            child: CustomText().createText(
+                                title: currentItem.quantity,
+                                size: 16,
+                                fontWeight: FontWeight.bold,
+                                align: TextAlign.end))
+                      ],
                     ),
-                    const SizedBox(
-                      width: 4,
-                    ),
-                    FittedBox(
-                        fit: BoxFit.scaleDown,
-                        alignment: AlignmentDirectional.centerEnd,
-                        child: CustomText().createText(
-                            title: currentItem.quantity,
-                            size: 16,
-                            fontWeight: FontWeight.bold,
-                            align: TextAlign.end))
-                  ],
-                ),
-              );
-            },
-            separatorBuilder: (BuildContext context, int index) {
-              return const Divider();
-            },
-          ),
+                  );
+                },
+                separatorBuilder: (BuildContext context, int index) {
+                  return const Divider();
+                },
+              ),
               const Divider(),
               keyValText(
                   title: 'Subtotal',
-                  value: Get.find<CartController>().totalAmount.toString()),
+                  value: Get
+                      .find<CartController>()
+                      .totalAmount
+                      .toString()),
               const SizedBox(
                 height: 8,
               ),
               keyValText(
                   title: 'Discount',
                   value:
-                  '- ${Get.find<CartController>().discountAmount.toString()}'),
+                  '- ${Get
+                      .find<CartController>()
+                      .discountAmount
+                      .toString()}'),
               const SizedBox(
                 height: 8,
               ),
               keyValText(
                   title: 'Delivery',
                   value:
-                  '+ ${Get.find<CartController>().deliveryAmount.toString()}'),
+                  '+ ${Get
+                      .find<CartController>()
+                      .deliveryAmount
+                      .toString()}'),
               const SizedBox(
                 height: 8,
               ),
@@ -146,9 +154,15 @@ class _ShowFactorState extends State<ShowFactor> {
               ),
               keyValText(
                   title: 'total'.tr,
-                  value: (Get.find<CartController>().totalAmount +
-                      Get.find<CartController>().deliveryAmount -
-                      Get.find<CartController>().discountAmount)
+                  value: (Get
+                      .find<CartController>()
+                      .totalAmount +
+                      Get
+                          .find<CartController>()
+                          .deliveryAmount -
+                      Get
+                          .find<CartController>()
+                          .discountAmount)
                       .toString(),
                   keyWeight: FontWeight.bold,
                   valWeight: FontWeight.bold,
@@ -162,13 +176,12 @@ class _ShowFactorState extends State<ShowFactor> {
     );
   }
 
-  Widget keyValText(
-      {required title,
-        required value,
-        dynamic keyWeight,
-        dynamic valWeight,
-        dynamic keySize,
-        dynamic valSize}) {
+  Widget keyValText({required title,
+    required value,
+    dynamic keyWeight,
+    dynamic valWeight,
+    dynamic keySize,
+    dynamic valSize}) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -190,13 +203,29 @@ class _ShowFactorState extends State<ShowFactor> {
       ],
     );
   }
-  Future<void> _refresh() async {
-    print("Refreshed");
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(
-        builder: (context) => const ShowFactor(),
-      ),
-    ).then((value) => null);
+
+  void _refresh() {
+    var data = jsonDecode(LocalStorageHelper.getValue('cartData'));
+    Get
+        .find<CartController>()
+        .addToCartList
+        .value
+        .clear();
+    data['data'].forEach((element) {
+      Get
+          .find<CartController>()
+          .addToCartList
+          .value
+          .add(CartProductModel(mId: element['id'],
+          pId: element['productId'],
+          mPrice: element['price'],
+          mQuantity: element['quantity'],
+          mTitle: element['title'],
+          mTempUniqueId: element['tempUniqueId']));
+    });
+    Get.find<CartController>().totalAmount=double.parse(data['subTotal'].toString());
+    Get.find<CartController>().discountAmount=double.parse(data['discount'].toString());
+    Get.find<CartController>().deliveryAmount=double.parse(data['delivery'].toString());
+    Get.find<CartController>().update();
   }
 }

@@ -19,7 +19,7 @@ import 'auth_controller.dart';
 import 'customer_controller.dart';
 
 class CartController extends GetxController {
-  late String uniqueId;
+  String uniqueId='pos${Xid()}';
   late RxString cartPrice;
   double totalAmount = 0.0;
   double totalAmountForPrint = 0.0;
@@ -39,6 +39,7 @@ class CartController extends GetxController {
   List<CartProductModel> addToCartListForPrint = [];
   List<TempOrderModel> openCartsUDID = [];
   List<ProvinceModel> countryList = [];
+  var addToCartJson={};
 
   Future<void> addToCart(
       {required productId,
@@ -74,7 +75,7 @@ class CartController extends GetxController {
         }));
     if (response.statusCode == 200) {
 
-      AudioCache player = AudioCache();
+      //AudioCache player = AudioCache();
       AudioPlayer audioPlayer = AudioPlayer();
       const alarmAudioPath = "assets/sounds/beep.mp3";
       audioPlayer.play(alarmAudioPath);
@@ -89,7 +90,7 @@ class CartController extends GetxController {
           pId: jsonObject['data']['cart_item_id']));
       totalAmount = double.parse(jsonObject['data']['total_amount'].toString());
       update();
-      LocalStorageHelper.saveValue('cartData', addToCartList.value.toString());
+      saveCartForSecondMonitor();
       Fluttertoast.showToast(
           msg: "item added to cart successfully",  // message
           toastLength: Toast.LENGTH_SHORT, // length
@@ -101,7 +102,6 @@ class CartController extends GetxController {
     }else {
       Get.back();
       RemoteStatusHandler().errorHandler(code: response.statusCode,error:convert.jsonDecode(response.body));
-      print(response.statusCode);
     }
   }
 
@@ -128,8 +128,10 @@ class CartController extends GetxController {
 
       if (addToCartList.value[index].quantity == '0') {
         addToCartList.value.removeAt(index);
+        saveCartForSecondMonitor();
       } else {
         addToCartList.value[index].quantity = quantity.toString();
+        saveCartForSecondMonitor();
       }
       totalAmount = double.parse(jsonObject['data']['total_amount'].toString());
 
@@ -139,7 +141,6 @@ class CartController extends GetxController {
     } else {
       Get.back();
       RemoteStatusHandler().errorHandler(code: response.statusCode,error:convert.jsonDecode(response.body));
-      print(response.statusCode);
     }
   }
 
@@ -167,7 +168,7 @@ class CartController extends GetxController {
       double itemPrice = itemQty * itemPrc;
       totalAmount = totalAmount - itemPrice;
       addToCartList.value.removeAt(int.parse(index.toString()));
-
+      saveCartForSecondMonitor();
       update();
       Get.find<CartController>().update();
 
@@ -176,7 +177,6 @@ class CartController extends GetxController {
     } else {
       Get.back();
       RemoteStatusHandler().errorHandler(code: response.statusCode,error:convert.jsonDecode(response.body));
-      print(response.statusCode);
     }
   }
 
@@ -199,7 +199,7 @@ class CartController extends GetxController {
 
       addToCartList.value.clear();
       totalAmount = 0.0;
-
+      saveCartForSecondMonitor();
       update();
       Get.find<CartController>().update();
 
@@ -208,7 +208,6 @@ class CartController extends GetxController {
     } else {
       Get.back();
       RemoteStatusHandler().errorHandler(code: response.statusCode,error:convert.jsonDecode(response.body));
-      print(response.statusCode);
     }
   }
 
@@ -241,7 +240,6 @@ class CartController extends GetxController {
     } else {
       Get.back();
       RemoteStatusHandler().errorHandler(code: response.statusCode,error:convert.jsonDecode(response.body));
-      print(response.statusCode);
     }
   }
 
@@ -301,8 +299,6 @@ class CartController extends GetxController {
     } else {
       Get.back();
       RemoteStatusHandler().errorHandler(code: response.statusCode,error:convert.jsonDecode(response.body));
-      print(response.statusCode);
-      print(response.body);
     }
   }
 
@@ -351,7 +347,6 @@ class CartController extends GetxController {
     } else {
       Get.back();
       RemoteStatusHandler().errorHandler(code: response.statusCode,error:convert.jsonDecode(response.body));
-      print(response.statusCode);
     }
   }
 
@@ -372,5 +367,25 @@ class CartController extends GetxController {
       addToCartList.value.clear();
       update();
     }
+  }
+
+  void saveCartForSecondMonitor(){
+    addToCartJson={
+      'subTotal':totalAmount.toString(),
+      'discount':discountAmount.toString(),
+      'delivery':deliveryAmount.toString(),
+      'data':[
+        for(int i =0;i<addToCartList.value.length;i++)
+          {
+            'id':addToCartList.value[i].id,
+            'productId':addToCartList.value[i].productId,
+            'price':addToCartList.value[i].price,
+            'quantity':addToCartList.value[i].quantity,
+            'title':addToCartList.value[i].title,
+            'tempUniqueId':addToCartList.value[i].tempUniqueId,
+          },
+      ]
+    };
+    LocalStorageHelper.saveValue('cartData',jsonEncode(addToCartJson).toString());
   }
 }

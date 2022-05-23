@@ -10,12 +10,13 @@ import 'package:pos_system/services/controller/product_controller.dart';
 import 'package:pos_system/services/controller/user_controller.dart';
 import 'package:pos_system/services/remotes/api_routes.dart';
 import 'package:pos_system/services/remotes/local_storage.dart';
+import 'package:pos_system/services/remotes/remote_status_handler.dart';
 import 'package:pos_system/views/dialogs/loading_dialogs.dart';
 import 'package:xid/xid.dart';
 
 import 'category_controller.dart';
 import 'dashboard_controller.dart';
-// import 'dart:html' as html;
+import 'package:universal_html/html.dart' as html;
 
 class AuthController extends GetxController {
   // Holds the text that user typed.
@@ -50,6 +51,7 @@ class AuthController extends GetxController {
       Get.back();
       var jsonObject = convert.jsonDecode(response.body);
       token=jsonObject['token'];
+      LocalStorageHelper.clearAll();
       LocalStorageHelper.saveValue('token', token);
       Get.find<UserController>().name=jsonObject['user']['name'];
       Get.find<UserController>().email=jsonObject['user']['email'];
@@ -61,14 +63,14 @@ class AuthController extends GetxController {
       Get.find<CartController>().getAreas(doInBackground: true,hasLoading: false);
 
       // html.WindowBase _popup = html.window
-      //     .open('https://possystem.gulfweb.ir/#/showFactor', 'Pos system', 'left=100,top=100,width=800,height=600');
+      //     .open('http://localhost:54794/#/showFactor', 'Pos system', 'left=100,top=100,width=800,height=600');
       // if (_popup.closed!) {
       //   throw("Popups blocked");
       // }
 
     } else {
       Get.back();
-      print(response.statusCode);
+      RemoteStatusHandler().errorHandler(code: response.statusCode, error: response.body);
     }
   }
 
@@ -84,11 +86,11 @@ class AuthController extends GetxController {
     );
     if (response.statusCode == 200) {
       Get.back();
-      var jsonObject = convert.jsonDecode(response.body);
+      //var jsonObject = convert.jsonDecode(response.body);
       Get.offAndToNamed('/login');
     } else {
       Get.back();
-      print(response.statusCode);
+      RemoteStatusHandler().errorHandler(code: response.statusCode, error: response.body);
     }
   }
 
