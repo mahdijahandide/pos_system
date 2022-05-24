@@ -4,16 +4,21 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'dart:convert' as convert;
 import 'package:http/http.dart' as http;
+import 'package:pos_system/services/model/cash_history_model.dart';
 import 'package:pos_system/services/remotes/api_routes.dart';
 import 'package:pos_system/services/remotes/remote_status_handler.dart';
 
 import '../../views/components/snackbar/snackbar.dart';
 import '../../views/dialogs/loading_dialogs.dart';
+import 'auth_controller.dart';
 
 class CashController extends GetxController{
   RxBool isAddCash=true.obs;
   TextEditingController amountTextController=TextEditingController();
   TextEditingController descriptionTextController=TextEditingController();
+
+  Rx<List<CashHistoryModel>>cashHistoryList=Rx<List<CashHistoryModel>>([]);
+  RxBool hasHistoryList=false.obs;
 
   Future<void> addOrRemoveCashRequest() async {
     LoadingDialog.showCustomDialog(msg: 'loading'.tr);
@@ -35,6 +40,28 @@ class CashController extends GetxController{
       amountTextController.clear();
       descriptionTextController.clear();
       Snack().createSnack(title: 'success',msg: 'request recorded successfully');
+    } else {
+      Get.back();
+      RemoteStatusHandler().errorHandler(code: response.statusCode,error:convert.jsonDecode(response.body));
+    }
+  }
+
+  Future<void> getCashHistory() async {
+    var url = CASH_HISTORY;
+    final http.Response response = await http.post(
+      Uri.parse(url),
+      headers: <String,String>{
+        'Content-Type':'application/json',
+        'Authorization': 'Bearer ${Get.find<AuthController>().token}'
+      },
+    );
+    if (response.statusCode == 200) {
+      cashHistoryList.value.clear();
+      var jsonObject = convert.jsonDecode(response.body);
+      jsonObject['data'].forEach((element){
+        cashHistoryList.value.add(CashHistoryModel(data: element));
+      });
+      hasHistoryList.value=true;
     } else {
       Get.back();
       RemoteStatusHandler().errorHandler(code: response.statusCode,error:convert.jsonDecode(response.body));

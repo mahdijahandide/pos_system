@@ -25,6 +25,7 @@ class CashInOut extends GetView<CashController> {
               padding: const EdgeInsets.symmetric(horizontal: 12),
               child: IconButton(
                 onPressed: () {
+                  controller.hasHistoryList.value=false;
                   Get.bottomSheet(
                     CashModal(title: 'Cash History'),
                     isScrollControlled: true,

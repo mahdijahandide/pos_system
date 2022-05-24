@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'dart:convert' as convert;
 import 'package:http/http.dart' as http;
@@ -13,16 +14,20 @@ import '../remotes/remote_status_handler.dart';
 
 class ShiftController extends GetxController{
 
-  RxDouble existCash=0.0.obs;
-  RxDouble shouldExistCash=0.0.obs;
+  TextEditingController valController = TextEditingController();
+  Rx<TextEditingController>cashCount=Rx(TextEditingController());
+  Rx<TextEditingController>cardCount=Rx(TextEditingController());
+
   RxDouble startCash=0.0.obs;
   RxDouble sellCash=0.0.obs;
   RxDouble sellCard=0.0.obs;
+  RxDouble cashIn=0.0.obs;
   RxDouble totalSell=0.0.obs;
+  RxDouble totalFunds=0.0.obs;
+  RxDouble totalRefund=0.0.obs;
   RxDouble refundCash=0.0.obs;
   RxDouble refundCard=0.0.obs;
-  RxDouble totalRefund=0.0.obs;
-  RxDouble total=0.0.obs;
+  RxDouble totalCashFunds=0.0.obs;
 
   RxBool selectStartShift=true.obs;
   RxBool showLoading=true.obs;
@@ -44,18 +49,24 @@ class ShiftController extends GetxController{
     );
     if (response.statusCode == 200) {
       var jsonObject = convert.jsonDecode(response.body);
-      existCash.value=double.parse(jsonObject['data']['existCash'].toString());
-      shouldExistCash.value=double.parse(jsonObject['data']['shouldExistCash'].toString());
+      selectStartShift.value=false;
       startCash.value=double.parse(jsonObject['data']['startCash'].toString());
       sellCash.value=double.parse(jsonObject['data']['sellCash'].toString());
       sellCard.value=double.parse(jsonObject['data']['sellCard'].toString());
+      cashIn.value=double.parse(jsonObject['data']['cashIn'].toString());
       totalSell.value=double.parse(jsonObject['data']['totalSell'].toString());
+      totalFunds.value=double.parse(jsonObject['data']['totalFunds'].toString());
+      totalRefund.value=double.parse(jsonObject['data']['totalRefund'].toString());
       refundCash.value=double.parse(jsonObject['data']['refundCash'].toString());
       refundCard.value=double.parse(jsonObject['data']['refundCard'].toString());
-      totalRefund.value=double.parse(jsonObject['data']['totalRefund'].toString());
-      total.value=double.parse(jsonObject['data']['total'].toString());
+      totalCashFunds.value=double.parse(jsonObject['data']['totalCashFunds'].toString());
+      cashCount.value.text=totalCashFunds.value.toString();
+      cardCount.value.text=(sellCard.value-refundCard.value).toString();
       showLoading.value=false;
-    } else {
+    } else if(response.statusCode==400) {
+      showLoading.value=false;
+      selectStartShift.value=true;
+    }else{
       Get.back();
       RemoteStatusHandler().errorHandler(code: response.statusCode,error: convert.jsonDecode(response.body));
     }
@@ -77,6 +88,7 @@ class ShiftController extends GetxController{
     if (response.statusCode == 200) {
       var jsonObject = convert.jsonDecode(response.body);
       Get.back();
+      shiftDetailsRequest();
     } else {
       Get.back();
       RemoteStatusHandler().errorHandler(code: response.statusCode,error: convert.jsonDecode(response.body));
@@ -92,9 +104,14 @@ class ShiftController extends GetxController{
         'Content-Type':'application/json',
         'Authorization':'Bearer ${Get.find<AuthController>().token}'
       },
+      body: jsonEncode(<String,String>{
+        'countCash':cashCount.value.text.toString(),
+        'countCard':cardCount.value.text.toString(),
+      })
     );
     if (response.statusCode == 200) {
       var jsonObject = convert.jsonDecode(response.body);
+      selectStartShift.value=true;
       Get.back();
     } else {
       Get.back();

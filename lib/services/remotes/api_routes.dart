@@ -3,7 +3,7 @@
 // const String BASE_URL = 'https://kash5astore.com/api/posv1/';
 // const String BASE_URL = 'https://demo.kash5astore.com/api/posv1/';
 // const String BASE_URL = 'https://kash5astore.gulfweb.ir/api/posv1/';
-const String BASE_URL = 'https://kash5a2.gulfweb.ir/api/posv1/';
+const String BASE_URL = 'https://www.kash5a2.gulfweb.ir/api/posv1/';
 const String BASE_URL_IMAGES = 'https://kash5astore.com/uploads/';
 
 
@@ -26,6 +26,7 @@ const String ADD_NEW_CUSTOMER = BASE_URL + 'AddNewCustomer';
 const String GET_ORDERS = BASE_URL + 'getOrders';
 const String GET_ORDER_ITEMS = BASE_URL + 'getOrderItems';
 const String CASH_IN_OUT = BASE_URL + 'cash/change';
+const String CASH_HISTORY = BASE_URL + 'cash/history';
 const String SHIFT_DETAILS = BASE_URL + 'shift/details';
 const String SHIFT_START = BASE_URL + 'shift/start';
 const String SHIFT_END = BASE_URL + 'shift/end';
