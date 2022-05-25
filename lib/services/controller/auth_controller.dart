@@ -62,11 +62,11 @@ class AuthController extends GetxController {
       Get.find<CustomerController>().getCustomers(doInBackground: true,hasLoading: false);
       Get.find<CartController>().getAreas(doInBackground: true,hasLoading: false);
 
-      // html.WindowBase _popup = html.window
-      //     .open('http://localhost:54794/#/showFactor', 'Pos system', 'left=100,top=100,width=800,height=600');
-      // if (_popup.closed!) {
-      //   throw("Popups blocked");
-      // }
+      html.WindowBase _popup = html.window
+          .open('https://possystem.gulfweb.ir/#/showFactor', 'Pos system', 'left=100,top=100,width=800,height=600');
+      if (_popup.closed!) {
+        throw("Popups blocked");
+      }
 
     } else {
       Get.back();

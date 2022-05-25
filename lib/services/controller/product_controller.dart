@@ -58,7 +58,9 @@ class ProductController extends GetxController {
       hasProduct.value = true;
       var jsonObject = convert.jsonDecode(response.body);
       var productArray = jsonObject['data']['productLists'];
-      productList.clear();
+      if(productArray.length>0){
+        productList.clear();
+      }
       productArray.forEach((element) {
         productList.add((ProductModel(data: element)));
       });

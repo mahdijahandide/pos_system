@@ -8,58 +8,18 @@ import 'package:pos_system/views/components/textfields/textfield.dart';
 import 'package:pos_system/views/components/texts/customText.dart';
 import 'package:vk/vk.dart';
 
-class CheckoutModal extends GetView<CartController> {
+class RefundModal extends GetView<CartController> {
   String title;
+  String total;
+  bool isWholeCart;
 
-  CheckoutModal({
+  RefundModal({
     Key? key,
-    required this.title,
+    required this.title,required this.total,required this.isWholeCart
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    if (Get
-        .find<CustomerController>()
-        .selectedCustomer != null) {
-      Get
-          .find<CustomerController>()
-          .customerNameController
-          .text =
-          Get
-              .find<CustomerController>()
-              .selectedCustomer
-              .name ?? '';
-      Get
-          .find<CustomerController>()
-          .customerEmailController
-          .text =
-          Get
-              .find<CustomerController>()
-              .selectedCustomer
-              .email ?? '';
-      Get
-          .find<CustomerController>()
-          .customerNumberController
-          .text =
-          Get
-              .find<CustomerController>()
-              .selectedCustomer
-              .mobile ?? '';
-    } else {
-      Get
-          .find<CustomerController>()
-          .customerNameController
-          .text = '';
-      Get
-          .find<CustomerController>()
-          .customerEmailController
-          .text = '';
-      Get
-          .find<CustomerController>()
-          .customerNumberController
-          .text = '';
-    }
-
     return Scaffold(
         backgroundColor: Colors.white,
         body: Column(
@@ -93,64 +53,7 @@ class CheckoutModal extends GetView<CartController> {
                   const SizedBox(
                     height: 38,
                   ),
-                  Row(
-                    children: [
-                      Expanded(
-                          flex: 1,
-                          child: CustomText().createText(
-                              title: 'Customer Name: ')),
-                      Expanded(
-                          flex: 9,
-                          child: CustomTextField().createTextField(
-                            hint: 'enter name',
-                            height: 50,
-                            controller: Get
-                                .find<CustomerController>()
-                                .customerNameController,
-                          )),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 8,
-                  ),
-                  Row(
-                    children: [
-                      Expanded(
-                          flex: 1,
-                          child:
-                          CustomText().createText(title: 'Customer Email: ')),
-                      Expanded(
-                          flex: 9,
-                          child: CustomTextField().createTextField(
-                              hint: 'enter email',
-                              height: 50,
-                              controller: Get
-                                  .find<CustomerController>()
-                                  .customerEmailController)),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 8,
-                  ),
-                  Row(
-                    children: [
-                      Expanded(
-                          flex: 1,
-                          child:
-                          CustomText().createText(title: 'Customer Mobile: ')),
-                      Expanded(
-                          flex: 9,
-                          child: CustomTextField().createTextField(
-                              hint: 'enter number',
-                              height: 50,
-                              controller: Get
-                                  .find<CustomerController>()
-                                  .customerNumberController)),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 8,
-                  ),
+
                   Obx(() {
                     return Row(
                       children: [
@@ -159,9 +62,7 @@ class CheckoutModal extends GetView<CartController> {
                         SizedBox(
                           width: 200,
                           child: CustomText().createText(
-                              title: (controller.totalAmount +
-                                  controller.discountAmount +
-                                  controller.deliveryAmount).toString(),
+                              title:total,
                               size: 26,
                               fontWeight: FontWeight.bold),
                         ),
@@ -190,7 +91,7 @@ class CheckoutModal extends GetView<CartController> {
                             width: Get.width > 600 ? Get.width / 3 : Get.width /
                                 2,
                             child: CustomTextField().createTextField(
-                                hint: 'customer paid',
+                                hint: 'cashier paid',
                                 height: 50,
                                 keyboardType: TextInputType.number,
                                 inputFormatters: <TextInputFormatter>[
@@ -198,28 +99,7 @@ class CheckoutModal extends GetView<CartController> {
                                 ],
                                 controller: controller.calController,
                                 onSubmitted: (_) async {
-                                  String total = (controller.totalAmount +
-                                      controller.discountAmount +
-                                      controller.deliveryAmount).toString();
-                                  if (controller.calController.text == total) {
-                                    controller.checkoutCart();
-                                  } else if (double.parse(
-                                      controller.calController.text
-                                          .toString()) - double.parse(total) >
-                                      0) {
-                                    controller.balanceStatus.value =
-                                    'Change: ${double.parse(
-                                        controller.calController.text
-                                            .toString()) - double.parse(total.toString())}';
-                                  } else if (double.parse(
-                                      controller.calController.text
-                                          .toString()) - double.parse(total) <
-                                      0) {
-                                    controller.balanceStatus.value =
-                                    'Balance: ${double.parse(
-                                        controller.calController.text
-                                            .toString()) - double.parse(total)}';
-                                  }
+                                  refundCalculation();
                                 }
                             ),
                           ),
@@ -239,32 +119,9 @@ class CheckoutModal extends GetView<CartController> {
                                 2,
                             child: CustomTextButton().createTextButton(
                                 onPress: () {
-                                  String total = (controller.totalAmount +
-                                      controller.discountAmount +
-                                      controller.deliveryAmount).toString();
-                                  if (controller.calController.text == total) {
-                                    controller.checkoutCart();
-                                  } else if (double.parse(
-                                      controller.calController.text
-                                          .toString()) - double.parse(total) >
-                                      0) {
-                                    controller.balanceStatus.value =
-                                    'Change: ${double.parse(
-                                        controller.calController.text
-                                            .toString()) - double.parse(total) >
-                                        0}';
-                                  } else if (double.parse(
-                                      controller.calController.text
-                                          .toString()) - double.parse(total) <
-                                      0) {
-                                    controller.balanceStatus.value =
-                                    'Balance: ${double.parse(
-                                        controller.calController.text
-                                            .toString()) - double.parse(total) <
-                                        0}';
-                                  }
+                                  refundCalculation();
                                 },
-                                buttonText: 'Accept payment',
+                                buttonText: 'Accept Refund',
                                 borderRadius: 0.0,
                                 buttonColor: Colors.teal,
                                 textColor: Colors.white,
@@ -333,5 +190,19 @@ class CheckoutModal extends GetView<CartController> {
           }
       ),
     );
+  }
+
+  void refundCalculation(){
+    String total = isWholeCart==true?controller.refundCartTotalPrice: (controller.totalAmount + controller.discountAmount + controller.deliveryAmount).toString();
+
+    if (controller.calController.text == total) {
+      isWholeCart==true?controller.refundCartRequest():controller.refundCartItemRequest();
+    } else if (double.parse(controller.calController.text.toString()) - double.parse(total) > 0) {
+      controller.balanceStatus.value =
+      'Change: ${double.parse(controller.calController.text.toString()) - double.parse(total)}';
+    } else if (double.parse(controller.calController.text.toString()) - double.parse(total) < 0) {
+      controller.balanceStatus.value =
+      'Balance: ${double.parse(controller.calController.text.toString()) - double.parse(total)}';
+    }
   }
 }

@@ -5,6 +5,7 @@ import 'package:pos_system/services/controller/customer_controller.dart';
 import 'package:pos_system/services/controller/dashboard_controller.dart';
 import 'package:pos_system/services/controller/order_controller.dart';
 import 'package:pos_system/views/components/texts/customText.dart';
+import 'package:universal_html/html.dart' as html;
 
 class DashboardDrawer {
   Widget createDrawer() {
@@ -57,7 +58,13 @@ class DashboardDrawer {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children:  [
-            const Icon(Icons.settings),
+              IconButton(icon:const Icon(Icons.monitor), onPressed: () {
+              html.WindowBase _popup = html.window
+                  .open('https://possystem.gulfweb.ir/#/showFactor', 'Pos system', 'left=100,top=100,width=800,height=600');
+              if (_popup.closed!) {
+                throw("Popups blocked");
+              }
+            },),
             IconButton(onPressed: () {
               //document.documentElement.requestFullscreen();
               Get.find<DashboardController>().fullScreen();
