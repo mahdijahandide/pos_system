@@ -417,10 +417,10 @@ class DashboardSidebar {
                               .addToCartList
                               .value
                               .isNotEmpty) {
-                            controller.calController.text =
-                                (controller.totalAmount +
-                                    controller.discountAmount +
-                                    controller.deliveryAmount).toString();
+                            // controller.calController.text ='0';
+                                // (controller.totalAmount +
+                                //     controller.discountAmount +
+                                //     controller.deliveryAmount).toString();
                             Get.bottomSheet(
                               controller.isRefund.isFalse ?
                               CheckoutModal(title: 'Checkout') : RefundModal(
@@ -434,7 +434,8 @@ class DashboardSidebar {
                               ),
                             );
                           }else if(controller.addToCartList.value.isEmpty&&controller.isRefund.isTrue){
-                            controller.calController.text =controller.refundCartTotalPrice;
+                            controller.calController.text ='';
+                                //controller.refundCartTotalPrice;
                             Get.bottomSheet(
                               RefundModal(title: 'Refund', total: controller.refundCartTotalPrice, isWholeCart: true,),
                               isScrollControlled: true,

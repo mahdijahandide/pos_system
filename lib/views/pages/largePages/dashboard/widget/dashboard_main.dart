@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:pos_system/services/controller/cart_controller.dart';
 import 'package:pos_system/services/controller/dashboard_controller.dart';
@@ -303,11 +304,12 @@ class DashboardMain {
                             tempUniqueId:
                                 Get.find<CartController>().uniqueId.toString());
                       } else {
-                        Snack().createSnack(
-                            title: 'warning',
-                            msg: 'this item already exist in your cart',
-                            bgColor: Colors.orange,
-                            icon: Icons.warning);
+                        Fluttertoast.showToast(
+                            msg: "this item already exist in your cart", // message
+                            toastLength: Toast.LENGTH_SHORT, // length
+                            gravity: ToastGravity.CENTER, // location
+                            timeInSecForIosWeb: 1 // duration
+                        );
                       }
                     } else {
                       var contain = Get.find<CartController>()
@@ -318,11 +320,12 @@ class DashboardMain {
                             productId: currentItem.id.toString(),
                             title: currentItem.title);
                       } else {
-                        Snack().createSnack(
-                            title: 'warning',
-                            msg: 'this item already exist in your cart',
-                            bgColor: Colors.orange,
-                            icon: Icons.warning);
+                        Fluttertoast.showToast(
+                            msg: "this item already exist in your cart", // message
+                            toastLength: Toast.LENGTH_SHORT, // length
+                            gravity: ToastGravity.CENTER, // location
+                            timeInSecForIosWeb: 1 // duration
+                        );
                       }
                     }
                   },

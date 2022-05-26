@@ -90,7 +90,7 @@ class SaleHistory extends GetView<OrderController> {
                           Row(
                             children: [
                               Container(
-                                width: 100,
+                                width: 130,
                                 height: 50,
                                 decoration: BoxDecoration(
                                     color: Colors.greenAccent,

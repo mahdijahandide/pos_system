@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:pos_system/services/controller/cart_controller.dart';
 import 'package:pos_system/services/controller/customer_controller.dart';
 import 'package:pos_system/views/components/buttons/custom_text_button.dart';
+import 'package:pos_system/views/components/snackbar/snackbar.dart';
 import 'package:pos_system/views/components/textfields/textfield.dart';
 import 'package:pos_system/views/components/texts/customText.dart';
 import 'package:vk/vk.dart';
@@ -155,7 +156,7 @@ class CheckoutModal extends GetView<CartController> {
                     return Row(
                       children: [
                         CustomText().createText(
-                            title: 'Total Amount: '),
+                            title: 'Total Amount: ',size: 24,fontWeight: FontWeight.bold),
                         SizedBox(
                           width: 200,
                           child: CustomText().createText(
@@ -167,8 +168,8 @@ class CheckoutModal extends GetView<CartController> {
                         ),
                         const SizedBox(width: 8,),
                         CustomText().createText(
-                            title: controller.balanceStatus.value,size: 18,fontWeight: FontWeight.bold,
-                            color:double.parse(
+                            title: controller.balanceStatus.value==''?'':controller.balanceStatus.value,size: 18,fontWeight: FontWeight.bold,
+                            color:controller.calController.text==''?Colors.white: double.parse(
                                 controller.calController.text
                                     .toString()) - double.parse((controller.totalAmount +
                                 controller.discountAmount +
@@ -182,9 +183,10 @@ class CheckoutModal extends GetView<CartController> {
                     height: 8,
                   ),
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           SizedBox(
                             width: Get.width > 600 ? Get.width / 3 : Get.width /
@@ -207,6 +209,7 @@ class CheckoutModal extends GetView<CartController> {
                                       controller.calController.text
                                           .toString()) - double.parse(total) >
                                       0) {
+                                    controller.checkoutCart();
                                     controller.balanceStatus.value =
                                     'Change: ${double.parse(
                                         controller.calController.text
@@ -243,16 +246,21 @@ class CheckoutModal extends GetView<CartController> {
                                       controller.discountAmount +
                                       controller.deliveryAmount).toString();
                                   if (controller.calController.text == total) {
-                                    controller.checkoutCart();
+                                    if(Get.find<CustomerController>().customerNumberController.text.isNotEmpty){
+                                      controller.checkoutCart();
+                                    }else{
+                                      Snack().createSnack(title: 'warning',msg: 'select a customer first');
+                                    }
+
                                   } else if (double.parse(
                                       controller.calController.text
                                           .toString()) - double.parse(total) >
                                       0) {
+                                    controller.checkoutCart();
                                     controller.balanceStatus.value =
                                     'Change: ${double.parse(
                                         controller.calController.text
-                                            .toString()) - double.parse(total) >
-                                        0}';
+                                            .toString()) - double.parse(total)}';
                                   } else if (double.parse(
                                       controller.calController.text
                                           .toString()) - double.parse(total) <
@@ -260,8 +268,7 @@ class CheckoutModal extends GetView<CartController> {
                                     controller.balanceStatus.value =
                                     'Balance: ${double.parse(
                                         controller.calController.text
-                                            .toString()) - double.parse(total) <
-                                        0}';
+                                            .toString()) - double.parse(total)}';
                                   }
                                 },
                                 buttonText: 'Accept payment',

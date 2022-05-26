@@ -58,7 +58,7 @@ class RefundModal extends GetView<CartController> {
                     return Row(
                       children: [
                         CustomText().createText(
-                            title: 'Total Amount: '),
+                            title: 'Total Amount: ',fontWeight: FontWeight.bold,size: 26),
                         SizedBox(
                           width: 200,
                           child: CustomText().createText(
@@ -68,8 +68,8 @@ class RefundModal extends GetView<CartController> {
                         ),
                         const SizedBox(width: 8,),
                         CustomText().createText(
-                            title: controller.balanceStatus.value,size: 18,fontWeight: FontWeight.bold,
-                            color:double.parse(
+                            title:controller.balanceStatus.value==''?'': controller.balanceStatus.value,size: 18,fontWeight: FontWeight.bold,
+                            color:controller.balanceStatus.value==''?Colors.white:double.parse(
                                 controller.calController.text
                                     .toString()) - double.parse((controller.totalAmount +
                                 controller.discountAmount +
@@ -83,6 +83,7 @@ class RefundModal extends GetView<CartController> {
                     height: 8,
                   ),
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -198,6 +199,7 @@ class RefundModal extends GetView<CartController> {
     if (controller.calController.text == total) {
       isWholeCart==true?controller.refundCartRequest():controller.refundCartItemRequest();
     } else if (double.parse(controller.calController.text.toString()) - double.parse(total) > 0) {
+      isWholeCart==true?controller.refundCartRequest():controller.refundCartItemRequest();
       controller.balanceStatus.value =
       'Change: ${double.parse(controller.calController.text.toString()) - double.parse(total)}';
     } else if (double.parse(controller.calController.text.toString()) - double.parse(total) < 0) {

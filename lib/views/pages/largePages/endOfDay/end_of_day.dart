@@ -218,8 +218,11 @@ class EndOfDay extends GetView<ShiftController> {
                                         color: Colors.white),
                                     child: CalculatorTextField(
                                       textAlign: TextAlign.end,
+                                      operatorButtonColor: Colors.teal,
+                                      title: 'Cash count',
                                       inputDecoration: const InputDecoration(hintText: 'enter cashCount (required)',border: InputBorder.none),
-                                      initialValue: double.parse(controller.cashCount.value.text),
+                                      //initialValue:0,
+                                      //double.parse(controller.cashCount.value.text),
                                       onSubmitted: (value) {
                                         controller.cashCount.value.text=value.toString();
                                       },
@@ -253,8 +256,11 @@ class EndOfDay extends GetView<ShiftController> {
                                         color: Colors.white),
                                     child: CalculatorTextField(
                                       textAlign: TextAlign.end,
+                                      operatorButtonColor: Colors.teal,
+                                      title: 'Card count',
                                       inputDecoration: const InputDecoration(hintText: 'enter cardCount (required)',border: InputBorder.none),
-                                      initialValue: double.parse(controller.cardCount.value.text),
+                                      //initialValue:0,
+                                      //double.parse(controller.cardCount.value.text),
                                       onSubmitted: (value) {
                                         controller.cardCount.value.text=value.toString();
                                       },

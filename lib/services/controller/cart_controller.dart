@@ -16,6 +16,8 @@ import 'package:pos_system/views/dialogs/area_province_dialog.dart';
 import 'package:pos_system/views/dialogs/loading_dialogs.dart';
 import 'package:printing/printing.dart';
 import 'package:xid/xid.dart';
+import '../../views/components/buttons/custom_text_button.dart';
+import '../../views/components/texts/customText.dart';
 import '../model/temp_orders_model.dart';
 import 'auth_controller.dart';
 import 'customer_controller.dart';
@@ -266,6 +268,7 @@ class CartController extends GetxController {
 
   Future<void> checkoutCart() async {
     LoadingDialog.showCustomDialog(msg: 'Please wait ...');
+    print(selectedPaymentType.value);
     var url = CHECKOUT_CART;
     final http.Response response = await http.post(Uri.parse(url),
         headers: <String, String>{
@@ -321,7 +324,20 @@ class CartController extends GetxController {
           );
       Get.back();
       Get.back();
-      await Printing.layoutPdf(onLayout: (_) => generatePdf());
+      Get.defaultDialog(title: 'Success',content: Column(
+        children: [
+          CustomText().createText(title: balanceStatus.value==''?'change: 0.0': 'change: ${balanceStatus.value}',fontWeight: FontWeight.bold,size: 22),
+          const SizedBox(height: 15,),
+          SizedBox(
+            width: 110,height: 50,
+            child: CustomTextButton().createTextButton(
+                buttonText: 'Print', buttonColor: Colors.greenAccent, textColor: Colors.black,icon: const Icon(Icons.print),onPress: () async {
+                  Get.back();
+              await Printing.layoutPdf(onLayout: (_) => generatePdf());
+            }),
+          ),
+        ],
+      ));
       update();
     }  else {
       Get.back();
