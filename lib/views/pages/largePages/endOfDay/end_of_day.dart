@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_simple_calculator/flutter_simple_calculator.dart';
 import 'package:get/get.dart';
+import 'package:input_calculator/input_calculator.dart';
 import 'package:pos_system/services/controller/shift_controller.dart';
 import 'package:pos_system/views/dialogs/shift_warning_dialog.dart';
 import 'package:vk/vk.dart';
@@ -206,15 +207,70 @@ class EndOfDay extends GetView<ShiftController> {
                                 height: 15,
                               ),
                               Row(children: [
-                                SizedBox(width: 120,child: CustomText().createText(title: 'Cash Count: ')),
-                                Expanded(child: CustomTextField().createTextField(hint: 'enter cashCount (required)', height: 40,controller: controller.cashCount.value,))
+                                SizedBox(width: 90,child: CustomText().createText(title: 'Cash Count: ')),
+                                Expanded(
+                                  child: Container(
+                                    height: 45,
+                                    alignment: Alignment.center,
+                                    padding: const EdgeInsets.only(right: 8.0, left: 8.0),
+                                    decoration: BoxDecoration(
+                                        border: Border.all(color: const Color(0xffdcdcdc)),
+                                        color: Colors.white),
+                                    child: CalculatorTextField(
+                                      textAlign: TextAlign.end,
+                                      inputDecoration: const InputDecoration(hintText: 'enter cashCount (required)',border: InputBorder.none),
+                                      initialValue: double.parse(controller.cashCount.value.text),
+                                      onSubmitted: (value) {
+                                        controller.cashCount.value.text=value.toString();
+                                      },
+                                    ),
+                                  ),
+                                ),
+                                // IconButton(onPressed: (){
+                                //   Get.defaultDialog(
+                                //
+                                //     content: CalculatorTextField(
+                                //       initialValue: double.parse(controller.cashCount.value.text),
+                                //       onSubmitted: (value) {
+                                //         controller.cashCount.value.text=value.toString();
+                                //       },
+                                //     ),);
+                                // }, icon: const Icon(Icons.calculate)),
+                                // Expanded(child: CustomTextField().createTextField(hint: 'enter cashCount (required)', height: 40,controller: controller.cashCount.value,))
                               ],),
                               const SizedBox(
                                 height: 8,
                               ),
                               Row(children: [
-                                SizedBox(width: 120,child: CustomText().createText(title: 'Card Count: ')),
-                                Expanded(child: CustomTextField().createTextField(hint: 'enter cardCount (required)', height: 40,controller: controller.cardCount.value,))
+                                SizedBox(width: 90,child: CustomText().createText(title: 'Card Count: ')),
+                                Expanded(
+                                  child: Container(
+                                    height: 45,
+                                    alignment: Alignment.center,
+                                    padding: const EdgeInsets.only(right: 8.0, left: 8.0),
+                                    decoration: BoxDecoration(
+                                        border: Border.all(color: const Color(0xffdcdcdc)),
+                                        color: Colors.white),
+                                    child: CalculatorTextField(
+                                      textAlign: TextAlign.end,
+                                      inputDecoration: const InputDecoration(hintText: 'enter cardCount (required)',border: InputBorder.none),
+                                      initialValue: double.parse(controller.cardCount.value.text),
+                                      onSubmitted: (value) {
+                                        controller.cardCount.value.text=value.toString();
+                                      },
+                                    ),
+                                  ),
+                                ),
+                                // IconButton(onPressed: (){
+                                //   Get.defaultDialog(
+                                //     content: CalculatorTextField(
+                                //       initialValue: double.parse(controller.cardCount.value.text),
+                                //       onSubmitted: (value) {
+                                //         controller.cardCount.value.text=value.toString();
+                                //       },
+                                //     ),);
+                                // }, icon: const Icon(Icons.calculate)),
+                                // Expanded(child: CustomTextField().createTextField(hint: 'enter cardCount (required)', height: 40,controller: controller.cardCount.value,))
                               ],),
                               // const SizedBox(
                               //   height: 8,
