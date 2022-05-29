@@ -246,12 +246,7 @@ class CheckoutModal extends GetView<CartController> {
                                       controller.discountAmount +
                                       controller.deliveryAmount).toString();
                                   if (controller.calController.text == total) {
-                                    if(Get.find<CustomerController>().customerNumberController.text.isNotEmpty){
                                       controller.checkoutCart();
-                                    }else{
-                                      Snack().createSnack(title: 'warning',msg: 'select a customer first');
-                                    }
-
                                   } else if (double.parse(
                                       controller.calController.text
                                           .toString()) - double.parse(total) >
@@ -291,10 +286,10 @@ class CheckoutModal extends GetView<CartController> {
                                 'PCARD' ? Colors.white : Colors
                                 .black,)),
                           const SizedBox(height: 10,),
-                          paymentTypeOption('Cash', 'PCASH', Icon(
+                          paymentTypeOption('Cash', 'PCOD', Icon(
                             Icons.monetization_on,
                             color: controller.selectedPaymentType.value ==
-                                'PCASH' ? Colors.white : Colors
+                                'PCOD' ? Colors.white : Colors
                                 .black,)),
                           const SizedBox(height: 10,),
                           paymentTypeOption('Knet', 'PKNET', Icon(
