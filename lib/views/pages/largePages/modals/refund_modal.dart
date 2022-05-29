@@ -142,10 +142,10 @@ class RefundModal extends GetView<CartController> {
                                 'PCARD' ? Colors.white : Colors
                                 .black,)),
                           const SizedBox(height: 10,),
-                          paymentTypeOption('Cash', 'PCASH', Icon(
+                          paymentTypeOption('Cash', 'PCOD', Icon(
                             Icons.monetization_on,
                             color: controller.selectedPaymentType.value ==
-                                'PCASH' ? Colors.white : Colors
+                                'PCOD' ? Colors.white : Colors
                                 .black,)),
                           const SizedBox(height: 10,),
                           paymentTypeOption('Knet', 'PKNET', Icon(
