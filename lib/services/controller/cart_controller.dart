@@ -112,7 +112,9 @@ class CartController extends GetxController {
           gravity: ToastGravity.CENTER, // location
           timeInSecForIosWeb: 1 // duration
           );
-      Get.back();
+      if(Get.isBottomSheetOpen==true||Get.isDialogOpen==true){
+        Get.back(closeOverlays: true);
+      }
     } else {
       Get.back();
       RemoteStatusHandler().errorHandler(
@@ -152,8 +154,9 @@ class CartController extends GetxController {
       }
       totalAmount = double.parse(jsonObject['data']['total_amount'].toString());
 
-      Get.back();
-      Get.back();
+      if(Get.isBottomSheetOpen==true||Get.isDialogOpen==true){
+        Get.back(closeOverlays: true);
+      }
       update();
     } else {
       Get.back();
@@ -192,7 +195,9 @@ class CartController extends GetxController {
       update();
       Get.find<CartController>().update();
 
-      Get.back();
+      if(Get.isBottomSheetOpen==true||Get.isDialogOpen==true){
+        Get.back(closeOverlays: true);
+      }
       update();
     } else {
       Get.back();
@@ -224,7 +229,9 @@ class CartController extends GetxController {
       update();
       Get.find<CartController>().update();
 
-      Get.back();
+      if(Get.isBottomSheetOpen==true||Get.isDialogOpen==true){
+        Get.back(closeOverlays: true);
+      }
       update();
     } else {
       Get.back();
@@ -251,8 +258,8 @@ class CartController extends GetxController {
       jsonObject['data'].forEach((element) {
         countryList.add(ProvinceModel(data: element));
       });
-      if (hasLoading != false) {
-        Get.back();
+      if(Get.isBottomSheetOpen==true||Get.isDialogOpen==true){
+        Get.back(closeOverlays: true);
       }
 
       if (doInBackground != true) {
@@ -311,10 +318,7 @@ class CartController extends GetxController {
       discountAmountForPrint = discountAmount;
 
       addToCartList.value.clear();
-      totalAmount = 0.0;
-      deliveryAmount = 0.0;
-      discountAmount = 0.0;
-      uniqueId = 'pos${Xid()}';
+      newSale();
 
       Fluttertoast.showToast(
           msg: isRefund.isFalse?"cart paid successfully":"cart Refund successfully", // message
@@ -322,8 +326,9 @@ class CartController extends GetxController {
           gravity: ToastGravity.CENTER, // location
           timeInSecForIosWeb: 2 // duration
           );
-      Get.back();
-      Get.back();
+      if(Get.isBottomSheetOpen==true||Get.isDialogOpen==true){
+        Get.back(closeOverlays: true);
+      }
       Get.defaultDialog(title: 'Success',content: Column(
         children: [
           CustomText().createText(title: balanceStatus.value==''?'change: 0.0': 'change: ${balanceStatus.value}',fontWeight: FontWeight.bold,size: 22),
@@ -379,8 +384,9 @@ class CartController extends GetxController {
           timeInSecForIosWeb: 2 // duration
       );
       isRefund.value=false;
-      Get.back();
-      Get.back();
+      if(Get.isBottomSheetOpen==true||Get.isDialogOpen==true){
+        Get.back(closeOverlays: true);
+      }
       update();
     }  else {
       Get.back();
@@ -423,8 +429,9 @@ class CartController extends GetxController {
           timeInSecForIosWeb: 2 // duration
       );
       isRefund.value=false;
-      Get.back();
-      Get.back();
+      if(Get.isBottomSheetOpen==true||Get.isDialogOpen==true){
+        Get.back(closeOverlays: true);
+      }
       update();
     }  else {
       Get.back();
@@ -471,8 +478,9 @@ class CartController extends GetxController {
             pId: element['product_id']));
       });
       if (index != null) openCartsUDID.removeAt(index);
-      Get.back();
-      Get.back();
+      if(Get.isBottomSheetOpen==true||Get.isDialogOpen==true){
+        Get.back(closeOverlays: true);
+      }
 
       totalAmount = double.parse(jsonObject['data']['total'].toString());
 
@@ -498,7 +506,6 @@ class CartController extends GetxController {
       deliveryAmount = 0.0;
       discountAmount = 0.0;
       uniqueId = 'pos${Xid()}';
-      addToCartList.value.clear();
       update();
     }
   }

@@ -16,7 +16,7 @@ class CustomTextField {
     dynamic textInputAction,
     dynamic keyboardType,
     dynamic inputFormatters,
-    dynamic hintStyle,
+    dynamic hintStyle,dynamic maxLines,
     dynamic align,dynamic onSubmitted,
     dynamic maxLength,
     dynamic controller,
@@ -35,7 +35,7 @@ class CustomTextField {
           focusNode: node,
           obscureText: obscure != null ? true : false,
           maxLength: maxLength,
-          controller: controller,
+          controller: controller,maxLines: maxLines,
           textAlign: align ?? TextAlign.end,
           decoration: InputDecoration(
               counterText: '',

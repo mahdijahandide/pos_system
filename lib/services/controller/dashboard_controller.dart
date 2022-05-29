@@ -1,3 +1,5 @@
+import 'dart:html';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -23,14 +25,12 @@ class DashboardController extends GetxController{
   }
 
   void fullScreen(){
-    // SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
-    // SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
-    SystemChrome.setEnabledSystemUIMode(
-      SystemUiMode.manual,
-      overlays: [
-        SystemUiOverlay.top, // Shows Status bar and hides Navigation bar
-      ],
-    );
+    document.documentElement!.requestFullscreen();
+    if(document.fullscreenEnabled==true){
+      document.exitFullscreen();
+    }else{
+      document.documentElement!.requestFullscreen();
+    }
     update();
   }
 }

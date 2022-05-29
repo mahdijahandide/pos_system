@@ -120,7 +120,7 @@ class CashInOut extends GetView<CashController> {
                       height: 15,
                     ),
                     CustomTextField()
-                        .createTextField(hint: 'Description', height: 150,controller: controller.descriptionTextController),
+                        .createTextField(hint: 'Description',height: 150,maxLines: 6,controller: controller.descriptionTextController),
                     const Expanded(child: SizedBox()),
                     SizedBox(
                         height: 50,

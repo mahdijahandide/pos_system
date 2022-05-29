@@ -46,13 +46,13 @@ class DashboardDrawer {
           const Divider(),
           ListTile(leading: const Icon(Icons.person),title: CustomText().createText(title: 'User Info'),onTap: (){
             Get.toNamed('/profile');},),
-          ListTile(leading: const Icon(Icons.logout),title: CustomText().createText(title: 'Sign Out'),onTap: (){
-            Get.find<AuthController>().logoutRequest();
-          },),
-          const Divider(),
-          ListTile(leading: const Icon(Icons.feedback),title: CustomText().createText(title: 'Feedback'),onTap: (){},),
+          // ListTile(leading: const Icon(Icons.logout),title: CustomText().createText(title: 'Sign Out'),onTap: (){
+          //   Get.find<AuthController>().logoutRequest();
+          // },),
+          // const Divider(),
+          // ListTile(leading: const Icon(Icons.feedback),title: CustomText().createText(title: 'Feedback'),onTap: (){},),
           const Expanded(child: SizedBox()),
-          Center(child: CustomText().createText(title: '06-Jan-22'),),
+          Center(child: CustomText().createText(title: DateTime.now().year.toString()+'-'+DateTime.now().month.toString()+'-'+DateTime.now().day.toString()),),
           const Divider(),
           const SizedBox(height: 12.0,),
           Row(
@@ -70,7 +70,9 @@ class DashboardDrawer {
               Get.find<DashboardController>().fullScreen();
 
             }, icon: const Icon(Icons.fullscreen),),
-            const Icon(Icons.logout),
+            IconButton(icon:const Icon(Icons.logout),onPressed: (){
+              Get.find<AuthController>().logoutRequest();
+            },),
           ],)
 
         ],

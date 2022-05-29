@@ -39,10 +39,13 @@ class DashboardSidebar {
                             .where((element) => element.isSelected == true)
                             .toList()
                             .isEmpty) {
-                          Get.find<CartController>().removeAllFromCart(
-                              tempUniqueId: Get
-                                  .find<CartController>()
-                                  .uniqueId);
+                          if(controller.addToCartList.value.isNotEmpty){
+                            Get.find<CartController>().removeAllFromCart(
+                                tempUniqueId: Get
+                                    .find<CartController>()
+                                    .uniqueId);
+                          }
+
                         } else {
                           var item = Get
                               .find<CartController>()
@@ -416,7 +419,7 @@ class DashboardSidebar {
                               .find<CartController>()
                               .addToCartList
                               .value
-                              .isNotEmpty) {
+                              .isNotEmpty&&Get.find<CustomerController>().customerNumberController.text.isNotEmpty) {
                             // controller.calController.text ='0';
                                 // (controller.totalAmount +
                                 //     controller.discountAmount +
