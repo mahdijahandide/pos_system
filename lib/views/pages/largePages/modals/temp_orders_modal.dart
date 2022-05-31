@@ -3,6 +3,8 @@ import 'package:get/get.dart';
 import 'package:pos_system/services/controller/cart_controller.dart';
 import 'package:pos_system/views/components/texts/customText.dart';
 
+import '../../../../services/controller/product_controller.dart';
+
 
 class TempOrderModal extends StatelessWidget {
   String title ;
@@ -10,7 +12,7 @@ class TempOrderModal extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
+    Get.find<ProductController>().overlaysCounter.value++;
     return Scaffold(
         backgroundColor: Colors.transparent,
         body: Container(

@@ -236,7 +236,7 @@ class _TextFieldSearchState extends State<TextFieldSearch> {
     return ListView.builder(
       itemCount: filteredList!.length,
       itemBuilder: (context, i) {
-        return GestureDetector(
+        return InkWell(
             onTap: () {
               // set the controller value to what was selected
               setState(() {

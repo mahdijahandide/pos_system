@@ -22,7 +22,7 @@ import 'package:pos_system/views/pages/largePages/products/products_modal.dart';
 import '../remotes/remote_status_handler.dart';
 
 class ProductController extends GetxController {
-  List<ProductModel> productList = [];
+  Rx<List<ProductModel>> productList = Rx<List<ProductModel>>([]);
   List<ProductModel> searchedProductList = [];
   List<ProductColorModel> productColorList = [];
   List<ProductSizeModel> productSizeList = [];
@@ -35,6 +35,7 @@ class ProductController extends GetxController {
   late String selectedColorId;
   late String selectedValueId;
   late String selectedSizeId;
+  RxInt overlaysCounter=0.obs;
 
 
   int gridCtn(){
@@ -58,12 +59,6 @@ class ProductController extends GetxController {
       hasProduct.value = true;
       var jsonObject = convert.jsonDecode(response.body);
       var productArray = jsonObject['data']['productLists'];
-      if(productArray.length>0){
-        productList.clear();
-      }
-      productArray.forEach((element) {
-        productList.add((ProductModel(data: element)));
-      });
       if (openModal == true) {
         searchedProductList.clear();
         productArray.forEach((element) {
@@ -87,6 +82,13 @@ class ProductController extends GetxController {
             borderRadius: BorderRadius.circular(35),
           ),
         );
+      }else{
+        if(productArray.length>0){
+          productList.value.clear();
+        }
+        productArray.forEach((element) {
+          productList.value.add((ProductModel(data: element)));
+        });
       }
       update();
     } else {
@@ -177,5 +179,12 @@ class ProductController extends GetxController {
       RemoteStatusHandler().errorHandler(code: response.statusCode,error:convert.jsonDecode(response.body));
       print(response.statusCode);
     }
+  }
+
+  void closeOverlays(int count){
+    for(int i=0;i<count;i++){
+      Get.back();
+    }
+    overlaysCounter.value=0;
   }
 }

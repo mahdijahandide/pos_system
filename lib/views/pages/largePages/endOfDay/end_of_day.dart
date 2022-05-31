@@ -221,25 +221,13 @@ class EndOfDay extends GetView<ShiftController> {
                                       operatorButtonColor: Colors.teal,
                                       title: 'Cash count',
                                       inputDecoration: const InputDecoration(hintText: 'enter cashCount (required)',border: InputBorder.none),
-                                      //initialValue:0,
-                                      //double.parse(controller.cashCount.value.text),
+                                      initialValue:double.parse(controller.cashCount.value.text.toString()),
                                       onSubmitted: (value) {
                                         controller.cashCount.value.text=value.toString();
                                       },
                                     ),
                                   ),
                                 ),
-                                // IconButton(onPressed: (){
-                                //   Get.defaultDialog(
-                                //
-                                //     content: CalculatorTextField(
-                                //       initialValue: double.parse(controller.cashCount.value.text),
-                                //       onSubmitted: (value) {
-                                //         controller.cashCount.value.text=value.toString();
-                                //       },
-                                //     ),);
-                                // }, icon: const Icon(Icons.calculate)),
-                                // Expanded(child: CustomTextField().createTextField(hint: 'enter cashCount (required)', height: 40,controller: controller.cashCount.value,))
                               ],),
                               const SizedBox(
                                 height: 8,
@@ -267,22 +255,7 @@ class EndOfDay extends GetView<ShiftController> {
                                     ),
                                   ),
                                 ),
-                                // IconButton(onPressed: (){
-                                //   Get.defaultDialog(
-                                //     content: CalculatorTextField(
-                                //       initialValue: double.parse(controller.cardCount.value.text),
-                                //       onSubmitted: (value) {
-                                //         controller.cardCount.value.text=value.toString();
-                                //       },
-                                //     ),);
-                                // }, icon: const Icon(Icons.calculate)),
-                                // Expanded(child: CustomTextField().createTextField(hint: 'enter cardCount (required)', height: 40,controller: controller.cardCount.value,))
                               ],),
-                              // const SizedBox(
-                              //   height: 8,
-                              // ),
-                              // CustomText().createText(title: controller.cashCountStatusText.value,color: Colors.red),
-                              // CustomText().createText(title: controller.cashCount.value.text!=(controller.sellCard.value-controller.refundCard.value).toString()?'card count does not match with system':'',color: Colors.red),
                               const SizedBox(
                                 height: 15,
                               ),

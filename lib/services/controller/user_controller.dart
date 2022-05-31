@@ -6,23 +6,35 @@ import 'dart:convert' as convert;
 import 'package:http/http.dart' as http;
 import 'package:pos_system/services/controller/auth_controller.dart';
 import 'package:pos_system/services/remotes/api_routes.dart';
+import 'package:pos_system/services/remotes/local_storage.dart';
 import 'package:pos_system/views/dialogs/loading_dialogs.dart';
 
 import '../remotes/remote_status_handler.dart';
 
 class UserController extends GetxController {
 
-  String name = '';
+  
+  String name ='';
   String lastName = '';
   String email = '';
   String mobile = '';
   String isActive = '';
 
   RxBool hasEdit=false.obs;
-
   TextEditingController nameController= TextEditingController();
   TextEditingController emailController= TextEditingController();
   TextEditingController mobileController= TextEditingController();
+
+  @override
+  void onInit(){
+    super.onInit();
+    if(LocalStorageHelper.getValue('cashierDetails').toString()!='null'){
+      var data=jsonDecode(LocalStorageHelper.getValue('cashierDetails'));
+       name = data['name'];
+       email = data['email'];
+       mobile = data['mobile'];
+    }
+  }
 
 
   Future<void> updateProfile() async {
@@ -43,6 +55,7 @@ class UserController extends GetxController {
     if (response.statusCode == 200) {
       Get.back();
       var jsonObject = convert.jsonDecode(response.body);
+      LocalStorageHelper.saveValue('cashierDetails', jsonEncode(jsonObject['data']).toString());
       name=nameController.text.toString();
       email=emailController.text.toString();
       mobile=mobileController.text.toString();

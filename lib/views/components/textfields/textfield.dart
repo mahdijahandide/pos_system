@@ -35,7 +35,7 @@ class CustomTextField {
           focusNode: node,
           obscureText: obscure != null ? true : false,
           maxLength: maxLength,
-          controller: controller,maxLines: maxLines,
+          controller: controller,maxLines: maxLines??1,
           textAlign: align ?? TextAlign.end,
           decoration: InputDecoration(
               counterText: '',

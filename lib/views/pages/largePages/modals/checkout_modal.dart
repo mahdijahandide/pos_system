@@ -9,6 +9,8 @@ import 'package:pos_system/views/components/textfields/textfield.dart';
 import 'package:pos_system/views/components/texts/customText.dart';
 import 'package:vk/vk.dart';
 
+import '../../../../services/controller/product_controller.dart';
+
 class CheckoutModal extends GetView<CartController> {
   String title;
 
@@ -19,6 +21,7 @@ class CheckoutModal extends GetView<CartController> {
 
   @override
   Widget build(BuildContext context) {
+    Get.find<ProductController>().overlaysCounter.value++;
     if (Get
         .find<CustomerController>()
         .selectedCustomer != null) {

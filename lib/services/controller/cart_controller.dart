@@ -7,11 +7,15 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'dart:convert' as convert;
 import 'package:http/http.dart' as http;
+import 'package:pos_system/services/controller/dashboard_controller.dart';
+import 'package:pos_system/services/controller/product_controller.dart';
+import 'package:pos_system/services/controller/user_controller.dart';
 import 'package:pos_system/services/model/cart_product_model.dart';
 import 'package:pos_system/services/model/province_model.dart';
 import 'package:pos_system/services/remotes/api_routes.dart';
 import 'package:pos_system/services/remotes/local_storage.dart';
 import 'package:pos_system/services/remotes/remote_status_handler.dart';
+import 'package:pos_system/views/components/dottedLine/MySeparator.dart';
 import 'package:pos_system/views/dialogs/area_province_dialog.dart';
 import 'package:pos_system/views/dialogs/loading_dialogs.dart';
 import 'package:printing/printing.dart';
@@ -90,10 +94,9 @@ class CartController extends GetxController {
           if (otherAttribute != null) 'option': {"$otherId": otherValue}
         }));
     if (response.statusCode == 200) {
-      //AudioCache player = AudioCache();
-      AudioPlayer audioPlayer = AudioPlayer();
-      const alarmAudioPath = "assets/sounds/beep.mp3";
-      audioPlayer.play(alarmAudioPath);
+      // AudioPlayer audioPlayer = AudioPlayer();
+      // const alarmAudioPath = "assets/sounds/beep.mp3";
+      // audioPlayer.play(alarmAudioPath);
 
       var jsonObject = convert.jsonDecode(response.body);
       addToCartList.value.add(CartProductModel(
@@ -104,17 +107,16 @@ class CartController extends GetxController {
           mTempUniqueId: tempUniqueId,
           pId: jsonObject['data']['cart_item_id']));
       totalAmount = double.parse(jsonObject['data']['total_amount'].toString());
-      update();
-      saveCartForSecondMonitor();
+
+     saveCartForSecondMonitor();
       Fluttertoast.showToast(
           msg: "item added to cart successfully", // message
           toastLength: Toast.LENGTH_SHORT, // length
           gravity: ToastGravity.CENTER, // location
           timeInSecForIosWeb: 1 // duration
           );
-      if(Get.isBottomSheetOpen==true||Get.isDialogOpen==true){
-        Get.back(closeOverlays: true);
-      }
+      Get.back(closeOverlays: true);
+      update();
     } else {
       Get.back();
       RemoteStatusHandler().errorHandler(
@@ -154,9 +156,7 @@ class CartController extends GetxController {
       }
       totalAmount = double.parse(jsonObject['data']['total_amount'].toString());
 
-      if(Get.isBottomSheetOpen==true||Get.isDialogOpen==true){
-        Get.back(closeOverlays: true);
-      }
+      Get.back(closeOverlays: true);
       update();
     } else {
       Get.back();
@@ -195,9 +195,7 @@ class CartController extends GetxController {
       update();
       Get.find<CartController>().update();
 
-      if(Get.isBottomSheetOpen==true||Get.isDialogOpen==true){
-        Get.back(closeOverlays: true);
-      }
+      Get.back(closeOverlays: true);
       update();
     } else {
       Get.back();
@@ -229,9 +227,7 @@ class CartController extends GetxController {
       update();
       Get.find<CartController>().update();
 
-      if(Get.isBottomSheetOpen==true||Get.isDialogOpen==true){
-        Get.back(closeOverlays: true);
-      }
+      Get.back(closeOverlays: true);
       update();
     } else {
       Get.back();
@@ -258,9 +254,7 @@ class CartController extends GetxController {
       jsonObject['data'].forEach((element) {
         countryList.add(ProvinceModel(data: element));
       });
-      if(Get.isBottomSheetOpen==true||Get.isDialogOpen==true){
-        Get.back(closeOverlays: true);
-      }
+      Get.back(closeOverlays: true);
 
       if (doInBackground != true) {
         AreaProvinceDialog.showCustomDialog(title: 'Province & Areas');
@@ -326,9 +320,7 @@ class CartController extends GetxController {
           gravity: ToastGravity.CENTER, // location
           timeInSecForIosWeb: 2 // duration
           );
-      if(Get.isBottomSheetOpen==true||Get.isDialogOpen==true){
-        Get.back(closeOverlays: true);
-      }
+      Get.back(closeOverlays: true);
       Get.defaultDialog(title: 'Success',content: Column(
         children: [
           CustomText().createText(title: balanceStatus.value==''?'change: 0.0': 'change: ${balanceStatus.value}',fontWeight: FontWeight.bold,size: 22),
@@ -384,9 +376,7 @@ class CartController extends GetxController {
           timeInSecForIosWeb: 2 // duration
       );
       isRefund.value=false;
-      if(Get.isBottomSheetOpen==true||Get.isDialogOpen==true){
-        Get.back(closeOverlays: true);
-      }
+      Get.back(closeOverlays: true);
       update();
     }  else {
       Get.back();
@@ -429,9 +419,7 @@ class CartController extends GetxController {
           timeInSecForIosWeb: 2 // duration
       );
       isRefund.value=false;
-      if(Get.isBottomSheetOpen==true||Get.isDialogOpen==true){
-        Get.back(closeOverlays: true);
-      }
+      Get.back(closeOverlays: true);
       update();
     }  else {
       Get.back();
@@ -478,9 +466,7 @@ class CartController extends GetxController {
             pId: element['product_id']));
       });
       if (index != null) openCartsUDID.removeAt(index);
-      if(Get.isBottomSheetOpen==true||Get.isDialogOpen==true){
-        Get.back(closeOverlays: true);
-      }
+      Get.back(closeOverlays: true);
 
       totalAmount = double.parse(jsonObject['data']['total'].toString());
 
@@ -532,6 +518,7 @@ class CartController extends GetxController {
   }
 
   Future<Uint8List> generatePdf() async {
+    var coData=Get.find<AuthController>().coDetails;
     final pdf = pw.Document(version: PdfVersion.pdf_1_5, compress: true);
     final font = await PdfGoogleFonts.nunitoExtraLight();
 
@@ -541,11 +528,41 @@ class CartController extends GetxController {
         build: (context) {
           return pw.Column(
             children: [
-              pw.Center(child: pw.Text('Pos system factor')),
+              pw.Center(child: pw.Text('INVOICE NO #',style: pw.TextStyle(fontSize: 22,fontWeight: pw.FontWeight.bold))),
+              pw.Center(child: pw.Text(coData['name_en'])),
+              pw.Center(child: pw.Text(coData['address_en'])),
+              pw.Row(
+                  mainAxisAlignment: pw.MainAxisAlignment.center,
+                  children: [
+                pw.Center(child: pw.Text(coData['phone'])),
+                pw.SizedBox(width: 50),
+                pw.Center(child: pw.Text(coData['mobile'])),
+              ]),
+              pw.Center(child: pw.Text(Get.find<AuthController>().webSite)),
+              pw.SizedBox(height: 10),
+              pw.Row(
+                mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                children: [
+                  pw.Center(child: pw.Text('Cashier: ${Get.find<UserController>().name}')),
+                  pw.Column(children: [
+                    pw.Center(child: pw.Text(DateTime.now().year.toString()+'-'+DateTime.now().month.toString()+'-'+DateTime.now().day.toString()),),
+                    pw.Center(child: pw.Text(DateTime.now().hour.toString()+':'+DateTime.now().minute.toString()),)
+                  ])
+                ]
+              ),
+              pw.Divider(),
+              pw.Row(children: [
+                pw.Expanded(flex: 1,child: pw.Text('#')),
+                pw.Expanded(flex: 3,child: pw.Text('Item')),
+                pw.Expanded(flex: 1,child: pw.Text('QTY')),
+                pw.Expanded(flex: 1,child: pw.Text('Price')),
+                pw.Expanded(flex: 1,child: pw.Text('Total')),
+              ]),
+              pw.Divider(),
               pw.SizedBox(height: 10),
               pw.SizedBox(
                   width: double.infinity,
-                  child: pw.ListView.separated(
+                  child: pw.ListView.builder(
                       itemCount: Get.find<CartController>().addToCartListForPrint.length, itemBuilder: (pw.Context context, int index) {
                     var currentItem =
                     Get.find<CartController>().addToCartListForPrint[index];
@@ -595,14 +612,7 @@ class CartController extends GetxController {
                         )
                       ],
                     );
-                  }, separatorBuilder: (pw.Context context, int index) {
-                    return
-                      pw.SizedBox(
-                          width: Get.width,
-                          child:pw.Divider(thickness: 1,)
-                      );
-
-                  }
+                  },
                   )
               ),
               pw.SizedBox(height: 12),

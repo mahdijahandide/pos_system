@@ -118,7 +118,7 @@ class DesktopDashboard extends StatelessWidget {
                             decoration:
                             BoxDecoration(
                                 border: Border.all(color: Colors.black)),
-                            child: Get.find<ProductController>().productList.isEmpty
+                            child: Get.find<ProductController>().productList.value.isEmpty
                                 ?  ProductShimmer().createProductShimmer(gridCnt: 5,isLarge: true)
                                 :  DashboardMain().createMain(gridCnt: 5, isLarge: true)
                         )

@@ -27,6 +27,7 @@ class CashController extends GetxController{
       Uri.parse(url),
       headers: <String,String>{
         'Content-Type':'application/json',
+        'Authorization':'Bearer ${Get.find<AuthController>().token}'
       },
       body: jsonEncode(<String, String>{
         'type': isAddCash.isFalse?"out":"in",

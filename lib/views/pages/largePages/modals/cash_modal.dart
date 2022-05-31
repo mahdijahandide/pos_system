@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pos_system/services/controller/cash_controller.dart';
+import 'package:pos_system/services/controller/product_controller.dart';
 import 'package:pos_system/views/components/texts/customText.dart';
 
 
@@ -11,7 +12,7 @@ class CashModal extends GetView<CashController> {
 
   @override
   Widget build(BuildContext context) {
-
+    Get.find<ProductController>().overlaysCounter.value++;
     controller.getCashHistory();
     return Scaffold(
         backgroundColor: Colors.transparent,

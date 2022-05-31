@@ -118,7 +118,7 @@ class MobileDashboard extends StatelessWidget {
                 height: Get.height.toDouble(),
                 decoration:
                     BoxDecoration(border: Border.all(color: Colors.black)),
-                child: Get.find<ProductController>().productList.isEmpty
+                child: Get.find<ProductController>().productList.value.isEmpty
                     ? ProductShimmer().createProductShimmer(gridCnt: 2)
                     : DashboardMain()
                         .createMain(gridCnt: 2, key: scaffoldKey))),

@@ -279,10 +279,10 @@ class DashboardMain {
                 crossAxisSpacing: 5.0,
                 mainAxisSpacing: 5.0,
               ),
-              itemCount: Get.find<ProductController>().productList.length,
+              itemCount: Get.find<ProductController>().productList.value.length,
               itemBuilder: (context, index) {
                 var currentItem =
-                    Get.find<ProductController>().productList[index];
+                    Get.find<ProductController>().productList.value[index];
                 return GestureDetector(
                   onTap: ontap==true?(){
                         Get.find<ProductController>().getProductDetails(productId: currentItem.id,showDetails: true);

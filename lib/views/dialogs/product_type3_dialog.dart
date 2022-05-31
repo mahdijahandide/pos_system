@@ -85,7 +85,7 @@ class ProductOptionDialog3 {
       confirm: InkWell(
           onTap: () {
             var current = Get.find<ProductController>()
-                .productList
+                .productList.value
                 .where((element) =>
                     element.id == int.parse(productId.toString()))
                 .toList()[0];

@@ -44,49 +44,4 @@ class CategoryController extends GetxController {
       print(response.body);
     }
   }
-
-  Future<void> getCategoryProducts({required id}) async {
-    LoadingDialog.showCustomDialog(msg: 'loading'.tr);
-    categoryProductList.clear();
-    var url = 'GET_CATEGORY_PRODUCTS(id: id)';
-    final http.Response response = await http.get(
-      Uri.parse(url),
-      headers: <String, String>{
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ${Get
-            .find<AuthController>()
-            .token}'
-      },
-    );
-    if (response.statusCode == 200) {
-      Get.back();
-      hasCategory.value = true;
-      var jsonObject = convert.jsonDecode(response.body);
-      var productArray = jsonObject['data']['products'];
-      productArray.forEach((element) {
-        categoryProductList.add((ProductModel(data: element)));
-      });
-      Get.bottomSheet(ProductsModal(
-        gridCnt: Get.width < 600 ? 2 : Get.width > 600 && Get.width < 900
-            ? 3
-            : 5, title: categoryList
-          .where((element) => element.id == id)
-          .first
-          .title
-          .toString(), current: Get
-          .find<CategoryController>()
-          .categoryProductList, listCount: Get
-          .find<CategoryController>()
-          .categoryProductList
-          .length,), isScrollControlled: true,
-        enableDrag: true,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(35),),);
-      update();
-    } else {
-      Get.back();
-      RemoteStatusHandler().errorHandler(code: response.statusCode,error:convert.jsonDecode(response.body));
-      print(response.body);
-    }
-  }
 }

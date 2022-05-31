@@ -17,6 +17,7 @@ class ProductsModal extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Get.find<ProductController>().overlaysCounter.value++;
     return Scaffold(
         backgroundColor: Colors.transparent,
         body: Container(

@@ -20,9 +20,9 @@ class RemoteStatusHandler{
           }
           Get.toNamed('/login');
         }else{
+          print(error);
           Snack().createSnack(title: 'warning',msg: 'You need to start cash first');
         }
-
         break;
       case 500:
         Snack().createSnack(title: 'Server Error',msg: 'Try again Later');

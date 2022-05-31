@@ -38,7 +38,7 @@ class EditQtyDialog {
                         .where((element) =>
                     element.productId == productId.toString())
                         .toList()[0];
-                    if(int.parse(qtyController.text.toString())>int.parse(Get.find<ProductController>().productList.where((element) => element.id==current.id).first.quantity.toString())){
+                    if(int.parse(qtyController.text.toString())>int.parse(Get.find<ProductController>().productList.value.where((element) => element.id==current.id).first.quantity.toString())){
                       Snack().createSnack(title: 'selected quantity is bigger than existed item quantity',msg: 'your entire quantity must be smaller than the max item quantity');
                     }else{
                       Get.find<CartController>().editCartProductQuantity(
@@ -69,7 +69,7 @@ class EditQtyDialog {
               .where((element) =>
           element.productId == productId.toString())
               .toList()[0];
-          if(int.parse(qtyController.text.toString())>int.parse(Get.find<ProductController>().productList.where((element) => element.id==current.id).first.quantity.toString())){
+          if(int.parse(qtyController.text.toString())>int.parse(Get.find<ProductController>().productList.value.where((element) => element.id==current.id).first.quantity.toString())){
             Snack().createSnack(title: 'selected quantity is bigger than existed item quantity',msg: 'your entire quantity must be smaller than the max item quantity');
           }else{
             Get.find<CartController>().editCartProductQuantity(

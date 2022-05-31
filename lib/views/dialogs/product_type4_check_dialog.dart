@@ -42,7 +42,7 @@ class ProductTypeCheck {
       contentPadding: const EdgeInsets.all(15),
       confirm: InkWell(
           onTap: () {
-            var current=Get.find<ProductController>().productList.where((element) => element.id==int.parse(productId.toString())).toList()[0];
+            var current=Get.find<ProductController>().productList.value.where((element) => element.id==int.parse(productId.toString())).toList()[0];
             Get.find<CartController>().addToCart(
                 title: current.title,
                 openDialog: true,

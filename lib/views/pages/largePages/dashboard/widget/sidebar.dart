@@ -419,11 +419,7 @@ class DashboardSidebar {
                               .find<CartController>()
                               .addToCartList
                               .value
-                              .isNotEmpty&&Get.find<CustomerController>().customerNumberController.text.isNotEmpty) {
-                            // controller.calController.text ='0';
-                                // (controller.totalAmount +
-                                //     controller.discountAmount +
-                                //     controller.deliveryAmount).toString();
+                              .isNotEmpty) {
                             Get.bottomSheet(
                               controller.isRefund.isFalse ?
                               CheckoutModal(title: 'Checkout') : RefundModal(

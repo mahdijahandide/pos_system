@@ -8,6 +8,8 @@ import 'package:pos_system/views/components/textfields/textfield.dart';
 import 'package:pos_system/views/components/texts/customText.dart';
 import 'package:vk/vk.dart';
 
+import '../../../../services/controller/product_controller.dart';
+
 class RefundModal extends GetView<CartController> {
   String title;
   String total;
@@ -20,6 +22,7 @@ class RefundModal extends GetView<CartController> {
 
   @override
   Widget build(BuildContext context) {
+    Get.find<ProductController>().overlaysCounter.value++;
     return Scaffold(
         backgroundColor: Colors.white,
         body: Column(

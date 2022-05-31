@@ -22,6 +22,8 @@ class AuthController extends GetxController {
   // Holds the text that user typed.
   String text = '';
   String token = LocalStorageHelper.getValue('token');
+ var coDetails=jsonDecode(LocalStorageHelper.getValue('systemData'));
+ String webSite=LocalStorageHelper.getValue('systemSite');
 
   // True if shift enabled.
   bool shiftEnabled = false;
@@ -51,13 +53,19 @@ class AuthController extends GetxController {
       Get.back();
       var jsonObject = convert.jsonDecode(response.body);
       token=jsonObject['token'];
-      LocalStorageHelper.clearAll();
-      LocalStorageHelper.saveValue('token', token);
+
       Get.find<UserController>().name=jsonObject['user']['name'];
       Get.find<UserController>().email=jsonObject['user']['email'];
       Get.find<UserController>().mobile=jsonObject['user']['mobile'];
-      Get.toNamed('/dashboard');
+      Get.offNamed('/dashboard');
       Get.find<CartController>().uniqueId='pos${Xid()}';
+      LocalStorageHelper.clearAll();
+      LocalStorageHelper.saveValue('token', token);
+      LocalStorageHelper.saveValue('cashierDetails',jsonEncode(jsonObject['user']).toString());
+      LocalStorageHelper.saveValue('systemData', jsonEncode(jsonObject['system']).toString());
+      LocalStorageHelper.saveValue('systemSite', jsonObject['site']);
+      coDetails=jsonDecode(LocalStorageHelper.getValue('systemData'));
+      webSite=LocalStorageHelper.getValue('systemSite');
 
       Get.find<CustomerController>().getCustomers(doInBackground: true,hasLoading: false);
       Get.find<CartController>().getAreas(doInBackground: true,hasLoading: false);
@@ -118,7 +126,7 @@ class AuthController extends GetxController {
     Get.find<DashboardController>().searchController.text ='' ;
     Get.find<DashboardController>().searchId=1.obs;
     //product controller
-    Get.find<ProductController>(). productList = [];
+    Get.find<ProductController>(). productList.value = [];
     Get.find<ProductController>(). searchedProductList = [];
     Get.find<ProductController>(). productColorList = [];
     Get.find<ProductController>(). productSizeList = [];

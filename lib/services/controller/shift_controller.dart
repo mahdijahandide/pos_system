@@ -60,8 +60,8 @@ class ShiftController extends GetxController{
       refundCash.value=double.parse(jsonObject['data']['refundCash'].toString());
       refundCard.value=double.parse(jsonObject['data']['refundCard'].toString());
       totalCashFunds.value=double.parse(jsonObject['data']['totalCashFunds'].toString());
-      cashCount.value.text=totalCashFunds.value.toString();
-      cardCount.value.text=(sellCard.value-refundCard.value).toString();
+      cashCount.value.text='0';
+      cardCount.value.text='0';
       showLoading.value=false;
     } else if(response.statusCode==400) {
       showLoading.value=false;

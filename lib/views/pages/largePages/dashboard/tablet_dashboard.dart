@@ -95,7 +95,7 @@ class TabletDashboard extends StatelessWidget {
               height: Get.height,
               decoration:
                   BoxDecoration(border: Border.all(color: Colors.black)),
-              child: Get.find<ProductController>().productList.isEmpty
+              child: Get.find<ProductController>().productList.value.isEmpty
                   ? ProductShimmer().createProductShimmer(gridCnt: 3)
                   : DashboardMain().createMain(gridCnt: 3, key: scaffoldKey))),
     );

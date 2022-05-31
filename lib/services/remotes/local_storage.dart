@@ -9,10 +9,6 @@ class LocalStorageHelper{
   static void saveValue(String key,String value){
     localStorage[key]=value;
   }
-  //To Save Data
-  static void saveCartValue(String key,dynamic value){
-    localStorage[key]=value;
-  }
   //Get Data
   static String getValue(String key){
     return localStorage[key].toString();
