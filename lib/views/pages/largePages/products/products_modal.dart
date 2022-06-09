@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pos_system/services/controller/cart_controller.dart';
+import 'package:pos_system/services/controller/dashboard_controller.dart';
 import 'package:pos_system/services/controller/product_controller.dart';
 import 'package:pos_system/views/components/texts/customText.dart';
 import 'package:pos_system/views/dialogs/loading_dialogs.dart';
@@ -55,7 +56,7 @@ class ProductsModal extends StatelessWidget {
                 return GestureDetector(
                   onTap: (){
                     if(isProduct==true){
-                      if(ontap==true){
+                      if(ontap==true||Get.find<DashboardController>().showProductDetails.isTrue){
                         Get.find<ProductController>().getProductDetails(productId: currentItem.id,showDetails: true);
                       }else if (currentItem.isAttribute == 0) {
                         var contain = Get.find<CartController>().addToCartList.value.where((element) => element.id == currentItem.id);

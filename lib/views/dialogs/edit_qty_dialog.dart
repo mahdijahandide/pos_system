@@ -26,7 +26,7 @@ class EditQtyDialog {
           child: Column(
             children: [
               CustomTextField().createTextField(
-                  hint: 'enter new quantity',
+                  hint: 'Enter New Quantity',
                   height: 50,keyboardType: TextInputType.number,
                   inputFormatters: <TextInputFormatter>[
                     FilteringTextInputFormatter.digitsOnly

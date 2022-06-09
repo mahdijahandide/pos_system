@@ -21,7 +21,6 @@ class CheckoutModal extends GetView<CartController> {
 
   @override
   Widget build(BuildContext context) {
-    Get.find<ProductController>().overlaysCounter.value++;
     if (Get
         .find<CustomerController>()
         .selectedCustomer != null) {
@@ -163,7 +162,7 @@ class CheckoutModal extends GetView<CartController> {
                         SizedBox(
                           width: 200,
                           child: CustomText().createText(
-                              title: (controller.totalAmount +
+                              title: (controller.totalAmount -
                                   controller.discountAmount +
                                   controller.deliveryAmount).toString(),
                               size: 26,
@@ -197,13 +196,13 @@ class CheckoutModal extends GetView<CartController> {
                             child: CustomTextField().createTextField(
                                 hint: 'customer paid',
                                 height: 50,
-                                keyboardType: TextInputType.number,
+                                keyboardType: const TextInputType.numberWithOptions(decimal: true),
                                 inputFormatters: <TextInputFormatter>[
-                                  FilteringTextInputFormatter.digitsOnly
+                                  FilteringTextInputFormatter.allow((RegExp(r'^\d+\.?\d{0,2}')))
                                 ],
                                 controller: controller.calController,
                                 onSubmitted: (_) async {
-                                  String total = (controller.totalAmount +
+                                  String total = (controller.totalAmount -
                                       controller.discountAmount +
                                       controller.deliveryAmount).toString();
                                   if (controller.calController.text == total) {
@@ -245,7 +244,7 @@ class CheckoutModal extends GetView<CartController> {
                                 2,
                             child: CustomTextButton().createTextButton(
                                 onPress: () {
-                                  String total = (controller.totalAmount +
+                                  String total = (controller.totalAmount -
                                       controller.discountAmount +
                                       controller.deliveryAmount).toString();
                                   if (controller.calController.text == total) {

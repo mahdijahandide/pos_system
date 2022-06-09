@@ -43,6 +43,11 @@ class MyApp extends StatelessWidget {
       translations: Messages(),
       locale: Get.deviceLocale,
       fallbackLocale: const Locale('en', 'US'),
+      supportedLocales: const [
+        Locale("fa", "IR"),
+        Locale("ar", "KW"),
+        Locale("en", "US"),
+      ],
       theme: ThemeData(
         primarySwatch: Colors.teal,
       ),

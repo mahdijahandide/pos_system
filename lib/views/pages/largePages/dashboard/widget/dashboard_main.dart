@@ -3,6 +3,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:pos_system/services/controller/cart_controller.dart';
 import 'package:pos_system/services/controller/dashboard_controller.dart';
+import 'package:pos_system/services/controller/order_controller.dart';
 import 'package:pos_system/services/controller/product_controller.dart';
 import 'package:pos_system/views/components/snackbar/snackbar.dart';
 import 'package:pos_system/views/components/textfields/textfield.dart';
@@ -295,19 +296,52 @@ class DashboardMain {
                         if(Get.isSnackbarOpen){
                           Get.closeCurrentSnackbar();
                         }
-                        Get.find<CartController>().addToCart(
-                            optionSc: '0',
-                            productId: currentItem.id.toString(),
-                            price: currentItem.retailPrice.toString(),
-                            quantity: '1',
-                            title: currentItem.title,
-                            tempUniqueId:
+                        if(int.parse(currentItem.quantity.toString())>0){
+                          if(Get.find<CartController>().isRefund.isFalse){
+                            Get.find<CartController>().addToCart(
+                                optionSc: '0',
+                                productId: currentItem.id.toString(),
+                                price: currentItem.retailPrice.toString(),
+                                quantity: '1',
+                                title: currentItem.title,titleAr: currentItem.titleAr.toString(),
+                                tempUniqueId:
                                 Get.find<CartController>().uniqueId.toString());
+                          }else{
+                            var product = Get.find<CartController>().refundFactorItemList.value
+                                .where((product) => product.productId.toString() == currentItem.id.toString()).first.productId.toString();
+
+                            final index = Get.find<CartController>().addToCartList.value.indexWhere((element) =>
+                            element.productId.toString() == product);
+
+                            if(product==currentItem.id.toString()){
+                              if(index<0){
+                                Get.find<CartController>().addToCart(
+                                    optionSc: '0',
+                                    productId: currentItem.id.toString(),
+                                    price: currentItem.retailPrice.toString(),
+                                    quantity: '1',
+                                    title: currentItem.title,titleAr: currentItem.titleAr.toString(),
+                                    tempUniqueId:
+                                    Get.find<CartController>().uniqueId.toString());
+                              }else{
+                                Snack().createSnack(title: 'warning',msg: 'item exist in cart');
+                              }
+
+                            }else{
+                              Snack().createSnack(title: 'warning',msg: 'No enough quantity');
+                            }
+                          }
+
+                        }else{
+                          Snack().createSnack(title: 'warning',msg: 'No enough quantity');
+                        }
+
                       } else {
                         Fluttertoast.showToast(
                             msg: "this item already exist in your cart", // message
                             toastLength: Toast.LENGTH_SHORT, // length
                             gravity: ToastGravity.CENTER, // location
+                            webPosition: 'center',
                             timeInSecForIosWeb: 1 // duration
                         );
                       }
@@ -316,14 +350,41 @@ class DashboardMain {
                           .addToCartList.value
                           .where((element) => element.id == currentItem.id);
                       if (contain.isEmpty) {
-                        Get.find<ProductController>().getProductDetails(
-                            productId: currentItem.id.toString(),
-                            title: currentItem.title);
+                        if(int.parse(currentItem.quantity.toString())>0){
+                          if(Get.find<CartController>().isRefund.isFalse){
+                            Get.find<ProductController>().getProductDetails(
+                                productId: currentItem.id.toString(),
+                                title: currentItem.title);
+                          }else{
+                            var product = Get.find<CartController>().refundFactorItemList.value
+                                .where((product) => product.productId.toString() == currentItem.id.toString()).first.productId.toString();
+
+                            final index = Get.find<CartController>().addToCartList.value.indexWhere((element) =>
+                            element.productId.toString() == product);
+
+                            if(product==currentItem.id.toString()){
+                              if(index<0){
+                                Get.find<ProductController>().getProductDetails(
+                                    productId: currentItem.id.toString(),
+                                    title: currentItem.title);
+                              }else{
+                                Snack().createSnack(title: 'warning',msg: 'item exist in cart');
+                              }
+
+                            }else{
+                              Snack().createSnack(title: 'warning',msg: 'No enough quantity');
+                            }
+                          }
+
+                        }else{
+                          Snack().createSnack(title: 'warning',msg: 'No enough quantity');
+                        }
                       } else {
                         Fluttertoast.showToast(
                             msg: "this item already exist in your cart", // message
                             toastLength: Toast.LENGTH_SHORT, // length
                             gravity: ToastGravity.CENTER, // location
+                            webPosition: 'center',
                             timeInSecForIosWeb: 1 // duration
                         );
                       }

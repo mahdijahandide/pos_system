@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:pos_system/services/controller/cart_controller.dart';
 import 'package:pos_system/services/controller/product_controller.dart';
 import 'package:pos_system/services/model/product_others_model.dart';
+import 'package:pos_system/views/components/snackbar/snackbar.dart';
 import 'package:pos_system/views/components/texts/customText.dart';
 
 
@@ -23,6 +24,7 @@ class ProductTypeSelect {
               padding:
               const EdgeInsets.symmetric(vertical: 12, horizontal: 15),
               child: DropdownButton<String>(isExpanded: true,
+                focusColor: Colors.white,
                 hint: Text(Get
                     .find<ProductController>()
                     .selectedValue
@@ -60,17 +62,22 @@ class ProductTypeSelect {
       confirm: InkWell(
           onTap: () {
             var current=Get.find<ProductController>().productList.value.where((element) => element.id==int.parse(productId.toString())).toList()[0];
-            Get.find<CartController>().addToCart(
-                title: current.title,
-                openDialog: true,
-                optionSc: '4',
-                productId: current.id.toString(),
-                price: Get.find<ProductController>().productOthersList.where((element) => element.id.toString()==Get.find<ProductController>().selectedValueId.toString()).first.retail_price.toString(),
-                quantity: '1',
-                otherAttribute: true,
-                tempUniqueId: Get.find<CartController>().uniqueId.toString(),
-                otherValue: Get.find<ProductController>().selectedValueId,
-                otherId: otherId);
+            if(int.parse(current.quantity.toString())>0){
+              Get.find<CartController>().addToCart(
+                  title: current.title,
+                  openDialog: true,
+                  optionSc: '4',
+                  productId: current.id.toString(),
+                  price: Get.find<ProductController>().productOthersList.where((element) => element.id.toString()==Get.find<ProductController>().selectedValueId.toString()).first.retail_price.toString(),
+                  quantity: '1',
+                  otherAttribute: true,
+                  tempUniqueId: Get.find<CartController>().uniqueId.toString(),
+                  otherValue: Get.find<ProductController>().selectedValueId,
+                  otherId: otherId);
+            }else{
+              Snack().createSnack(title: 'warning',msg: 'No enough quantity');
+            }
+
           },
           child: Container(
             width: 90,height: 50,alignment: Alignment.center,

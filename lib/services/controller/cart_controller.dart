@@ -7,15 +7,12 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'dart:convert' as convert;
 import 'package:http/http.dart' as http;
-import 'package:pos_system/services/controller/dashboard_controller.dart';
-import 'package:pos_system/services/controller/product_controller.dart';
 import 'package:pos_system/services/controller/user_controller.dart';
 import 'package:pos_system/services/model/cart_product_model.dart';
 import 'package:pos_system/services/model/province_model.dart';
 import 'package:pos_system/services/remotes/api_routes.dart';
 import 'package:pos_system/services/remotes/local_storage.dart';
 import 'package:pos_system/services/remotes/remote_status_handler.dart';
-import 'package:pos_system/views/components/dottedLine/MySeparator.dart';
 import 'package:pos_system/views/dialogs/area_province_dialog.dart';
 import 'package:pos_system/views/dialogs/loading_dialogs.dart';
 import 'package:printing/printing.dart';
@@ -33,12 +30,15 @@ class CartController extends GetxController {
   late RxString cartPrice;
   double totalAmount = 0.0;
   double totalAmountForPrint = 0.0;
+  double totalPaidForPrint = 0.0;
   double discountAmount = 0.0;
   double discountAmountForPrint = 0.0;
   double deliveryAmount = 0.0;
   double deliveryAmountForPrint = 0.0;
 
   RxBool isRefund=false.obs;
+
+  RxString printedFactorId=''.obs;
 
   RxString selectedCountryName = ''.obs;
   RxString selectedProvinceName = ''.obs;
@@ -51,6 +51,7 @@ class CartController extends GetxController {
   String refundCartTotalPrice = '';
 
   Rx<List<CartProductModel>> addToCartList = Rx<List<CartProductModel>>([]);
+  Rx<List<CartProductModel>> refundFactorItemList = Rx<List<CartProductModel>>([]);
   List<CartProductModel> addToCartListForPrint = [];
   List<TempOrderModel> openCartsUDID = [];
   List<ProvinceModel> countryList = [];
@@ -72,7 +73,7 @@ class CartController extends GetxController {
       dynamic otherAttribute,
       dynamic otherId,
       dynamic otherValue,
-      dynamic title}) async {
+      dynamic title,dynamic titleAr}) async {
     LoadingDialog.showCustomDialog(msg: 'Please wait ...');
     var url = ADD_TO_CART;
     final http.Response response = await http.post(Uri.parse(url),
@@ -100,12 +101,13 @@ class CartController extends GetxController {
 
       var jsonObject = convert.jsonDecode(response.body);
       addToCartList.value.add(CartProductModel(
-          mId: int.parse(productId),
+          mId: jsonObject['data']['cart_item_id'],
           mPrice: price,
           mQuantity: quantity,
           mTitle: title,
           mTempUniqueId: tempUniqueId,
-          pId: jsonObject['data']['cart_item_id']));
+          pId: int.parse(productId),
+          mTitleAr: titleAr));
       totalAmount = double.parse(jsonObject['data']['total_amount'].toString());
 
      saveCartForSecondMonitor();
@@ -113,7 +115,8 @@ class CartController extends GetxController {
           msg: "item added to cart successfully", // message
           toastLength: Toast.LENGTH_SHORT, // length
           gravity: ToastGravity.CENTER, // location
-          timeInSecForIosWeb: 1 // duration
+          fontSize: 26,webPosition: 'center',
+          timeInSecForIosWeb: 1 // duration,
           );
       Get.back(closeOverlays: true);
       update();
@@ -196,6 +199,10 @@ class CartController extends GetxController {
       Get.find<CartController>().update();
 
       Get.back(closeOverlays: true);
+      if(addToCartList.value.isEmpty){
+        discountAmount=0.0;
+        deliveryAmount=0.0;
+      }
       update();
     } else {
       Get.back();
@@ -228,6 +235,8 @@ class CartController extends GetxController {
       Get.find<CartController>().update();
 
       Get.back(closeOverlays: true);
+      discountAmount=0.0;
+      deliveryAmount=0.0;
       update();
     } else {
       Get.back();
@@ -241,7 +250,6 @@ class CartController extends GetxController {
     if (hasLoading != false) {
       LoadingDialog.showCustomDialog(msg: 'Please wait ...');
     }
-
     var url = GET_AREAS;
     final http.Response response =
         await http.get(Uri.parse(url), headers: <String, String>{
@@ -269,7 +277,6 @@ class CartController extends GetxController {
 
   Future<void> checkoutCart() async {
     LoadingDialog.showCustomDialog(msg: 'Please wait ...');
-    print(selectedPaymentType.value);
     var url = CHECKOUT_CART;
     final http.Response response = await http.post(Uri.parse(url),
         headers: <String, String>{
@@ -278,6 +285,7 @@ class CartController extends GetxController {
         },
         body: jsonEncode(<String, dynamic>{
           'temp_uniqueid': uniqueId,
+          if(Get.find<CustomerController>().customerNumberController.text.isNotEmpty)
           'customer_id': Get.find<CustomerController>().customerList
               .where((element) => element.mobile.toString() == Get.find<CustomerController>()
                       .customerNumberController.text.toString()).first.id.toString(),
@@ -285,6 +293,7 @@ class CartController extends GetxController {
           'mobile': Get.find<CustomerController>().customerNumberController.text,
           'email': Get.find<CustomerController>().customerEmailController.text,
           'delivery_status': deliveryAmount > 0 ? '1' : '0',
+          'user_discount':discountAmount.toString(),
           'transactions':[
             {
               'type':selectedPaymentType.value,
@@ -296,7 +305,7 @@ class CartController extends GetxController {
     if (response.statusCode == 200) {
       var jsonObject = convert.jsonDecode(response.body);
       Get.log(jsonObject.toString());
-
+      addToCartListForPrint.clear();
       for (int i = 0; i < addToCartList.value.length; i++) {
         addToCartListForPrint.add(CartProductModel(
             mId: addToCartList.value[i].id,
@@ -304,12 +313,15 @@ class CartController extends GetxController {
             mPrice: addToCartList.value[i].price,
             mQuantity: addToCartList.value[i].quantity,
             mTitle: addToCartList.value[i].title,
-            mTempUniqueId: addToCartList.value[i].tempUniqueId));
+            mTempUniqueId: addToCartList.value[i].tempUniqueId, mTitleAr: addToCartList.value[i].titleAr));
       }
 
+      printedFactorId.value=jsonObject['data']['trackid'];
+      totalPaidForPrint=double.parse(calController.text.toString());
       totalAmountForPrint = totalAmount;
       deliveryAmountForPrint = deliveryAmount;
       discountAmountForPrint = discountAmount;
+
 
       addToCartList.value.clear();
       newSale();
@@ -318,24 +330,90 @@ class CartController extends GetxController {
           msg: isRefund.isFalse?"cart paid successfully":"cart Refund successfully", // message
           toastLength: Toast.LENGTH_SHORT, // length
           gravity: ToastGravity.CENTER, // location
-          timeInSecForIosWeb: 2 // duration
+          timeInSecForIosWeb: 2,fontSize: 22,webPosition: 'center'
           );
       Get.back(closeOverlays: true);
-      Get.defaultDialog(title: 'Success',content: Column(
-        children: [
-          CustomText().createText(title: balanceStatus.value==''?'change: 0.0': 'change: ${balanceStatus.value}',fontWeight: FontWeight.bold,size: 22),
-          const SizedBox(height: 15,),
-          SizedBox(
-            width: 110,height: 50,
-            child: CustomTextButton().createTextButton(
-                buttonText: 'Print', buttonColor: Colors.greenAccent, textColor: Colors.black,icon: const Icon(Icons.print),onPress: () async {
-                  Get.back();
-              await Printing.layoutPdf(onLayout: (_) => generatePdf());
-            }),
+      Get.bottomSheet(
+          Container(
+            color: Colors.white,
+            height: Get.height,
+            width: Get.width,
+            child: Column(
+              children: [
+                Container(
+                  width: Get.width, color: Colors.grey.withOpacity(0.5),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const SizedBox(),
+                      CustomText().createText(
+                          title: 'Success',
+                          size: 18, color: Colors.black,
+                          fontWeight: FontWeight.bold),
+                      IconButton(onPressed: () {
+                        Get.back();
+                      }, icon: const Icon(
+                        Icons.close,
+                        color: Colors.red,
+                        size: 23,
+                      ))
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 25,),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                  const Icon(Icons.monetization_on),
+                  CustomText().createText(title: balanceStatus.value==''?'change: 0.0': 'change: ${balanceStatus.value}',fontWeight: FontWeight.bold,size: 22,color: Colors.green),
+                ],),
+                const SizedBox(height: 25,),
+                CustomText().createText(title: 'How would the customer like their receipt? ',size: 25),
+                const SizedBox(height: 25,),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    SizedBox(
+                      width: 250,height: 150,
+                      child: CustomTextButton().createTextButton(
+                          buttonText: 'Print', buttonColor: Colors.white,elevation: 6, textColor: Colors.black,icon: const Icon(Icons.print),onPress: () async {
+                        Get.back();
+                        await Printing.layoutPdf(onLayout: (_) => generatePdf());
+                      }),
+                    ),
+                    SizedBox(
+                      width: 250,height: 150,
+                      child: CustomTextButton().createTextButton(
+                          buttonText: 'Save', buttonColor: Colors.white,elevation: 6, textColor: Colors.black,icon: const Icon(Icons.save),onPress: () async {
+                        //Get.back();
+
+                      }),
+                    ),
+                    SizedBox(
+                      width: 250,height: 150,
+                      child: CustomTextButton().createTextButton(
+                          buttonText: 'Email', buttonColor: Colors.white,elevation: 6, textColor: Colors.black,icon: const Icon(Icons.mail),onPress: () async {
+                        // Get.back();
+                        // await Printing.layoutPdf(onLayout: (_) => generatePdf());
+                      }),
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
-        ],
-      ));
-      update();
+        isScrollControlled: true,
+        enableDrag: true,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(35),
+        ),
+      );
+      Get.find<CustomerController>().customerNameController.text='';
+      Get.find<CustomerController>().customerEmailController.text='';
+      Get.find<CustomerController>().customerNumberController.text='';
+      discountAmount=0;
+      deliveryAmount=0;
+      Get.find<CustomerController>().selectedCustomer=null;
     }  else {
       Get.back();
       RemoteStatusHandler().errorHandler(
@@ -373,6 +451,7 @@ class CartController extends GetxController {
           msg: "cart Refund successfully", // message
           toastLength: Toast.LENGTH_SHORT, // length
           gravity: ToastGravity.CENTER, // location
+          webPosition: 'center',
           timeInSecForIosWeb: 2 // duration
       );
       isRefund.value=false;
@@ -416,6 +495,7 @@ class CartController extends GetxController {
           msg: "cart item Refund successfully", // message
           toastLength: Toast.LENGTH_SHORT, // length
           gravity: ToastGravity.CENTER, // location
+          webPosition: 'center',
           timeInSecForIosWeb: 2 // duration
       );
       isRefund.value=false;
@@ -463,7 +543,8 @@ class CartController extends GetxController {
             mQuantity: element['quantity'].toString(),
             mTitle: element['title'],
             mTempUniqueId: uniqueId,
-            pId: element['product_id']));
+            pId: element['product_id'],
+            mTitleAr: element['title']));
       });
       if (index != null) openCartsUDID.removeAt(index);
       Get.back(closeOverlays: true);
@@ -518,9 +599,9 @@ class CartController extends GetxController {
   }
 
   Future<Uint8List> generatePdf() async {
+   // final ttf = await fontFromAssetBundle('assets/fonts/pelak.ttf');
     var coData=Get.find<AuthController>().coDetails;
     final pdf = pw.Document(version: PdfVersion.pdf_1_5, compress: true);
-    final font = await PdfGoogleFonts.nunitoExtraLight();
 
     pdf.addPage(
       pw.Page(
@@ -528,124 +609,97 @@ class CartController extends GetxController {
         build: (context) {
           return pw.Column(
             children: [
-              pw.Center(child: pw.Text('INVOICE NO #',style: pw.TextStyle(fontSize: 22,fontWeight: pw.FontWeight.bold))),
+              pw.Center(child: pw.Text('INVOICE NO #${printedFactorId.value}',style: pw.TextStyle(fontSize: 22,fontWeight: pw.FontWeight.bold))),
               pw.Center(child: pw.Text(coData['name_en'])),
               pw.Center(child: pw.Text(coData['address_en'])),
               pw.Row(
                   mainAxisAlignment: pw.MainAxisAlignment.center,
                   children: [
-                pw.Center(child: pw.Text(coData['phone'])),
-                pw.SizedBox(width: 50),
-                pw.Center(child: pw.Text(coData['mobile'])),
-              ]),
+                    pw.Center(child: pw.Text(coData['phone'])),
+                    pw.SizedBox(width: 50),
+                    pw.Center(child: pw.Text(coData['mobile'])),
+                  ]),
               pw.Center(child: pw.Text(Get.find<AuthController>().webSite)),
               pw.SizedBox(height: 10),
               pw.Row(
-                mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
-                children: [
-                  pw.Center(child: pw.Text('Cashier: ${Get.find<UserController>().name}')),
-                  pw.Column(children: [
-                    pw.Center(child: pw.Text(DateTime.now().year.toString()+'-'+DateTime.now().month.toString()+'-'+DateTime.now().day.toString()),),
-                    pw.Center(child: pw.Text(DateTime.now().hour.toString()+':'+DateTime.now().minute.toString()),)
-                  ])
-                ]
+                  mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                  children: [
+                    pw.Center(child: pw.Text('Cashier: ${Get.find<UserController>().name}')),
+                    pw.Column(children: [
+                      pw.Center(child: pw.Text(DateTime.now().year.toString()+'-'+DateTime.now().month.toString()+'-'+DateTime.now().day.toString()),),
+                      pw.Center(child: pw.Text(DateTime.now().hour.toString()+':'+DateTime.now().minute.toString()),)
+                    ])
+                  ]
               ),
               pw.Divider(),
-              pw.Row(children: [
-                pw.Expanded(flex: 1,child: pw.Text('#')),
-                pw.Expanded(flex: 3,child: pw.Text('Item')),
-                pw.Expanded(flex: 1,child: pw.Text('QTY')),
-                pw.Expanded(flex: 1,child: pw.Text('Price')),
-                pw.Expanded(flex: 1,child: pw.Text('Total')),
-              ]),
+              pw.Row(
+                  mainAxisAlignment: pw.MainAxisAlignment.start,
+                  children: [
+                    pw.Expanded(flex: 1,child: pw.Text('#')),
+                    pw.Expanded(flex: 3,child: pw.Text('Item')),
+                    pw.Expanded(flex: 1,child: pw.Text('QTY')),
+                    pw.Expanded(flex: 1,child: pw.Text('Price')),
+                    pw.Expanded(flex: 1,child: pw.Text('Total')),
+                  ]),
               pw.Divider(),
               pw.SizedBox(height: 10),
               pw.SizedBox(
                   width: double.infinity,
-                  child: pw.ListView.builder(
-                      itemCount: Get.find<CartController>().addToCartListForPrint.length, itemBuilder: (pw.Context context, int index) {
+                  child: pw.ListView.separated(
+                    itemCount: addToCartListForPrint.length, itemBuilder: (pw.Context context, int index) {
                     var currentItem =
-                    Get.find<CartController>().addToCartListForPrint[index];
+                    addToCartListForPrint[index];
                     double itemQty =
                     double.parse(currentItem.quantity.toString());
                     double itemPrc =
                     double.parse(currentItem.price.toString());
                     double itemPrice = itemQty * itemPrc;
                     return pw.Row(
-                      children: [
-                        pw.Column(
-                          crossAxisAlignment:
-                          pw.CrossAxisAlignment.start,
-                          children: [
-                            pw.FittedBox(
-                              child: pw.Text(currentItem.title.toString(),),
-                            ),
-                            pw.SizedBox(
-                              height: 8,
-                            ),
-                            pw.Row(
-                              children: [
-
-                                pw.SizedBox(
-                                  width: 5,
-                                ),
-                                pw.Text('#${index + 1}',),
-                                pw.SizedBox(
-                                  width: 8,
-                                ),
-                                pw.Text('${currentItem.price}'),
-                                pw.SizedBox(
-                                  width: 5,
-                                ),
-                                pw.Text(itemPrice.toString()),
-                              ],
-                            )
-                          ],
-                        ),
-
-                        pw.SizedBox(
-                          width: 4,
-                        ),
-                        pw.FittedBox(
-                            fit: pw.BoxFit.scaleDown,
-                            child:pw.Text(currentItem.quantity.toString(),style: const pw.TextStyle(fontSize: 14))
-                        )
-                      ],
-                    );
-                  },
+                        mainAxisAlignment: pw.MainAxisAlignment.start,
+                        children: [
+                          pw.Expanded(flex: 1,child: pw.Text(currentItem.productId.toString())),
+                          pw.Expanded(flex: 3,child: pw.Column(
+                              crossAxisAlignment: pw.CrossAxisAlignment.start,
+                              children:[
+                                pw.Text(currentItem.title.toString(),overflow: pw.TextOverflow.clip,),
+                                pw.Text(currentItem.titleAr.toString(),),
+                              ])),
+                          pw.Expanded(flex: 1,child: pw.Text(currentItem.quantity.toString())),
+                          pw.Expanded(flex: 1,child: pw.Text(currentItem.price.toString())),
+                          pw.Expanded(flex: 1,child: pw.Text(itemPrice.toString())),
+                        ]);
+                  }, separatorBuilder: (pw.Context context, int index) { return pw.SizedBox(height: 9); },
                   )
               ),
               pw.SizedBox(height: 12),
               pw.Row(
                   mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
                   children: [
-                    pw.Text('Subtotal: '),
-                    pw.Text(Get.find<CartController>().totalAmountForPrint.toString(),),
-                  ]),
-              pw.Divider(thickness: 2),
-              pw.Row(
-                  mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
-                  children: [
-                    pw.Text('Discount: '),
-                    pw.Text('- ${Get.find<CartController>().discountAmountForPrint.toString()}',),
-                  ]),
-              pw.Divider(thickness: 2),
-              pw.Row(
-                  mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
-                  children: [
-                    pw.Text('Delivery: '),
-                    pw.Text('+ ${Get.find<CartController>().deliveryAmountForPrint.toString()}',),
-                  ]),
-              pw.Divider(thickness: 2),
-              pw.Row(
-                  mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
-                  children: [
                     pw.Text('Total: '),
-                    pw.Text((Get.find<CartController>().totalAmountForPrint +
-                        Get.find<CartController>().deliveryAmountForPrint -
-                        Get.find<CartController>().discountAmountForPrint)
-                        .toString(),),
+                    pw.Text(totalAmountForPrint.toString()),
                   ]),
+              pw.Divider(thickness: 2),
+
+              pw.Row(
+                  mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                  children: [
+                    pw.Text('Qty: ${addToCartListForPrint.length}'),
+                    pw.Text('Total:  ${totalAmountForPrint.toString()}',),
+                  ]),
+              pw.Row(
+                  mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                  children: [
+                    pw.SizedBox(),
+                    pw.Text('Paid: ${totalPaidForPrint.toString()}',),
+                  ]),
+              pw.Row(
+                  mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                  children: [
+                    pw.SizedBox(),
+                    pw.Text('Balance: ${totalPaidForPrint- totalAmountForPrint}',),
+                  ]),
+              pw.SizedBox(height: 25),
+              pw.Center(child: pw.Text(coData['pos_note_en']))
             ],
           );
         },

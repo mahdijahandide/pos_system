@@ -12,7 +12,6 @@ class TempOrderModal extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Get.find<ProductController>().overlaysCounter.value++;
     return Scaffold(
         backgroundColor: Colors.transparent,
         body: Container(
@@ -47,6 +46,9 @@ class TempOrderModal extends StatelessWidget {
                     var currentItem=Get.find<CartController>().openCartsUDID[index];
                     return InkWell(
                       onTap: (){
+                        if(Get.find<CartController>().addToCartList.value.isNotEmpty){
+                          Get.find<CartController>().newSale();
+                        }
                         Get.find<CartController>().getTempOrders(cartId: currentItem.tempId,index: index);
                       },
                       child: Container(

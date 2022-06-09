@@ -54,7 +54,7 @@ class DiscountDialog {
               ],),
               const SizedBox(height: 12,),
               CustomTextField().createTextField(
-                  hint: 'enter discount price',
+                  hint: 'Enter Discount Amount',
                   height: 50,keyboardType: TextInputType.number,
                   inputFormatters: <TextInputFormatter>[
                     FilteringTextInputFormatter.digitsOnly

@@ -4,6 +4,7 @@ import 'package:pos_system/services/controller/customer_controller.dart';
 import 'package:pos_system/services/controller/product_controller.dart';
 import 'package:pos_system/services/model/string_with_string.dart';
 import 'package:pos_system/views/components/texts/customText.dart';
+import 'package:vk/vk.dart';
 
 import '../../helper/autocomplete_helper.dart';
 
@@ -17,14 +18,30 @@ class CustomerAutoCompleteDialog {
 
   static void showCustomDialog({required title,required List<StringWithString> list}) {
     TextEditingController customerController = TextEditingController();
+    final FocusNode focusNode = FocusNode();
     Get.defaultDialog(
       title: title,
       content: GetBuilder(
           builder: (ProductController controller) {
-            return TextFieldSearch(
-                initialList: list,
-                label: 'customer name',
-                controller: customerController);
+            return Column(
+              children: [
+                TextFieldSearch(
+                    hasKeyboard: true,
+                    initialList: list,
+                    label: 'Customer Name',
+                    controller: customerController),
+                Container(
+                  width: 900,
+                  margin: const EdgeInsets.only(top: 10),
+                  color: const Color(0xffeeeeee),
+                  child: VirtualKeyboard(
+                    textColor: Colors.black,
+                    type: VirtualKeyboardType.Alphanumeric, textController: customerController,
+
+                  ),
+                ),
+              ],
+            );
 
           }
       ),

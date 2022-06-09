@@ -221,7 +221,7 @@ class ShowFactor extends StatelessWidget {
           mPrice: element['price'],
           mQuantity: element['quantity'],
           mTitle: element['title'],
-          mTempUniqueId: element['tempUniqueId']));
+          mTempUniqueId: element['tempUniqueId'], mTitleAr: element['title']));
     });
     Get.find<CartController>().totalAmount=double.parse(data['subTotal'].toString());
     Get.find<CartController>().discountAmount=double.parse(data['discount'].toString());

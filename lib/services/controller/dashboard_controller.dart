@@ -19,6 +19,8 @@ class DashboardController extends GetxController{
 
   RxInt searchId=1.obs;
 
+  RxBool showProductDetails=false.obs;
+
   void changeSearchType({required id}){
      searchId.value=id;
      update();

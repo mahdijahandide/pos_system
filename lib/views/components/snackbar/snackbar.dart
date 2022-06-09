@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 class  Snack{
    createSnack({dynamic title,dynamic msg,dynamic icon,dynamic bgColor,dynamic titleColor,dynamic msgColor}){
     return Get.snackbar('', '',
-        backgroundColor:bgColor ?? Colors.black,duration: const Duration(seconds: 2),
+        backgroundColor:bgColor ?? Colors.black,duration: const Duration(seconds: 3),
         titleText: Text(
           '$title',
           textDirection: TextDirection.rtl,

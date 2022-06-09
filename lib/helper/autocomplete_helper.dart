@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:vk/vk.dart';
 import 'dart:async';
 
 import '../services/model/string_with_string.dart';
@@ -12,6 +13,7 @@ class TextFieldSearch extends StatefulWidget {
 
   /// A controller for an editable text field
   final TextEditingController controller;
+  final bool hasKeyboard;
 
   /// An optional future or async function that should return a list of selectable elements
   final Function? future;
@@ -28,12 +30,14 @@ class TextFieldSearch extends StatefulWidget {
   /// The minimum length of characters to be entered into the TextField before executing a search
   final int minStringLength;
 
+
   /// Creates a TextFieldSearch for displaying selected elements and retrieving a selected element
   const TextFieldSearch(
       {Key? key,
         this.initialList,
         required this.label,
         required this.controller,
+        required this.hasKeyboard,
         this.textStyle,
         this.future,
         this.getSelectedValue,
@@ -46,7 +50,6 @@ class TextFieldSearch extends StatefulWidget {
 }
 
 class _TextFieldSearchState extends State<TextFieldSearch> {
-  final FocusNode _focusNode = FocusNode();
   late OverlayEntry _overlayEntry;
   final LayerLink _layerLink = LayerLink();
   List? filteredList = <StringWithString>[];
@@ -198,6 +201,7 @@ class _TextFieldSearchState extends State<TextFieldSearch> {
         }
       }
     });
+
   }
 
   @override
@@ -330,25 +334,42 @@ class _TextFieldSearchState extends State<TextFieldSearch> {
 
   @override
   Widget build(BuildContext context) {
+    // Timer timer;
+    // timer = Timer.periodic(const Duration(seconds: 1), (Timer t) {
+    //   _debouncer.run(() {
+    //     setState(() {
+    //       updateGetItems();
+    //       if (hasFuture) {
+    //         updateGetItems();
+    //       } else {
+    //         updateList();
+    //       }
+    //     });
+    //   });
+    // });
     return CompositedTransformTarget(
       link: _layerLink,
-      child: TextField(
-        controller: widget.controller,
-        focusNode: _focusNode,
-        decoration: widget.decoration ?? InputDecoration(labelText: widget.label),
-        style: widget.textStyle,
-        onChanged: (String value) {
-          // every time we make a change to the input, update the list
-          _debouncer.run(() {
-            setState(() {
-              if (hasFuture) {
-                updateGetItems();
-              } else {
-                updateList();
-              }
-            });
-          });
-        },
+      child: Column(
+        children: [
+          TextField(
+            controller: widget.controller,
+            focusNode: _focusNode,
+            decoration: widget.decoration ?? InputDecoration(labelText: widget.label),
+            style: widget.textStyle,
+            onChanged: (String value) {
+              // every time we make a change to the input, update the list
+              _debouncer.run(() {
+                setState(() {
+                  if (hasFuture) {
+                    updateGetItems();
+                  } else {
+                    updateList();
+                  }
+                });
+              });
+            },
+          ),
+        ],
       ),
     );
   }

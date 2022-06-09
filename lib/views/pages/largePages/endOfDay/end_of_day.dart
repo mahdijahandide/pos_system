@@ -7,6 +7,7 @@ import 'package:pos_system/services/controller/shift_controller.dart';
 import 'package:pos_system/views/dialogs/shift_warning_dialog.dart';
 import 'package:vk/vk.dart';
 
+import '../../../../services/controller/cash_controller.dart';
 import '../../../components/buttons/custom_text_button.dart';
 import '../../../components/textfields/textfield.dart';
 import '../../../components/texts/customText.dart';
@@ -18,6 +19,7 @@ class EndOfDay extends GetView<ShiftController> {
   @override
   Widget build(BuildContext context) {
     Get.put(ShiftController());
+    Get.lazyPut(()=>CashController());
     return Scaffold(
       appBar: AppBar(
         centerTitle: true, backgroundColor: Colors.grey.withOpacity(0.5),

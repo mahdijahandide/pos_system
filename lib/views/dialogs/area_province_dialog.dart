@@ -24,7 +24,7 @@ class AreaProvinceDialog {
             children: [
               //country
               DropdownButton<String>(
-                isExpanded: true,
+                isExpanded: true,focusColor: Colors.white,
                 hint: Text(
                     Get.find<CartController>().selectedCountryName.toString()),
                 onChanged: (val) {
@@ -55,6 +55,7 @@ class AreaProvinceDialog {
               Get.find<CartController>().selectedCountryId == ''
                   ? const SizedBox()
                   : DropdownButton<String>(
+                focusColor: Colors.white,
                       isExpanded: true,
                       hint: Text(Get.find<CartController>()
                           .selectedProvinceName
@@ -101,54 +102,20 @@ class AreaProvinceDialog {
               Get.find<CartController>().selectedProvinceId == ''
                   ? const SizedBox()
                   : DropdownButton<String>(
+                focusColor: Colors.white,
                       isExpanded: true,
                       hint: Text(Get.find<CartController>()
                           .selectedAreaName
                           .toString()),
                       onChanged: (val) {
-                        Get.find<CartController>().selectedAreaId =
-                            val.toString();
-                        Get.find<CartController>().selectedAreaName.value =
-                            Get.find<CartController>()
-                                .countryList
-                                .where((element) =>
-                                    element.name ==
-                                    Get.find<CartController>()
-                                        .selectedCountryName
-                                        .value)
-                                .first
-                                .provinceList
-                                .where((element) =>
-                                    element.id.toString() ==
-                                    Get.find<CartController>()
-                                        .selectedProvinceId
-                                        .toString())
-                                .first
-                                .areaList
-                                .where((element) =>
-                                    element.id.toString() == val.toString())
-                                .first
-                                .name
-                                .toString();
+                        Get.find<CartController>().selectedAreaId = val.toString();
+
+                        Get.find<CartController>().selectedAreaName.value = Get.find<CartController>().countryList.where((element) => element.name == Get.find<CartController>().selectedCountryName.value).first.provinceList.where((element) => element.id.toString() == Get.find<CartController>().selectedProvinceId.toString()).first.areaList.where((element) => element.id.toString() == val.toString()).first.name.toString();
+                        Get.find<CartController>().deliveryAmount=double.parse(Get.find<CartController>().countryList.where((element) => element.name == Get.find<CartController>().selectedCountryName.value).first.provinceList.where((element) => element.id.toString() == Get.find<CartController>().selectedProvinceId.toString()).first.areaList.where((element) => element.id.toString() == val.toString()).first.deliveryFee.toString());
+                        print(Get.find<CartController>().deliveryAmount);
                         controller.update();
                       },
-                      items: Get.find<CartController>()
-                          .countryList
-                          .where((element) =>
-                              element.name ==
-                              Get.find<CartController>()
-                                  .selectedCountryName
-                                  .toString())
-                          .first
-                          .provinceList
-                          .where((element) =>
-                              element.name ==
-                              Get.find<CartController>()
-                                  .selectedProvinceName
-                                  .toString())
-                          .first
-                          .areaList
-                          .map((AreaModel value) {
+                      items: Get.find<CartController>().countryList.where((element) => element.name == Get.find<CartController>().selectedCountryName.toString()).first.provinceList.where((element) => element.name == Get.find<CartController>().selectedProvinceName.toString()).first.areaList.map((AreaModel value) {
                         return DropdownMenuItem<String>(
                           value: value.id.toString(),
                           child: Text(value.name.toString()),

@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pos_system/services/controller/cart_controller.dart';
+import 'package:pos_system/services/model/cart_product_model.dart';
 import 'package:pos_system/services/model/order_item_model.dart';
 import 'package:pos_system/services/model/order_model.dart';
 import 'package:pos_system/services/remotes/api_routes.dart';
@@ -22,6 +23,8 @@ class OrderController  extends GetxController{
   Rx<List<OrderModel>>orderList=Rx<List<OrderModel>>([]);
   Rx<List<OrderModel>>orderFilteredList=Rx<List<OrderModel>>([]);
   List<OrderItemsModel>orderItemsList=[];
+
+  RxString selectedFilteredDate=''.obs;
 
   late OrderModel selectedItem;
 
@@ -47,7 +50,10 @@ class OrderController  extends GetxController{
       if(reqStatus=='refund'){
         if(jsonObject['data']['orders'][0]['order_status'].toString()=='completed'){
           Get.find<CartController>().refundCartTotalPrice=jsonObject['data']['orders'][0]['total_amount'].toString();
+          // Get.find<CartController>().discountAmount=jsonObject
           Get.find<CartController>().isRefund.value=!Get.find<CartController>().isRefund.value;
+          Get.find<CartController>().refundFactorItemList.value.clear();
+          getOrderProducts(id: jsonObject['data']['orders'][0]['id']);
         }else{
           Get.back();
           Snack().createSnack(title: 'warning',msg: 'cant refund this factor');
@@ -85,10 +91,13 @@ class OrderController  extends GetxController{
     if (response.statusCode == 200) {
       var jsonObject = convert.jsonDecode(response.body);
       Get.log(jsonObject.toString());
-      jsonObject['data']['orderItems'].forEach((element) {
-        orderItemsList.add(OrderItemsModel(data: element));
-      });
-      Get.back();
+      if(Get.find<CartController>().isRefund.isFalse){
+        jsonObject['data']['orderItems'].forEach((element) {
+          orderItemsList.add(OrderItemsModel(data: element));
+        });
+        Get.find<CartController>().totalAmountForPrint=double.parse(jsonObject['data']['total'].toString());
+        Get.find<CartController>().totalPaidForPrint=double.parse(jsonObject['data']['pay'].toString());
+        Get.back();
         selectedItem=current;
         Get.bottomSheet(
           OrderItemsModal().orderItems(),
@@ -98,7 +107,19 @@ class OrderController  extends GetxController{
             borderRadius: BorderRadius.circular(35),
           ),
         );
-
+      }else{
+        jsonObject['data']['orderItems'].forEach((element){
+          Get.find<CartController>().refundFactorItemList.value.add(CartProductModel(
+              mId: int.parse(element['id'].toString()),
+              pId: element['product_id'].toString(),
+              mPrice: element['unitprice'].toString(),
+              mQuantity: element['quantity'].toString(),
+              mTitle: element['translate']['en'].toString(),
+              mTitleAr: element['translate']['ar'].toString(),
+              mTempUniqueId: ''));
+          Get.back(closeOverlays: true);
+        });
+      }
     } else {
       Get.back();
       RemoteStatusHandler().errorHandler(code: response.statusCode,error:convert.jsonDecode(response.body));

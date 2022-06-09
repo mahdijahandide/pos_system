@@ -52,7 +52,8 @@ class ProductController extends GetxController {
     final http.Response response = await http.post(Uri.parse(url),
         headers: <String, String>{
           'Content-Type': 'application/json',
-          'Authorization': 'Bearer ${Get.find<AuthController>().token}'
+          'Authorization': 'Bearer ${Get.find<AuthController>().token}',
+         // 'Access-Control-Allow-Origin':'*'
         },
         body: jsonEncode(<String, String>{'catid': catId, 'keyword': keyword}));
     if (response.statusCode == 200) {

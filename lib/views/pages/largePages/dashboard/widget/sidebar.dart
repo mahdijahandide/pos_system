@@ -60,7 +60,7 @@ class DashboardSidebar {
                                   .value
                                   .indexWhere(
                                       (element) => element.isSelected == true),
-                              id: item.productId.toString(),
+                              id: item.id.toString(),
                               tempUniqueId: Get
                                   .find<CartController>()
                                   .uniqueId);
@@ -370,15 +370,7 @@ class DashboardSidebar {
                       padding: const EdgeInsets.all(6),
                       icon: Icons.money,
                       title: 'cash_drawer'.tr,
-                      onTap: () {
-                        html.WindowBase _popup = html.window
-                            .open(
-                            'http://localhost:53094/#/showFactor', 'Pos system',
-                            'left=100,top=100,width=800,height=600');
-                        if (_popup.closed!) {
-                          throw("Popups blocked");
-                        }
-                      }),
+                      onTap: () {}),
                 ),
                 const SizedBox(
                   width: 6,
@@ -415,6 +407,8 @@ class DashboardSidebar {
                       flex: 2,
                       child: InkWell(
                         onTap: () {
+                          controller.calController.text='';
+                          controller.balanceStatus.value='';
                           if (Get
                               .find<CartController>()
                               .addToCartList
@@ -423,7 +417,7 @@ class DashboardSidebar {
                             Get.bottomSheet(
                               controller.isRefund.isFalse ?
                               CheckoutModal(title: 'Checkout') : RefundModal(
-                                  title: 'Refund', total: (controller.totalAmount +
+                                  title: 'Refund', total: (controller.totalAmount -
                                   controller.discountAmount +
                                   controller.deliveryAmount).toString(), isWholeCart:controller.addToCartList.value.isNotEmpty? false:true,),
                               isScrollControlled: true,
@@ -541,14 +535,5 @@ class DashboardSidebar {
                     fontWeight: valWeight ?? FontWeight.normal))),
       ],
     );
-  }
-
-  _launchURL({required url}) async {
-    String uri = url; //flutter.io’;
-    if (await canLaunch(uri)) {
-      await launch(url);
-    } else {
-      throw 'Could not launch $url';
-    }
   }
 }

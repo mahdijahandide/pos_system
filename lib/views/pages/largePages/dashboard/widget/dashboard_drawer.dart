@@ -41,6 +41,7 @@ class DashboardDrawer {
             Get.toNamed('/endOfDay');
           },),
           ListTile(leading: const Icon(Icons.workspaces_filled),title: CustomText().createText(title: 'View All Products'),onTap: (){
+            Get.find<DashboardController>().showProductDetails.value=true;
             Get.toNamed('/allProduct');
           },),
           const Divider(),

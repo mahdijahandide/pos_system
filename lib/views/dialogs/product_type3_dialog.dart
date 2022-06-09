@@ -4,6 +4,7 @@ import 'package:pos_system/services/controller/cart_controller.dart';
 import 'package:pos_system/services/controller/product_controller.dart';
 import 'package:pos_system/services/model/product_color_model.dart';
 import 'package:pos_system/services/model/product_size_color_model.dart';
+import 'package:pos_system/views/components/snackbar/snackbar.dart';
 import 'package:pos_system/views/components/texts/customText.dart';
 
 class ProductOptionDialog3 {
@@ -24,7 +25,7 @@ class ProductOptionDialog3 {
             children: [
               //size
               DropdownButton<String>(
-                isExpanded: true,
+                isExpanded: true,focusColor: Colors.white,
                 hint: Text(
                     Get.find<ProductController>().selectedSizeName.toString()),
                 onChanged: (val) {
@@ -49,7 +50,7 @@ class ProductOptionDialog3 {
               ),
               //color
              Get.find<ProductController>().selectedSizeId==''?const SizedBox(): DropdownButton<String>(
-                isExpanded: true,
+                isExpanded: true,focusColor: Colors.white,
                 hint: Text(
                     Get.find<ProductController>().selectedColorName.toString()),
                 onChanged: (val) {
@@ -89,17 +90,22 @@ class ProductOptionDialog3 {
                 .where((element) =>
                     element.id == int.parse(productId.toString()))
                 .toList()[0];
-            Get.find<CartController>().addToCart(
-                title: current.title,
-                openDialog: true,
-                optionSc: '3',
-                productId: current.id.toString(),
-                price: current.retailPrice.toString(),
-                quantity: '1',
-                tempUniqueId: Get.find<CartController>().uniqueId.toString(),
-                sizeAttribute: Get.find<ProductController>().selectedSizeId.toString(),
-                colorAttribute:
-                    Get.find<ProductController>().selectedColorId.toString());
+            if(int.parse(current.quantity.toString())>0){
+              Get.find<CartController>().addToCart(
+                  title: current.title,
+                  openDialog: true,
+                  optionSc: '3',
+                  productId: current.id.toString(),
+                  price: current.retailPrice.toString(),
+                  quantity: '1',
+                  tempUniqueId: Get.find<CartController>().uniqueId.toString(),
+                  sizeAttribute: Get.find<ProductController>().selectedSizeId.toString(),
+                  colorAttribute:
+                  Get.find<ProductController>().selectedColorId.toString());
+            }else{
+              Snack().createSnack(title: 'warning',msg: 'No enough quantity');
+            }
+
 
           },
           child:

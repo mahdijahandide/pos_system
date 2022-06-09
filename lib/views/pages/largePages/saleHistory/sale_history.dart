@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:pos_system/services/controller/cart_controller.dart';
 import 'package:pos_system/services/controller/order_controller.dart';
 import 'package:web_date_picker/web_date_picker.dart';
 import '../../../components/texts/customText.dart';
@@ -25,6 +26,7 @@ class SaleHistory extends GetView<OrderController> {
               cancel: InkWell(
                 onTap: () {
                   controller.orderFilteredList.value = controller.orderList.value;
+                  controller.selectedFilteredDate.value='';
                   Get.back();
                 },
                 child: Container(
@@ -37,13 +39,15 @@ class SaleHistory extends GetView<OrderController> {
                 ),
               ),
               content: WebDatePicker(
-                dateformat:  'yyyy-MM-dd',
+                dateformat:  'yyyy-MM-dd',initialDate: controller.selectedFilteredDate.value.isNotEmpty?
+                  DateTime.parse(controller.selectedFilteredDate.value.toString()):DateTime.now(),
                 onChange: (value) {
                   final DateFormat formatter = DateFormat('yyyy-MM-dd');
                   RxString date = formatter.format(value!).obs;
                   controller.orderFilteredList.value = controller.orderList.value
                       .where((element) =>
                   element.deliveryDate.toString() == date.value).toList();
+                  controller.selectedFilteredDate.value=value.toString();
                   Get.back();
                 },
               )
@@ -117,6 +121,7 @@ class SaleHistory extends GetView<OrderController> {
                               color: Colors.black),
                           InkWell(
                               onTap: () {
+                                Get.find<CartController>().printedFactorId.value=currentItem.orderId.toString();
                                 controller.getOrderProducts(
                                   id: currentItem.id, current: currentItem,);
                               },

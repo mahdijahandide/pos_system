@@ -5,6 +5,8 @@ import 'package:pos_system/services/controller/product_controller.dart';
 import 'package:pos_system/services/model/product_color_model.dart';
 import 'package:pos_system/views/components/texts/customText.dart';
 
+import '../components/snackbar/snackbar.dart';
+
 
 class ProductOptionDialog2 {
   static final ProductOptionDialog2 _instance = ProductOptionDialog2.internal();
@@ -22,7 +24,7 @@ class ProductOptionDialog2 {
               width: Get.width / 2,
               padding:
               const EdgeInsets.symmetric(vertical: 12, horizontal: 15),
-              child: DropdownButton<String>(isExpanded: true,
+              child: DropdownButton<String>(isExpanded: true,focusColor: Colors.white,
                 hint: Text(Get
                     .find<ProductController>()
                     .selectedColorName
@@ -60,13 +62,18 @@ class ProductOptionDialog2 {
       confirm: InkWell(
           onTap: () {
             var current=Get.find<ProductController>().productList.value.where((element) => element.id==int.parse(productId.toString())).toList()[0];
-            Get.find<CartController>().addToCart(
-                title: current.title,openDialog: true,optionSc: '2',
-                productId: current.id.toString(),
-                price: current.retailPrice.toString(),
-                quantity: '1',
-                tempUniqueId: Get.find<CartController>().uniqueId.toString(),
-                colorAttribute: Get.find<ProductController>().selectedColorId.toString());
+            if(int.parse(current.quantity.toString())>0){
+              Get.find<CartController>().addToCart(
+                  title: current.title,openDialog: true,optionSc: '2',
+                  productId: current.id.toString(),
+                  price: current.retailPrice.toString(),
+                  quantity: '1',
+                  tempUniqueId: Get.find<CartController>().uniqueId.toString(),
+                  colorAttribute: Get.find<ProductController>().selectedColorId.toString());
+            }else{
+              Snack().createSnack(title: 'warning',msg: 'No enough quantity');
+            }
+
           },
           child: Container(
             width: 90,height: 50,alignment: Alignment.center,

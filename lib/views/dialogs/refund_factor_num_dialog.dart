@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:pos_system/services/controller/auth_controller.dart';
 import 'package:pos_system/services/controller/cart_controller.dart';
 import 'package:pos_system/services/controller/order_controller.dart';
 import 'package:pos_system/services/controller/product_controller.dart';
@@ -27,7 +28,7 @@ class RefundFactorNumDialog {
           child: Column(
             children: [
               CustomTextField().createTextField(
-                  hint: 'enter factor number',
+                  hint: 'Enter Invoice Number',
                   height: 50,keyboardType: TextInputType.number,
                   inputFormatters: <TextInputFormatter>[
                     FilteringTextInputFormatter.digitsOnly
@@ -36,9 +37,9 @@ class RefundFactorNumDialog {
                   onSubmitted: (_)async{
                     if(controller.refundFactorNumController.text.isNotEmpty){
                       Get.back();
-                      Get.find<OrderController>().getOrders(id:controller.refundFactorNumController.text, reqStatus: 'refund');
+                      Get.find<OrderController>().getOrders(id:Get.find<AuthController>().coDetails['prefix']+controller.refundFactorNumController.text, reqStatus: 'refund');
                     }else{
-                      Snack().createSnack(title: 'warning',msg: 'enter factor number');
+                      Snack().createSnack(title: 'warning',msg: 'Enter Invoice Number');
                     }
                   }
               ),
@@ -58,7 +59,7 @@ class RefundFactorNumDialog {
         onTap: (){
           if( Get.find<CartController>().refundFactorNumController.text.isNotEmpty){
             Get.back();
-            Get.find<OrderController>().getOrders(id: Get.find<CartController>().refundFactorNumController.text, reqStatus: 'refund');
+            Get.find<OrderController>().getOrders(id:Get.find<AuthController>().coDetails['prefix']+Get.find<CartController>().refundFactorNumController.text, reqStatus: 'refund');
           }else{
             Snack().createSnack(title: 'warning',msg: 'enter factor number');
           }

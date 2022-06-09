@@ -1,6 +1,7 @@
 class ProductModel {
   int?id;
   String?title;
+  String?titleAr;
   String?extraTitle;
   String?image;
   String?rolloverImage;
@@ -19,6 +20,7 @@ class ProductModel {
   ProductModel({data}) {
     id=data['id'];
     title=data['title'];
+    titleAr=data['translate']['ar'];
     extraTitle=data['extra_title'];
     image=data['image'];
     rolloverImage=data['rolloverImage'];
