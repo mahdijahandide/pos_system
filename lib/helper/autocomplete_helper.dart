@@ -30,19 +30,18 @@ class TextFieldSearch extends StatefulWidget {
   /// The minimum length of characters to be entered into the TextField before executing a search
   final int minStringLength;
 
-
   /// Creates a TextFieldSearch for displaying selected elements and retrieving a selected element
   const TextFieldSearch(
       {Key? key,
-        this.initialList,
-        required this.label,
-        required this.controller,
-        required this.hasKeyboard,
-        this.textStyle,
-        this.future,
-        this.getSelectedValue,
-        this.decoration,
-        this.minStringLength = 2})
+      this.initialList,
+      required this.label,
+      required this.controller,
+      required this.hasKeyboard,
+      this.textStyle,
+      this.future,
+      this.getSelectedValue,
+      this.decoration,
+      this.minStringLength = 2})
       : super(key: key);
 
   @override
@@ -51,6 +50,9 @@ class TextFieldSearch extends StatefulWidget {
 
 class _TextFieldSearchState extends State<TextFieldSearch> {
   late OverlayEntry _overlayEntry;
+
+  FocusNode _focusNode = FocusNode();
+
   final LayerLink _layerLink = LayerLink();
   List? filteredList = <StringWithString>[];
   bool hasFuture = false;
@@ -83,9 +85,8 @@ class _TextFieldSearchState extends State<TextFieldSearch> {
       filteredList = tempList;
       loading = false;
       // if no items are found, add message none found
-      itemsFound = tempList.isEmpty && widget.controller.text.isNotEmpty
-          ? false
-          : true;
+      itemsFound =
+          tempList.isEmpty && widget.controller.text.isNotEmpty ? false : true;
     });
     // mark that the overlay widget needs to be rebuilt so results can show
     _overlayEntry.markNeedsBuild();
@@ -105,22 +106,28 @@ class _TextFieldSearchState extends State<TextFieldSearch> {
         for (int i = 0; i < filteredList!.length; i++) {
           // lowercase the item and see if the item contains the string of text from the lowercase search
           if (widget.getSelectedValue != null) {
-            if (filteredList![i].name
-                .label
-                .toLowerCase()
-                .contains(widget.controller.text.toLowerCase())||filteredList![i].num
-                .label
-                .toLowerCase()
-                .contains(widget.controller.text.toLowerCase())) {
+            if (filteredList![i]
+                    .name
+                    .label
+                    .toLowerCase()
+                    .contains(widget.controller.text.toLowerCase()) ||
+                filteredList![i]
+                    .num
+                    .label
+                    .toLowerCase()
+                    .contains(widget.controller.text.toLowerCase())) {
               // if there is a match, add to the temp list
               tempList.add(filteredList![i].name);
             }
           } else {
-            if (filteredList![i].name
-                .toLowerCase()
-                .contains(widget.controller.text.toLowerCase())||filteredList![i].num
-                .toLowerCase()
-                .contains(widget.controller.text.toLowerCase())) {
+            if (filteredList![i]
+                    .name
+                    .toLowerCase()
+                    .contains(widget.controller.text.toLowerCase()) ||
+                filteredList![i]
+                    .num
+                    .toLowerCase()
+                    .contains(widget.controller.text.toLowerCase())) {
               // if there is a match, add to the temp list
               tempList.add(filteredList![i].name);
             }
@@ -144,13 +151,17 @@ class _TextFieldSearchState extends State<TextFieldSearch> {
     // loop through each item in filtered items
     for (int i = 0; i < filteredList!.length; i++) {
       // lowercase the item and see if the item contains the string of text from the lowercase search
-      if (filteredList![i].name
-          .toLowerCase()
-          .contains(widget.controller.text.toLowerCase())||filteredList![i].num
-          .toLowerCase()
-          .contains(widget.controller.text.toLowerCase())) {
+      if (filteredList![i]
+              .name
+              .toLowerCase()
+              .contains(widget.controller.text.toLowerCase()) ||
+          filteredList![i]
+              .num
+              .toLowerCase()
+              .contains(widget.controller.text.toLowerCase())) {
         // if there is a match, add to the temp list
-        tempList.add(StringWithString(mName: filteredList![i].name, mNum: filteredList![i].num));
+        tempList.add(StringWithString(
+            mName: filteredList![i].name, mNum: filteredList![i].num));
       }
     }
     // helper function to set tempList and other state props
@@ -201,7 +212,6 @@ class _TextFieldSearchState extends State<TextFieldSearch> {
         }
       }
     });
-
   }
 
   @override
@@ -293,7 +303,7 @@ class _TextFieldSearchState extends State<TextFieldSearch> {
     if (itemsFound == true && filteredList!.isNotEmpty ||
         itemsFound == false && widget.controller.text.isNotEmpty) {
       double _height =
-      itemsFound == true && filteredList!.length > 1 ? 110 : 55;
+          itemsFound == true && filteredList!.length > 1 ? 110 : 55;
       return SizedBox(
         height: _height,
         child: _listViewBuilder(context),
@@ -309,27 +319,27 @@ class _TextFieldSearchState extends State<TextFieldSearch> {
     double screenWidth = screenSize.width;
     return OverlayEntry(
         builder: (context) => Positioned(
-          width: overlaySize.width,
-          child: CompositedTransformFollower(
-            link: _layerLink,
-            showWhenUnlinked: false,
-            offset: Offset(0.0, overlaySize.height + 5.0),
-            child: Material(
-              elevation: 4.0,
-              child: ConstrainedBox(
-                  constraints: BoxConstraints(
-                    minWidth: screenWidth,
-                    maxWidth: screenWidth,
-                    minHeight: 0,
-                    // max height set to 150
-                    maxHeight: itemsFound == true ? 110 : 55,
-                  ),
-                  child: loading
-                      ? _loadingIndicator()
-                      : _listViewContainer(context)),
-            ),
-          ),
-        ));
+              width: overlaySize.width,
+              child: CompositedTransformFollower(
+                link: _layerLink,
+                showWhenUnlinked: false,
+                offset: Offset(0.0, overlaySize.height + 5.0),
+                child: Material(
+                  elevation: 4.0,
+                  child: ConstrainedBox(
+                      constraints: BoxConstraints(
+                        minWidth: screenWidth,
+                        maxWidth: screenWidth,
+                        minHeight: 0,
+                        // max height set to 150
+                        maxHeight: itemsFound == true ? 110 : 55,
+                      ),
+                      child: loading
+                          ? _loadingIndicator()
+                          : _listViewContainer(context)),
+                ),
+              ),
+            ));
   }
 
   @override
@@ -354,7 +364,8 @@ class _TextFieldSearchState extends State<TextFieldSearch> {
           TextField(
             controller: widget.controller,
             focusNode: _focusNode,
-            decoration: widget.decoration ?? InputDecoration(labelText: widget.label),
+            decoration:
+                widget.decoration ?? InputDecoration(labelText: widget.label),
             style: widget.textStyle,
             onChanged: (String value) {
               // every time we make a change to the input, update the list

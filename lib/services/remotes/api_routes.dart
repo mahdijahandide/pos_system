@@ -3,11 +3,13 @@
 // const String BASE_URL = 'https://kash5astore.com/api/posv1/';
 // const String BASE_URL = 'https://demo.kash5astore.com/api/posv1/';
 // const String BASE_URL = 'https://kash5astore.gulfweb.ir/api/posv1/';
-const String BASE_URL = 'https://kash5a2.gulfweb.ir/api/posv1/';
-const String BASE_URL_IMAGES = 'https://kash5astore.com/uploads/';
+// ignore_for_file: constant_identifier_names
 
+const String BASE_URL = 'https://kash5a2.gulfweb.ir/api/posv1/';
+const String BASE_URL_IMAGES = 'https://kash5astore.com/uploads/logo/';
 
 //routes
+const String GET_SETTING_DETAILS_ROUTE = BASE_URL + 'getSetting';
 const String LOGIN_ROUTE = BASE_URL + 'login';
 const String LOGOUT_ROUTE = BASE_URL + 'logout';
 const String PRODUCT_DETAILS_ROUTE = BASE_URL + 'getProductDetails';
@@ -31,9 +33,10 @@ const String SHIFT_DETAILS = BASE_URL + 'shift/details';
 const String SHIFT_START = BASE_URL + 'shift/start';
 const String SHIFT_END = BASE_URL + 'shift/end';
 
-String getRefundCartRoute(String id){
-  return BASE_URL+'order/$id/refund';
+String getRefundCartRoute(String id) {
+  return BASE_URL + 'order/$id/refund';
 }
-String getRefundCartItemRoute(String id){
-  return BASE_URL+'order/$id/refund/item';
+
+String getRefundCartItemRoute(String id) {
+  return BASE_URL + 'order/$id/refund/item';
 }
