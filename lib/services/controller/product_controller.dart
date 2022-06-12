@@ -35,25 +35,29 @@ class ProductController extends GetxController {
   late String selectedColorId;
   late String selectedValueId;
   late String selectedSizeId;
-  RxInt overlaysCounter=0.obs;
+  RxInt overlaysCounter = 0.obs;
 
-
-  int gridCtn(){
+  int gridCtn() {
     update();
-    return Get.width<=600?2:Get.width>600&&Get.width<900?3:4;
+    return Get.width <= 600
+        ? 2
+        : Get.width > 600 && Get.width < 900
+            ? 3
+            : 4;
   }
 
   Future<void> getAllProducts(
       {required catId,
       required keyword,
-      dynamic openModal,dynamic openModalTap,
+      dynamic openModal,
+      dynamic openModalTap,
       dynamic title}) async {
     var url = PRODUCTS_BY_CATEGORIES_ROUTE;
     final http.Response response = await http.post(Uri.parse(url),
         headers: <String, String>{
           'Content-Type': 'application/json',
           'Authorization': 'Bearer ${Get.find<AuthController>().token}',
-         // 'Access-Control-Allow-Origin':'*'
+          // 'Access-Control-Allow-Origin':'*'
         },
         body: jsonEncode(<String, String>{'catid': catId, 'keyword': keyword}));
     if (response.statusCode == 200) {
@@ -67,14 +71,16 @@ class ProductController extends GetxController {
         });
         Get.back();
         Get.bottomSheet(
-          ProductsModal(ontap: openModalTap,
+          ProductsModal(
+            ontap: openModalTap,
             gridCnt: Get.width < 600
                 ? 2
                 : Get.width > 600 && Get.width < 900
                     ? 3
                     : 5,
             title: title.toString(),
-            current: searchedProductList,isProduct: true,
+            current: searchedProductList,
+            isProduct: true,
             listCount: searchedProductList.length,
           ),
           isScrollControlled: true,
@@ -83,8 +89,8 @@ class ProductController extends GetxController {
             borderRadius: BorderRadius.circular(35),
           ),
         );
-      }else{
-        if(productArray.length>0){
+      } else {
+        if (productArray.length > 0) {
           productList.value.clear();
         }
         productArray.forEach((element) {
@@ -94,13 +100,17 @@ class ProductController extends GetxController {
       update();
     } else {
       Get.back();
-      RemoteStatusHandler().errorHandler(code: response.statusCode,error:convert.jsonDecode(response.body));
+      RemoteStatusHandler().errorHandler(
+          code: response.statusCode, error: convert.jsonDecode(response.body));
       print(response.statusCode);
     }
   }
 
   Future<void> getProductDetails(
-      {required productId, dynamic openModal, dynamic title,dynamic showDetails}) async {
+      {required productId,
+      dynamic openModal,
+      dynamic title,
+      dynamic showDetails}) async {
     LoadingDialog.showCustomDialog(msg: 'please wait ...');
     var url = PRODUCT_DETAILS_ROUTE;
     final http.Response response = await http.post(Uri.parse(url),
@@ -119,9 +129,9 @@ class ProductController extends GetxController {
       var jsonObject = convert.jsonDecode(response.body);
       var productDetails = jsonObject['data']['productDetails'];
       var optionsArray = jsonObject['data']['productDetails']['options'];
-      if(showDetails!=null){
-        Get.toNamed('/productDetails',arguments: productDetails);
-      }else{
+      if (showDetails != null) {
+        Get.toNamed('/productDetails', arguments: productDetails);
+      } else {
         switch (optionsArray['section_id']) {
           case 1:
             var sizeArray = optionsArray['sizes'];
@@ -129,8 +139,10 @@ class ProductController extends GetxController {
             sizeArray.forEach((element) {
               productSizeList.add(ProductSizeModel(data: element));
             });
-            selectedSizeName = 'select Size'.obs;selectedSizeId='';
-            ProductOptionDialog1.showCustomDialog(title: title,productId: productId);
+            selectedSizeName = 'select Size'.obs;
+            selectedSizeId = '';
+            ProductOptionDialog1.showCustomDialog(
+                title: title, productId: productId);
             break;
           case 2:
             var colorArray = optionsArray['colors'];
@@ -138,8 +150,10 @@ class ProductController extends GetxController {
             colorArray.forEach((element) {
               productColorList.add(ProductColorModel(data: element));
             });
-            selectedColorName = 'select color'.obs;selectedColorId='';
-            ProductOptionDialog2.showCustomDialog(title: title,productId: productId);
+            selectedColorName = 'select color'.obs;
+            selectedColorId = '';
+            ProductOptionDialog2.showCustomDialog(
+                title: title, productId: productId);
             break;
           case 3:
             var sizeColorArray = optionsArray['sizes_colors'];
@@ -147,45 +161,67 @@ class ProductController extends GetxController {
             sizeColorArray.forEach((element) {
               productSizeColorList.add(ProductSizeColorModel(data: element));
             });
-            selectedColorName = 'select color'.obs;selectedColorId='';
-            selectedSizeName = 'select size'.obs;selectedSizeId='';
-            ProductOptionDialog3.showCustomDialog(title: title,productId: productId,);
+            selectedColorName = 'select color'.obs;
+            selectedColorId = '';
+            selectedSizeName = 'select size'.obs;
+            selectedSizeId = '';
+            ProductOptionDialog3.showCustomDialog(
+              title: title,
+              productId: productId,
+            );
             break;
           case 4:
             var othersObj = optionsArray['others'];
-            var title=othersObj['title'];
-            var type=othersObj['type'];
-            var isRequired=othersObj['is_required'];
-            var otherId=othersObj['id'];
-            var valuesArray=othersObj['values'];
+            var title = othersObj['title'];
+            var type = othersObj['type'];
+            var isRequired = othersObj['is_required'];
+            var otherId = othersObj['id'];
+            var valuesArray = othersObj['values'];
             productOthersList.clear();
             valuesArray.forEach((element) {
               productOthersList.add(ProductOthersModel(data: element));
             });
-            selectedValue = 'select value'.obs;selectedValueId='';
-            if(type=="radio"||type=="select"){
-              ProductTypeSelect.showCustomDialog(title: title,productId: productId, isRequired: isRequired, type: type, otherId: otherId,);
-            }else if(type=="checkbox"){
-              ProductTypeSelect.showCustomDialog(title: title,productId: productId, isRequired: isRequired, type: type, otherId: otherId,);
+            selectedValue = 'select value'.obs;
+            selectedValueId = '';
+            if (type == "radio" || type == "select") {
+              ProductTypeSelect.showCustomDialog(
+                title: title,
+                productId: productId,
+                isRequired: isRequired,
+                type: type,
+                otherId: otherId,
+              );
+            } else if (type == "checkbox") {
+              ProductTypeSelect.showCustomDialog(
+                title: title,
+                productId: productId,
+                isRequired: isRequired,
+                type: type,
+                otherId: otherId,
+              );
             }
             break;
           default:
-            Snack().createSnack(title: 'warning',msg: 'cant add this item to cart at this moment');
+            Snack().createSnack(
+                title: 'warning',
+                msg: 'can not add this item to cart at this moment',
+                bgColor: Colors.red);
             break;
         }
         update();
       }
     } else {
       Get.back();
-      RemoteStatusHandler().errorHandler(code: response.statusCode,error:convert.jsonDecode(response.body));
+      RemoteStatusHandler().errorHandler(
+          code: response.statusCode, error: convert.jsonDecode(response.body));
       print(response.statusCode);
     }
   }
 
-  void closeOverlays(int count){
-    for(int i=0;i<count;i++){
+  void closeOverlays(int count) {
+    for (int i = 0; i < count; i++) {
       Get.back();
     }
-    overlaysCounter.value=0;
+    overlaysCounter.value = 0;
   }
 }

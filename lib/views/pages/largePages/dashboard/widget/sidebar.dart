@@ -13,7 +13,6 @@ import 'package:pos_system/views/pages/largePages/modals/temp_orders_modal.dart'
 import 'package:pos_system/views/pages/largePages/secondMonitor/show_factor.dart';
 import 'package:universal_html/html.dart' as html;
 
-
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../dialogs/area_province_dialog.dart';
@@ -31,141 +30,131 @@ class DashboardSidebar {
               children: [
                 Expanded(
                     child: InkWell(
-                      onTap: () {
-                        if (Get
-                            .find<CartController>()
-                            .addToCartList
-                            .value
-                            .where((element) => element.isSelected == true)
-                            .toList()
-                            .isEmpty) {
-                          if(controller.addToCartList.value.isNotEmpty){
-                            Get.find<CartController>().removeAllFromCart(
-                                tempUniqueId: Get
-                                    .find<CartController>()
-                                    .uniqueId);
-                          }
-
-                        } else {
-                          var item = Get
-                              .find<CartController>()
+                  onTap: () {
+                    if (Get.find<CartController>()
+                        .addToCartList
+                        .value
+                        .where((element) => element.isSelected == true)
+                        .toList()
+                        .isEmpty) {
+                      if (controller.addToCartList.value.isNotEmpty) {
+                        Get.find<CartController>().removeAllFromCart(
+                            tempUniqueId: Get.find<CartController>().uniqueId);
+                      }
+                    } else {
+                      var item = Get.find<CartController>()
+                          .addToCartList
+                          .value
+                          .where((element) => element.isSelected == true)
+                          .first;
+                      Get.find<CartController>().removeCartProductItem(
+                          index: Get.find<CartController>()
+                              .addToCartList
+                              .value
+                              .indexWhere(
+                                  (element) => element.isSelected == true),
+                          id: item.id.toString(),
+                          tempUniqueId: Get.find<CartController>().uniqueId);
+                    }
+                  },
+                  child: Container(
+                    height: 60.0,
+                    decoration:
+                        BoxDecoration(border: Border.all(color: Colors.black)),
+                    alignment: Alignment.center,
+                    child: FittedBox(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 2.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Icon(Icons.close),
+                            const SizedBox(
+                              width: 4.0,
+                            ),
+                            CustomText().createText(
+                              title: 'delete'.tr,
+                              align: TextAlign.center,
+                              size: 20.0,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                )),
+                const SizedBox(
+                  width: 6,
+                ),
+                Expanded(
+                    child: InkWell(
+                  onTap: () {
+                    if (Get.find<CartController>()
+                        .addToCartList
+                        .value
+                        .where((element) => element.isSelected == true)
+                        .toList()
+                        .isEmpty) {
+                      Snack().createSnack(
+                          title: 'please select an item first',
+                          msg: 'your shopping cart is empty',
+                          bgColor: Colors.yellow,
+                          msgColor: Colors.black,
+                          titleColor: Colors.black);
+                    } else {
+                      EditQtyDialog.showCustomDialog(
+                          title: 'enter new quantity',
+                          productId: Get.find<CartController>()
                               .addToCartList
                               .value
                               .where((element) => element.isSelected == true)
-                              .first;
-                          Get.find<CartController>().removeCartProductItem(
-                              index: Get
-                                  .find<CartController>()
-                                  .addToCartList
-                                  .value
-                                  .indexWhere(
-                                      (element) => element.isSelected == true),
-                              id: item.id.toString(),
-                              tempUniqueId: Get
-                                  .find<CartController>()
-                                  .uniqueId);
-                        }
-                      },
-                      child: Container(
-                        height: 60.0,
-                        decoration:
+                              .toList()
+                              .first
+                              .productId);
+                    }
+                  },
+                  child: Container(
+                    height: 60.0,
+                    decoration:
                         BoxDecoration(border: Border.all(color: Colors.black)),
-                        alignment: Alignment.center,
-                        child: FittedBox(
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 2.0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                const Icon(Icons.close),
-                                const SizedBox(
-                                  width: 4.0,
-                                ),
-                                CustomText().createText(
-                                  title: 'delete'.tr,
-                                  align: TextAlign.center,
-                                  size: 20.0,
-                                ),
-                              ],
-                            ),
-                          ),
+                    alignment: Alignment.center,
+                    child: FittedBox(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 2),
+                        child: CustomText().createText(
+                          title: 'quantity'.tr,
+                          align: TextAlign.center,
+                          size: 20,
                         ),
                       ),
-                    )),
+                    ),
+                  ),
+                )),
                 const SizedBox(
                   width: 6,
                 ),
                 Expanded(
                     child: InkWell(
-                      onTap: () {
-                        if (Get
-                            .find<CartController>()
-                            .addToCartList
-                            .value
-                            .where((element) => element.isSelected == true)
-                            .toList()
-                            .isEmpty) {
-                          Snack().createSnack(
-                              title: 'please select an item first',
-                              msg: 'your shopping cart is empty');
-                        } else {
-                          EditQtyDialog.showCustomDialog(
-                              title: 'enter new quantity',
-                              productId: Get
-                                  .find<CartController>()
-                                  .addToCartList
-                                  .value
-                                  .where((element) =>
-                              element.isSelected == true)
-                                  .toList()
-                                  .first
-                                  .productId);
-                        }
-                      },
-                      child: Container(
-                        height: 60.0,
-                        decoration:
-                        BoxDecoration(border: Border.all(color: Colors.black)),
-                        alignment: Alignment.center,
-                        child: FittedBox(
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 2),
-                            child: CustomText().createText(
-                              title: 'quantity'.tr,
-                              align: TextAlign.center,
-                              size: 20,
-                            ),
-                          ),
-                        ),
-                      ),
-                    )),
-                const SizedBox(
-                  width: 6,
-                ),
-                Expanded(
-                    child: InkWell(
-                      onTap: () {
-                        if (controller.openCartsUDID.isNotEmpty) {
-                          Get.bottomSheet(
-                              TempOrderModal(title: 'Temp Orders'),
-                              isScrollControlled: true,
-                              enableDrag: true,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(35),)
-                          );
-                        }
-                      },
-                      child: SizedBox(
-                        height: 60,
-                        child: FittedBox(
-                          child: CustomText().createText(
-                              title: controller.openCartsUDID.length.toString(),
-                              align: TextAlign.center,
-                              size: 20),
-                        ),
-                      ),
-                    )),
+                  onTap: () {
+                    if (controller.openCartsUDID.isNotEmpty) {
+                      Get.bottomSheet(TempOrderModal(title: 'Temp Orders'),
+                          isScrollControlled: true,
+                          enableDrag: true,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(35),
+                          ));
+                    }
+                  },
+                  child: SizedBox(
+                    height: 60,
+                    child: FittedBox(
+                      child: CustomText().createText(
+                          title: controller.openCartsUDID.length.toString(),
+                          align: TextAlign.center,
+                          size: 20),
+                    ),
+                  ),
+                )),
               ],
             ),
             const Divider(),
@@ -175,24 +164,20 @@ class DashboardSidebar {
                   return ListView(
                     children: [
                       ListView.separated(
-                        itemCount:
-                        Get
-                            .find<CartController>()
+                        itemCount: Get.find<CartController>()
                             .addToCartList
                             .value
                             .length,
                         shrinkWrap: true,
                         physics: const AlwaysScrollableScrollPhysics(),
                         itemBuilder: (BuildContext context, int index) {
-                          var currentItem =
-                          Get
-                              .find<CartController>()
+                          var currentItem = Get.find<CartController>()
                               .addToCartList
                               .value[index];
                           double itemQty =
-                          double.parse(currentItem.quantity.toString());
+                              double.parse(currentItem.quantity.toString());
                           double itemPrc =
-                          double.parse(currentItem.price.toString());
+                              double.parse(currentItem.price.toString());
                           double itemPrice = itemQty * itemPrc;
                           return GestureDetector(
                             onTap: () {
@@ -207,7 +192,7 @@ class DashboardSidebar {
                                     .isNotEmpty) {
                                   controller.addToCartList.value
                                       .where((element) =>
-                                  element.isSelected == true)
+                                          element.isSelected == true)
                                       .first
                                       .isSelected = false;
                                 }
@@ -225,7 +210,7 @@ class DashboardSidebar {
                                     flex: 1,
                                     child: Column(
                                       crossAxisAlignment:
-                                      CrossAxisAlignment.start,
+                                          CrossAxisAlignment.start,
                                       children: [
                                         FittedBox(
                                           child: CustomText().createText(
@@ -289,30 +274,21 @@ class DashboardSidebar {
             const Divider(),
             keyValText(
                 title: 'Subtotal',
-                value: Get
-                    .find<CartController>()
-                    .totalAmount
-                    .toString()),
+                value: Get.find<CartController>().totalAmount.toString()),
             const SizedBox(
               height: 8,
             ),
             keyValText(
                 title: 'Discount',
                 value:
-                '- ${Get
-                    .find<CartController>()
-                    .discountAmount
-                    .toString()}'),
+                    '- ${Get.find<CartController>().discountAmount.toString()}'),
             const SizedBox(
               height: 8,
             ),
             keyValText(
                 title: 'Delivery',
                 value:
-                '+ ${Get
-                    .find<CartController>()
-                    .deliveryAmount
-                    .toString()}'),
+                    '+ ${Get.find<CartController>().deliveryAmount.toString()}'),
             const SizedBox(
               height: 8,
             ),
@@ -332,15 +308,9 @@ class DashboardSidebar {
             ),
             keyValText(
                 title: 'total'.tr,
-                value: (Get
-                    .find<CartController>()
-                    .totalAmount +
-                    Get
-                        .find<CartController>()
-                        .deliveryAmount -
-                    Get
-                        .find<CartController>()
-                        .discountAmount)
+                value: (Get.find<CartController>().totalAmount +
+                        Get.find<CartController>().deliveryAmount -
+                        Get.find<CartController>().discountAmount)
                     .toString(),
                 keyWeight: FontWeight.bold,
                 valWeight: FontWeight.bold,
@@ -382,14 +352,13 @@ class DashboardSidebar {
                       icon: Icons.person,
                       title: 'customer'.tr,
                       onTap: () {
-                        if (Get
-                            .find<CustomerController>()
+                        if (Get.find<CustomerController>()
                             .customerList
                             .isNotEmpty) {
                           CustomerAutoCompleteDialog.showCustomDialog(
-                              title: 'Customer', list: Get
-                              .find<CustomerController>()
-                              .customerName);
+                              title: 'Customer',
+                              list:
+                                  Get.find<CustomerController>().customerName);
                         } else {
                           Get.find<CustomerController>().getCustomers();
                         }
@@ -407,30 +376,42 @@ class DashboardSidebar {
                       flex: 2,
                       child: InkWell(
                         onTap: () {
-                          controller.calController.text='';
-                          controller.balanceStatus.value='';
-                          if (Get
-                              .find<CartController>()
+                          controller.calController.text = '';
+                          controller.balanceStatus.value = '';
+                          if (Get.find<CartController>()
                               .addToCartList
                               .value
                               .isNotEmpty) {
                             Get.bottomSheet(
-                              controller.isRefund.isFalse ?
-                              CheckoutModal(title: 'Checkout') : RefundModal(
-                                  title: 'Refund', total: (controller.totalAmount -
-                                  controller.discountAmount +
-                                  controller.deliveryAmount).toString(), isWholeCart:controller.addToCartList.value.isNotEmpty? false:true,),
+                              controller.isRefund.isFalse
+                                  ? CheckoutModal(title: 'Checkout')
+                                  : RefundModal(
+                                      title: 'Refund',
+                                      total: (controller.totalAmount -
+                                              controller.discountAmount +
+                                              controller.deliveryAmount)
+                                          .toString(),
+                                      isWholeCart: controller
+                                              .addToCartList.value.isNotEmpty
+                                          ? false
+                                          : true,
+                                    ),
                               isScrollControlled: true,
                               enableDrag: true,
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(35),
                               ),
                             );
-                          }else if(controller.addToCartList.value.isEmpty&&controller.isRefund.isTrue){
-                            controller.calController.text ='';
-                                //controller.refundCartTotalPrice;
+                          } else if (controller.addToCartList.value.isEmpty &&
+                              controller.isRefund.isTrue) {
+                            controller.calController.text = '';
+                            //controller.refundCartTotalPrice;
                             Get.bottomSheet(
-                              RefundModal(title: 'Refund', total: controller.refundCartTotalPrice, isWholeCart: true,),
+                              RefundModal(
+                                title: 'Refund',
+                                total: controller.refundCartTotalPrice,
+                                isWholeCart: true,
+                              ),
                               isScrollControlled: true,
                               enableDrag: true,
                               shape: RoundedRectangleBorder(
@@ -451,8 +432,8 @@ class DashboardSidebar {
                           alignment: Alignment.center,
                           child: FittedBox(
                             child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 2),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 2),
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
@@ -490,10 +471,7 @@ class DashboardSidebar {
                       icon: Icons.delivery_dining,
                       title: 'delivery'.tr,
                       onTap: () {
-                        if (Get
-                            .find<CartController>()
-                            .countryList
-                            .isNotEmpty) {
+                        if (Get.find<CartController>().countryList.isNotEmpty) {
                           AreaProvinceDialog.showCustomDialog(
                               title: 'Province & Areas');
                         } else {
@@ -509,12 +487,13 @@ class DashboardSidebar {
     );
   }
 
-  Widget keyValText({required title,
-    required value,
-    dynamic keyWeight,
-    dynamic valWeight,
-    dynamic keySize,
-    dynamic valSize}) {
+  Widget keyValText(
+      {required title,
+      required value,
+      dynamic keyWeight,
+      dynamic valWeight,
+      dynamic keySize,
+      dynamic valSize}) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [

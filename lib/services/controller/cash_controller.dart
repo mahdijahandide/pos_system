@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'dart:convert' as convert;
 import 'package:http/http.dart' as http;
@@ -12,25 +13,25 @@ import '../../views/components/snackbar/snackbar.dart';
 import '../../views/dialogs/loading_dialogs.dart';
 import 'auth_controller.dart';
 
-class CashController extends GetxController{
-  RxBool isAddCash=true.obs;
-  TextEditingController amountTextController=TextEditingController();
-  TextEditingController descriptionTextController=TextEditingController();
+class CashController extends GetxController {
+  RxBool isAddCash = true.obs;
+  TextEditingController amountTextController = TextEditingController();
+  TextEditingController descriptionTextController = TextEditingController();
 
-  Rx<List<CashHistoryModel>>cashHistoryList=Rx<List<CashHistoryModel>>([]);
-  RxBool hasHistoryList=false.obs;
+  Rx<List<CashHistoryModel>> cashHistoryList = Rx<List<CashHistoryModel>>([]);
+  RxBool hasHistoryList = false.obs;
 
   Future<void> addOrRemoveCashRequest() async {
     LoadingDialog.showCustomDialog(msg: 'loading'.tr);
     var url = CASH_IN_OUT;
     final http.Response response = await http.post(
       Uri.parse(url),
-      headers: <String,String>{
-        'Content-Type':'application/json',
-        'Authorization':'Bearer ${Get.find<AuthController>().token}'
+      headers: <String, String>{
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ${Get.find<AuthController>().token}'
       },
       body: jsonEncode(<String, String>{
-        'type': isAddCash.isFalse?"out":"in",
+        'type': isAddCash.isFalse ? "out" : "in",
         'amount': amountTextController.text,
         'description': descriptionTextController.text,
       }),
@@ -40,10 +41,18 @@ class CashController extends GetxController{
       var jsonObject = convert.jsonDecode(response.body);
       amountTextController.clear();
       descriptionTextController.clear();
-      Snack().createSnack(title: 'success',msg: 'request recorded successfully');
+      Snack().createSnack(
+          title: 'success',
+          msg: 'request recorded successfully',
+          bgColor: Colors.green,
+          icon: const Icon(
+            Icons.check,
+            color: Colors.white,
+          ));
     } else {
       Get.back();
-      RemoteStatusHandler().errorHandler(code: response.statusCode,error:convert.jsonDecode(response.body));
+      RemoteStatusHandler().errorHandler(
+          code: response.statusCode, error: convert.jsonDecode(response.body));
     }
   }
 
@@ -51,21 +60,22 @@ class CashController extends GetxController{
     var url = CASH_HISTORY;
     final http.Response response = await http.post(
       Uri.parse(url),
-      headers: <String,String>{
-        'Content-Type':'application/json',
+      headers: <String, String>{
+        'Content-Type': 'application/json',
         'Authorization': 'Bearer ${Get.find<AuthController>().token}'
       },
     );
     if (response.statusCode == 200) {
       cashHistoryList.value.clear();
       var jsonObject = convert.jsonDecode(response.body);
-      jsonObject['data'].forEach((element){
+      jsonObject['data'].forEach((element) {
         cashHistoryList.value.add(CashHistoryModel(data: element));
       });
-      hasHistoryList.value=true;
+      hasHistoryList.value = true;
     } else {
       Get.back();
-      RemoteStatusHandler().errorHandler(code: response.statusCode,error:convert.jsonDecode(response.body));
+      RemoteStatusHandler().errorHandler(
+          code: response.statusCode, error: convert.jsonDecode(response.body));
     }
   }
 }

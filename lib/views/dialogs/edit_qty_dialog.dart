@@ -27,35 +27,53 @@ class EditQtyDialog {
             children: [
               CustomTextField().createTextField(
                   hint: 'Enter New Quantity',
-                  height: 50,keyboardType: TextInputType.number,
+                  height: 50,
+                  keyboardType: TextInputType.number,
                   inputFormatters: <TextInputFormatter>[
                     FilteringTextInputFormatter.digitsOnly
                   ],
                   controller: qtyController,
-                  onSubmitted: (_)async{
+                  onSubmitted: (_) async {
                     var current = Get.find<CartController>()
-                        .addToCartList.value
+                        .addToCartList
+                        .value
                         .where((element) =>
-                    element.productId == productId.toString())
+                            element.productId == productId.toString())
                         .toList()[0];
-                    if(int.parse(qtyController.text.toString())>int.parse(Get.find<ProductController>().productList.value.where((element) => element.id==current.id).first.quantity.toString())){
-                      Snack().createSnack(title: 'selected quantity is bigger than existed item quantity',msg: 'your entire quantity must be smaller than the max item quantity');
-                    }else{
+                    if (int.parse(qtyController.text.toString()) >
+                        int.parse(Get.find<ProductController>()
+                            .productList
+                            .value
+                            .where((element) => element.id == current.id)
+                            .first
+                            .quantity
+                            .toString())) {
+                      Snack().createSnack(
+                          title:
+                              'selected quantity is bigger than existed item quantity',
+                          msg: '',
+                          bgColor: Colors.yellow,
+                          msgColor: Colors.black,
+                          titleColor: Colors.black);
+                    } else {
                       Get.find<CartController>().editCartProductQuantity(
                           tempId: current.productId,
                           quantity: qtyController.text,
                           tempUniqueId: Get.find<CartController>().uniqueId,
-                          index: Get.find<CartController>().addToCartList.value.indexWhere(
-                                  (element) => element.productId == current.productId));
+                          index: Get.find<CartController>()
+                              .addToCartList
+                              .value
+                              .indexWhere((element) =>
+                                  element.productId == current.productId));
                     }
-                  }
-              ),
+                  }),
               Container(
                 color: const Color(0xffeeeeee),
                 child: VirtualKeyboard(
-                    textColor: Colors.black,
-                    type: VirtualKeyboardType.Numeric, textController: qtyController,
-                    ),
+                  textColor: Colors.black,
+                  type: VirtualKeyboardType.Numeric,
+                  textController: qtyController,
+                ),
               ),
             ],
           ),
@@ -63,33 +81,52 @@ class EditQtyDialog {
       }),
       contentPadding: const EdgeInsets.all(15),
       confirm: InkWell(
-        onTap: (){
+        onTap: () {
           var current = Get.find<CartController>()
-              .addToCartList.value
-              .where((element) =>
-          element.productId == productId.toString())
+              .addToCartList
+              .value
+              .where((element) => element.productId == productId.toString())
               .toList()[0];
-          if(int.parse(qtyController.text.toString())>int.parse(Get.find<ProductController>().productList.value.where((element) => element.id==current.id).first.quantity.toString())){
-            Snack().createSnack(title: 'selected quantity is bigger than existed item quantity',msg: 'your entire quantity must be smaller than the max item quantity');
-          }else{
+          if (int.parse(qtyController.text.toString()) >
+              int.parse(Get.find<ProductController>()
+                  .productList
+                  .value
+                  .where((element) => element.id == current.id)
+                  .first
+                  .quantity
+                  .toString())) {
+            Snack().createSnack(
+                title: 'selected quantity is bigger than existed item quantity',
+                msg: '',
+                bgColor: Colors.yellow,
+                msgColor: Colors.black,
+                titleColor: Colors.black);
+          } else {
             Get.find<CartController>().editCartProductQuantity(
                 tempId: current.productId,
                 quantity: qtyController.text,
                 tempUniqueId: Get.find<CartController>().uniqueId,
-                index: Get.find<CartController>().addToCartList.value.indexWhere(
+                index: Get.find<CartController>()
+                    .addToCartList
+                    .value
+                    .indexWhere(
                         (element) => element.productId == current.productId));
           }
         },
         child: Container(
-          width: 90,height: 50,alignment: Alignment.center,
+          width: 90,
+          height: 50,
+          alignment: Alignment.center,
           color: Colors.green.withOpacity(0.2),
           child: CustomText().createText(title: 'Submit', color: Colors.teal),
         ),
       ),
       cancel: InkWell(
-        onTap: ()=>Get.back(),
+        onTap: () => Get.back(),
         child: Container(
-          width: 90,height: 50,alignment: Alignment.center,
+          width: 90,
+          height: 50,
+          alignment: Alignment.center,
           color: Colors.red.withOpacity(0.2),
           child: CustomText().createText(title: 'Cancel', color: Colors.red),
         ),

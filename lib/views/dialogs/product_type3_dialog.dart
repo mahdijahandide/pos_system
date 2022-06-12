@@ -25,7 +25,8 @@ class ProductOptionDialog3 {
             children: [
               //size
               DropdownButton<String>(
-                isExpanded: true,focusColor: Colors.white,
+                isExpanded: true,
+                focusColor: Colors.white,
                 hint: Text(
                     Get.find<ProductController>().selectedSizeName.toString()),
                 onChanged: (val) {
@@ -49,35 +50,51 @@ class ProductOptionDialog3 {
                 }).toList(),
               ),
               //color
-             Get.find<ProductController>().selectedSizeId==''?const SizedBox(): DropdownButton<String>(
-                isExpanded: true,focusColor: Colors.white,
-                hint: Text(
-                    Get.find<ProductController>().selectedColorName.toString()),
-                onChanged: (val) {
-                  Get.find<ProductController>().selectedColorId =
-                      val.toString();
-                  Get.find<ProductController>().selectedColorName.value = Get.find<ProductController>().productSizeColorList.where((element) => element.sizeName==
-                  Get.find<ProductController>().selectedSizeName.value).first.colorList.where((element) => element.colorId==int.parse(val.toString())).first.colorName.toString();
-                  controller.update();
-                },
-                items: Get.find<ProductController>()
-                    .productSizeColorList
-                    .where((element) =>
-                element.sizeName ==
-                    Get.find<ProductController>()
-                        .selectedSizeName
-                        .toString())
-                    .first
-                    .colorList
-                    .map((ProductColorModel value) {
-                  return DropdownMenuItem<String>(
-                    value: value.colorId.toString(),
-                    child: Text(value.colorName.toString()),
-                  );
-                }).toList(),
-              ),
-
-
+              Get.find<ProductController>().selectedSizeId == ''
+                  ? const SizedBox()
+                  : DropdownButton<String>(
+                      isExpanded: true,
+                      focusColor: Colors.white,
+                      hint: Text(Get.find<ProductController>()
+                          .selectedColorName
+                          .toString()),
+                      onChanged: (val) {
+                        Get.find<ProductController>().selectedColorId =
+                            val.toString();
+                        Get.find<ProductController>().selectedColorName.value =
+                            Get.find<ProductController>()
+                                .productSizeColorList
+                                .where((element) =>
+                                    element.sizeName ==
+                                    Get.find<ProductController>()
+                                        .selectedSizeName
+                                        .value)
+                                .first
+                                .colorList
+                                .where((element) =>
+                                    element.colorId ==
+                                    int.parse(val.toString()))
+                                .first
+                                .colorName
+                                .toString();
+                        controller.update();
+                      },
+                      items: Get.find<ProductController>()
+                          .productSizeColorList
+                          .where((element) =>
+                              element.sizeName ==
+                              Get.find<ProductController>()
+                                  .selectedSizeName
+                                  .toString())
+                          .first
+                          .colorList
+                          .map((ProductColorModel value) {
+                        return DropdownMenuItem<String>(
+                          value: value.colorId.toString(),
+                          child: Text(value.colorName.toString()),
+                        );
+                      }).toList(),
+                    ),
             ],
           ),
         );
@@ -86,11 +103,12 @@ class ProductOptionDialog3 {
       confirm: InkWell(
           onTap: () {
             var current = Get.find<ProductController>()
-                .productList.value
-                .where((element) =>
-                    element.id == int.parse(productId.toString()))
+                .productList
+                .value
+                .where(
+                    (element) => element.id == int.parse(productId.toString()))
                 .toList()[0];
-            if(int.parse(current.quantity.toString())>0){
+            if (int.parse(current.quantity.toString()) > 0) {
               Get.find<CartController>().addToCart(
                   title: current.title,
                   openDialog: true,
@@ -99,28 +117,37 @@ class ProductOptionDialog3 {
                   price: current.retailPrice.toString(),
                   quantity: '1',
                   tempUniqueId: Get.find<CartController>().uniqueId.toString(),
-                  sizeAttribute: Get.find<ProductController>().selectedSizeId.toString(),
+                  sizeAttribute:
+                      Get.find<ProductController>().selectedSizeId.toString(),
                   colorAttribute:
-                  Get.find<ProductController>().selectedColorId.toString());
-            }else{
-              Snack().createSnack(title: 'warning',msg: 'No enough quantity');
+                      Get.find<ProductController>().selectedColorId.toString());
+            } else {
+              Snack().createSnack(
+                  title: 'warning',
+                  msg: 'No enough quantity',
+                  bgColor: Colors.yellow,
+                  msgColor: Colors.black,
+                  titleColor: Colors.black);
             }
-
-
           },
-          child:
-              Container(
-                  width: 90,height: 50,alignment: Alignment.center,
-                  color: Colors.green.withOpacity(0.2),
-                  child: CustomText().createText(title: 'Submit', color: Colors.teal))),
+          child: Container(
+              width: 90,
+              height: 50,
+              alignment: Alignment.center,
+              color: Colors.green.withOpacity(0.2),
+              child: CustomText()
+                  .createText(title: 'Submit', color: Colors.teal))),
       cancel: InkWell(
           onTap: () {
             Get.back();
           },
           child: Container(
-              width: 90,height: 50,alignment: Alignment.center,
+              width: 90,
+              height: 50,
+              alignment: Alignment.center,
               color: Colors.red.withOpacity(0.2),
-              child: CustomText().createText(title: 'Cancel', color: Colors.red))),
+              child:
+                  CustomText().createText(title: 'Cancel', color: Colors.red))),
     );
   }
 }

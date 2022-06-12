@@ -10,7 +10,7 @@ class DesktopLogin extends GetView<AuthController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: GetBuilder(builder: (AuthController controller) {
+      body: Obx(() {
         return Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
@@ -62,7 +62,11 @@ class DesktopLogin extends GetView<AuthController> {
                       align: TextAlign.start,
                       hasSuffixIcon: false,
                       hasPrefixIcon: true,
-                      node: Get.find<AuthController>().userFocus,
+                      onTap: () {
+                        controller.userFocus.value = true;
+                        print(controller.userFocus.value);
+                        controller.update();
+                      },
                       prefixIcon: Icons.person)),
               const SizedBox(
                 height: 8,
@@ -72,7 +76,11 @@ class DesktopLogin extends GetView<AuthController> {
                 child: CustomTextField().createTextField(
                     hint: '',
                     height: 45.0,
-                    node: Get.find<AuthController>().passwordFocus,
+                    onTap: () {
+                      controller.userFocus.value = false;
+                      print(controller.userFocus.value);
+                      controller.update();
+                    },
                     controller:
                         Get.find<AuthController>().loginControllerPasswordText,
                     borderColor: Colors.blue,
@@ -102,12 +110,9 @@ class DesktopLogin extends GetView<AuthController> {
                   type: Get.find<AuthController>().isNumericMode
                       ? VirtualKeyboardType.Numeric
                       : VirtualKeyboardType.Alphanumeric,
-                  textController: Get.find<AuthController>()
-                              .userFocus
-                              .hasPrimaryFocus ==
-                          true
-                      ? Get.find<AuthController>().loginControllerUserText
-                      : Get.find<AuthController>().loginControllerPasswordText,
+                  textController: controller.userFocus.value == true
+                      ? controller.loginControllerUserText
+                      : controller.loginControllerPasswordText,
                 ),
               ),
             ],
