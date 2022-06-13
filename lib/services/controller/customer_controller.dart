@@ -19,25 +19,23 @@ class CustomerController extends GetxController {
   RxString selectedCustomerName = ''.obs;
   var selectedCustomer;
 
-  TextEditingController customerNameController=TextEditingController();
-  TextEditingController customerEmailController=TextEditingController();
-  TextEditingController customerNumberController=TextEditingController();
+  TextEditingController customerNameController = TextEditingController();
+  TextEditingController customerEmailController = TextEditingController();
+  TextEditingController customerNumberController = TextEditingController();
 
-  TextEditingController addCustomerNameController=TextEditingController();
-  TextEditingController addCustomerNumberController=TextEditingController();
-  TextEditingController addCustomerEmailController=TextEditingController();
+  TextEditingController addCustomerNameController = TextEditingController();
+  TextEditingController addCustomerNumberController = TextEditingController();
+  TextEditingController addCustomerEmailController = TextEditingController();
 
   TextEditingController customerController = TextEditingController();
 
-  Rx<List<CustomerModel>> foundPlayers =
-  Rx<List<CustomerModel>>([]);
+  Rx<List<CustomerModel>> foundPlayers = Rx<List<CustomerModel>>([]);
 
   @override
   void onInit() {
     super.onInit();
     foundPlayers.value = customerList;
   }
-
 
   @override
   void onClose() {}
@@ -48,27 +46,26 @@ class CustomerController extends GetxController {
     } else {
       results = customerList
           .where((element) => element.name
-          .toString()
-          .toLowerCase()
-          .contains(playerName.toLowerCase()))
+              .toString()
+              .toLowerCase()
+              .contains(playerName.toLowerCase()))
           .toList();
-      if(results.isEmpty){
+      if (results.isEmpty) {
         results = customerList
             .where((element) => element.mobile
-            .toString()
-            .toLowerCase()
-            .contains(playerName.toLowerCase()))
+                .toString()
+                .toLowerCase()
+                .contains(playerName.toLowerCase()))
             .toList();
       }
     }
     foundPlayers.value = results;
   }
 
-
-
-  Future<void> getCustomers({dynamic hasOpenPage,dynamic doInBackground,dynamic hasLoading}) async {
+  Future<void> getCustomers(
+      {dynamic hasOpenPage, dynamic doInBackground, dynamic hasLoading}) async {
     customerList.clear();
-    if(hasLoading!=false){
+    if (hasLoading != false) {
       LoadingDialog.showCustomDialog(msg: 'Please wait ...');
     }
     var url = GET_Customers;
@@ -84,24 +81,27 @@ class CustomerController extends GetxController {
         customerList.add(CustomerModel(data: element));
       });
 
-      for(int i=0;i<customerList.length;i++){
-        customerName.add(StringWithString(mName: customerList[i].name.toString(), mNum: customerList[i].mobile.toString()));
+      for (int i = 0; i < customerList.length; i++) {
+        customerName.add(StringWithString(
+            mName: customerList[i].name.toString(),
+            mNum: customerList[i].mobile.toString()));
       }
-      if(hasLoading!=false){
+      if (hasLoading != false) {
         Get.back();
       }
 
-      if(doInBackground!=true){
-        if(hasOpenPage!=null){
+      if (doInBackground != true) {
+        if (hasOpenPage != null) {
           Get.toNamed('/customers');
-        }else{
-          CustomerAutoCompleteDialog.showCustomDialog(title: 'Customer', list: customerName);
+        } else {
+          CustomerAutoCompleteDialog.showCustomDialog(
+              title: 'Customer', list: customerName);
         }
       }
-
     } else {
       Get.back();
-      RemoteStatusHandler().errorHandler(code: response.statusCode,error:convert.jsonDecode(response.body));
+      RemoteStatusHandler().errorHandler(
+          code: response.statusCode, error: convert.jsonDecode(response.body));
       print(response.statusCode);
     }
   }
@@ -111,8 +111,8 @@ class CustomerController extends GetxController {
     var url = ADD_NEW_CUSTOMER;
     final http.Response response = await http.post(
       Uri.parse(url),
-      headers: <String,String>{
-        'Content-Type':'application/json',
+      headers: <String, String>{
+        'Content-Type': 'application/json',
         'Authorization': 'Bearer ${Get.find<AuthController>().token}'
       },
       body: jsonEncode(<String, String>{
@@ -127,10 +127,14 @@ class CustomerController extends GetxController {
       var jsonObject = convert.jsonDecode(response.body);
 
       customerList.add(CustomerModel(data: jsonObject['data']));
+      customerName.add(StringWithString(
+          mName: jsonObject['data']['name'],
+          mNum: jsonObject['data']['mobile']));
       update();
     } else {
       Get.back();
-      RemoteStatusHandler().errorHandler(code: response.statusCode,error:convert.jsonDecode(response.body));
+      RemoteStatusHandler().errorHandler(
+          code: response.statusCode, error: convert.jsonDecode(response.body));
       print(response.statusCode);
     }
   }

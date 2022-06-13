@@ -8,61 +8,66 @@ import 'package:vk/vk.dart';
 
 import '../../helper/autocomplete_helper.dart';
 
-
 class CustomerAutoCompleteDialog {
-  static final CustomerAutoCompleteDialog _instance = CustomerAutoCompleteDialog.internal();
+  static final CustomerAutoCompleteDialog _instance =
+      CustomerAutoCompleteDialog.internal();
 
   CustomerAutoCompleteDialog.internal();
 
   factory CustomerAutoCompleteDialog() => _instance;
 
-  static void showCustomDialog({required title,required List<StringWithString> list}) {
+  static void showCustomDialog(
+      {required title, required List<StringWithString> list}) {
     TextEditingController customerController = TextEditingController();
     final FocusNode focusNode = FocusNode();
     Get.defaultDialog(
       title: title,
-      content: GetBuilder(
-          builder: (ProductController controller) {
-            return Column(
-              children: [
-                TextFieldSearch(
-                    hasKeyboard: true,
-                    initialList: list,
-                    label: 'Customer Name',
-                    controller: customerController),
-                Container(
-                  width: 900,
-                  margin: const EdgeInsets.only(top: 10),
-                  color: const Color(0xffeeeeee),
-                  child: VirtualKeyboard(
-                    textColor: Colors.black,
-                    type: VirtualKeyboardType.Alphanumeric, textController: customerController,
-
-                  ),
-                ),
-              ],
-            );
-
-          }
-      ),
+      content: GetBuilder(builder: (ProductController controller) {
+        return Column(
+          children: [
+            TextFieldSearch(
+                hasKeyboard: true,
+                initialList: list,
+                label: 'Customer Name',
+                controller: customerController),
+            Container(
+              width: 900,
+              margin: const EdgeInsets.only(top: 10),
+              color: const Color(0xffeeeeee),
+              child: VirtualKeyboard(
+                textColor: Colors.black,
+                type: VirtualKeyboardType.Alphanumeric,
+                textController: customerController,
+              ),
+            ),
+          ],
+        );
+      }),
       contentPadding: const EdgeInsets.all(15),
       confirm: InkWell(
-        onTap: (){
-          Get.find<CustomerController>().selectedCustomer=Get.find<CustomerController>().customerList.where((element) => element.name==customerController.text).first;
+        onTap: () {
+          Get.find<CustomerController>().selectedCustomer =
+              Get.find<CustomerController>()
+                  .customerList
+                  .where((element) => element.name == customerController.text)
+                  .first;
           Get.find<CustomerController>().update();
           Get.back();
         },
         child: Container(
-          width: 90,height: 50,alignment: Alignment.center,
+          width: 90,
+          height: 50,
+          alignment: Alignment.center,
           color: Colors.green.withOpacity(0.2),
-          child: CustomText().createText(
-              title: 'Submit', color: Colors.teal),
+          child: CustomText().createText(title: 'Submit', color: Colors.teal),
         ),
       ),
       cancel: InkWell(
-        onTap: ()=>Get.back(),
+        onTap: () => Get.back(),
         child: Container(
-          width: 90,height: 50,alignment: Alignment.center,
+          width: 90,
+          height: 50,
+          alignment: Alignment.center,
           color: Colors.red.withOpacity(0.2),
           child: CustomText().createText(title: 'Cancel', color: Colors.red),
         ),

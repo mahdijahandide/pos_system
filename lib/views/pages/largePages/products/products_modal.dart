@@ -7,6 +7,8 @@ import 'package:pos_system/services/controller/product_controller.dart';
 import 'package:pos_system/views/components/texts/customText.dart';
 import 'package:pos_system/views/dialogs/loading_dialogs.dart';
 
+import '../../../components/snackbar/snackbar.dart';
+
 class ProductsModal extends StatelessWidget {
   int gridCnt;
   String title;
@@ -99,14 +101,23 @@ class ProductsModal extends StatelessWidget {
                                       .toString());
                             } else {
                               Get.back(closeOverlays: true);
-                              Fluttertoast.showToast(
-                                  msg:
-                                      "this item already exist in your cart", // message
-                                  toastLength: Toast.LENGTH_SHORT, // length
-                                  gravity: ToastGravity.CENTER, // location
-                                  webPosition: 'center',
-                                  timeInSecForIosWeb: 2 // duration
-                                  );
+                              // Fluttertoast.showToast(
+                              //     msg:
+                              //         "this item already exist in your cart", // message
+                              //     toastLength: Toast.LENGTH_SHORT, // length
+                              //     gravity: ToastGravity.CENTER, // location
+                              //     webPosition: 'center',
+                              //     timeInSecForIosWeb: 2 // duration
+                              //     );
+                              Snack().createSnack(
+                                  title: '',
+                                  msg: 'this item already exist in your cart',
+                                  bgColor: Colors.green,
+                                  msgColor: Colors.black,
+                                  icon: const Icon(
+                                    Icons.check,
+                                    color: Colors.white,
+                                  ));
                             }
                           } else {
                             bool contain = Get.find<CartController>()
@@ -122,14 +133,23 @@ class ProductsModal extends StatelessWidget {
                                   title: currentItem.title);
                             } else {
                               Get.back(closeOverlays: true);
-                              Fluttertoast.showToast(
-                                  msg:
-                                      "this item already exist in your cart", // message
-                                  toastLength: Toast.LENGTH_SHORT, // length
-                                  gravity: ToastGravity.CENTER, // location
-                                  webPosition: 'center',
-                                  timeInSecForIosWeb: 2 // duration
-                                  );
+                              // Fluttertoast.showToast(
+                              //     msg:
+                              //         "this item already exist in your cart", // message
+                              //     toastLength: Toast.LENGTH_SHORT, // length
+                              //     gravity: ToastGravity.CENTER, // location
+                              //     webPosition: 'center',
+                              //     timeInSecForIosWeb: 2 // duration
+                              //     );
+                              Snack().createSnack(
+                                  title: '',
+                                  msg: 'this item already exist in your cart',
+                                  bgColor: Colors.green,
+                                  msgColor: Colors.black,
+                                  icon: const Icon(
+                                    Icons.check,
+                                    color: Colors.white,
+                                  ));
                             }
                           }
                         } else {

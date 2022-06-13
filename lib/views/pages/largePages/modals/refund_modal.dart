@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:pos_system/services/controller/cart_controller.dart';
-import 'package:pos_system/services/controller/customer_controller.dart';
 import 'package:pos_system/views/components/buttons/custom_text_button.dart';
 import 'package:pos_system/views/components/textfields/textfield.dart';
 import 'package:pos_system/views/components/texts/customText.dart';
@@ -15,10 +14,12 @@ class RefundModal extends GetView<CartController> {
   String total;
   bool isWholeCart;
 
-  RefundModal({
-    Key? key,
-    required this.title,required this.total,required this.isWholeCart
-  }) : super(key: key);
+  RefundModal(
+      {Key? key,
+      required this.title,
+      required this.total,
+      required this.isWholeCart})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -34,8 +35,11 @@ class RefundModal extends GetView<CartController> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   const SizedBox(),
-                  CustomText().createText(color: Colors.black,
-                      title: title, size: 18, fontWeight: FontWeight.bold),
+                  CustomText().createText(
+                      color: Colors.black,
+                      title: title,
+                      size: 18,
+                      fontWeight: FontWeight.bold),
                   InkWell(
                       onTap: () {
                         Get.back();
@@ -56,28 +60,41 @@ class RefundModal extends GetView<CartController> {
                   const SizedBox(
                     height: 38,
                   ),
-
                   Obx(() {
                     return Row(
                       children: [
                         CustomText().createText(
-                            title: 'Total Amount: ',fontWeight: FontWeight.bold,size: 26),
+                            title: 'Total Amount: ',
+                            fontWeight: FontWeight.bold,
+                            size: 26),
                         SizedBox(
                           width: 200,
                           child: CustomText().createText(
-                              title:total,
+                              title: double.parse(total).toStringAsFixed(3),
                               size: 26,
                               fontWeight: FontWeight.bold),
                         ),
-                        const SizedBox(width: 8,),
+                        const SizedBox(
+                          width: 8,
+                        ),
                         CustomText().createText(
-                            title:controller.balanceStatus.value==''?'': controller.balanceStatus.value,size: 18,fontWeight: FontWeight.bold,
-                            color:controller.balanceStatus.value==''?Colors.white:double.parse(
-                                controller.calController.text
-                                    .toString()) - double.parse((controller.totalAmount +
-                                controller.discountAmount +
-                                controller.deliveryAmount).toString()) <
-                                0?Colors.green: Colors.red),
+                            title: controller.balanceStatus.value == ''
+                                ? ''
+                                : controller.balanceStatus.value,
+                            size: 18,
+                            fontWeight: FontWeight.bold,
+                            color: controller.balanceStatus.value == ''
+                                ? Colors.white
+                                : double.parse(controller.calController.text
+                                                .toString()) -
+                                            double.parse((controller
+                                                        .totalAmount +
+                                                    controller.discountAmount +
+                                                    controller.deliveryAmount)
+                                                .toString()) <
+                                        0
+                                    ? Colors.green
+                                    : Colors.red),
                         const Expanded(child: SizedBox())
                       ],
                     );
@@ -92,8 +109,8 @@ class RefundModal extends GetView<CartController> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           SizedBox(
-                            width: Get.width > 600 ? Get.width / 3 : Get.width /
-                                2,
+                            width:
+                                Get.width > 600 ? Get.width / 3 : Get.width / 2,
                             child: CustomTextField().createTextField(
                                 hint: 'cashier paid',
                                 height: 50,
@@ -104,12 +121,11 @@ class RefundModal extends GetView<CartController> {
                                 controller: controller.calController,
                                 onSubmitted: (_) async {
                                   refundCalculation();
-                                }
-                            ),
+                                }),
                           ),
                           Container(
-                            width: Get.width > 600 ? Get.width / 3 : Get.width /
-                                2,
+                            width:
+                                Get.width > 600 ? Get.width / 3 : Get.width / 2,
                             color: const Color(0xffeeeeee),
                             child: VirtualKeyboard(
                               textColor: Colors.black,
@@ -119,8 +135,8 @@ class RefundModal extends GetView<CartController> {
                           ),
                           SizedBox(
                             height: 65.0,
-                            width: Get.width > 600 ? Get.width / 3 : Get.width /
-                                2,
+                            width:
+                                Get.width > 600 ? Get.width / 3 : Get.width / 2,
                             child: CustomTextButton().createTextButton(
                                 onPress: () {
                                   refundCalculation();
@@ -136,33 +152,63 @@ class RefundModal extends GetView<CartController> {
                           ),
                         ],
                       ),
-                      const SizedBox(width: 20,),
+                      const SizedBox(
+                        width: 20,
+                      ),
                       Obx(() {
-                        return Column(children: [
-                          paymentTypeOption('Card', 'PCARD', Icon(
-                            Icons.credit_card,
-                            color: controller.selectedPaymentType.value ==
-                                'PCARD' ? Colors.white : Colors
-                                .black,)),
-                          const SizedBox(height: 10,),
-                          paymentTypeOption('Cash', 'PCOD', Icon(
-                            Icons.monetization_on,
-                            color: controller.selectedPaymentType.value ==
-                                'PCOD' ? Colors.white : Colors
-                                .black,)),
-                          const SizedBox(height: 10,),
-                          paymentTypeOption('Knet', 'PKNET', Icon(
-                            Icons.attach_money_rounded,
-                            color: controller.selectedPaymentType.value ==
-                                'PKNET' ? Colors.white : Colors
-                                .black,)),
-                          const SizedBox(height: 10,),
-                          paymentTypeOption('Visa', 'PVISA', Icon(
-                            Icons.money_rounded,
-                            color: controller.selectedPaymentType.value ==
-                                'PVISA' ? Colors.white : Colors
-                                .black,)),
-                        ],);
+                        return Column(
+                          children: [
+                            paymentTypeOption(
+                                'Card',
+                                'PCARD',
+                                Icon(
+                                  Icons.credit_card,
+                                  color: controller.selectedPaymentType.value ==
+                                          'PCARD'
+                                      ? Colors.white
+                                      : Colors.black,
+                                )),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            paymentTypeOption(
+                                'Cash',
+                                'PCOD',
+                                Icon(
+                                  Icons.monetization_on,
+                                  color: controller.selectedPaymentType.value ==
+                                          'PCOD'
+                                      ? Colors.white
+                                      : Colors.black,
+                                )),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            paymentTypeOption(
+                                'Knet',
+                                'PKNET',
+                                Icon(
+                                  Icons.attach_money_rounded,
+                                  color: controller.selectedPaymentType.value ==
+                                          'PKNET'
+                                      ? Colors.white
+                                      : Colors.black,
+                                )),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            paymentTypeOption(
+                                'Visa',
+                                'PVISA',
+                                Icon(
+                                  Icons.money_rounded,
+                                  color: controller.selectedPaymentType.value ==
+                                          'PVISA'
+                                      ? Colors.white
+                                      : Colors.black,
+                                )),
+                          ],
+                        );
                       })
                     ],
                   )
@@ -175,39 +221,51 @@ class RefundModal extends GetView<CartController> {
 
   Widget paymentTypeOption(String title, String type, Icon ic) {
     return SizedBox(
-      height: 80, width: 120,
+      height: 80,
+      width: 120,
       child: CustomTextButton().createTextButton(
           buttonText: title,
-          buttonColor: controller.selectedPaymentType
-              .value == type ? Colors.teal : Colors
-              .white,
-          textSize: controller.selectedPaymentType
-              .value == type ? 20 : 17,
-          textColor: controller.selectedPaymentType
-              .value == type ? Colors.white : Colors
-              .black,
+          buttonColor: controller.selectedPaymentType.value == type
+              ? Colors.teal
+              : Colors.white,
+          textSize: controller.selectedPaymentType.value == type ? 20 : 17,
+          textColor: controller.selectedPaymentType.value == type
+              ? Colors.white
+              : Colors.black,
           elevation: 6.0,
           icon: ic,
           onPress: () {
-            controller.selectedPaymentType.value =
-                type;
-          }
-      ),
+            controller.selectedPaymentType.value = type;
+          }),
     );
   }
 
-  void refundCalculation(){
-    String total = isWholeCart==true?controller.refundCartTotalPrice: (controller.totalAmount + controller.discountAmount + controller.deliveryAmount).toString();
+  void refundCalculation() {
+    String total = isWholeCart == true
+        ? controller.refundCartTotalPrice
+        : (controller.totalAmount +
+                controller.discountAmount +
+                controller.deliveryAmount)
+            .toString();
 
-    if (controller.calController.text == total) {
-      isWholeCart==true?controller.refundCartRequest():controller.refundCartItemRequest();
-    } else if (double.parse(controller.calController.text.toString()) - double.parse(total) > 0) {
-      isWholeCart==true?controller.refundCartRequest():controller.refundCartItemRequest();
+    if (double.parse(controller.calController.text).toStringAsFixed(3) ==
+        double.parse(total).toStringAsFixed(3)) {
+      isWholeCart == true
+          ? controller.refundCartRequest()
+          : controller.refundCartItemRequest();
+    } else if (double.parse(controller.calController.text.toString()) -
+            double.parse(total) >
+        0) {
+      isWholeCart == true
+          ? controller.refundCartRequest()
+          : controller.refundCartItemRequest();
       controller.balanceStatus.value =
-      'Change: ${double.parse(controller.calController.text.toString()) - double.parse(total)}';
-    } else if (double.parse(controller.calController.text.toString()) - double.parse(total) < 0) {
+          'Change: ${double.parse(controller.calController.text.toString()) - double.parse(total)}';
+    } else if (double.parse(controller.calController.text.toString()) -
+            double.parse(total) <
+        0) {
       controller.balanceStatus.value =
-      'Balance: ${double.parse(controller.calController.text.toString()) - double.parse(total)}';
+          'Balance: ${double.parse(controller.calController.text.toString()) - double.parse(total)}';
     }
   }
 }

@@ -10,50 +10,40 @@ import '../../../../services/controller/cart_controller.dart';
 import '../../../../services/model/cart_product_model.dart';
 import '../../../components/texts/customText.dart';
 
-
 class ShowFactor extends StatelessWidget {
   Timer? timer;
 
   @override
   Widget build(BuildContext context) {
-    CartController controller=Get.put(CartController());
+    CartController controller = Get.put(CartController());
     timer = Timer.periodic(const Duration(seconds: 1), (Timer t) => _refresh());
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      body: GetBuilder(builder:(CartController controller) {
+      body: GetBuilder(builder: (CartController controller) {
         return Padding(
           padding: const EdgeInsets.all(12.0),
           child: ListView(
             children: [
               ListView.separated(
-                itemCount: Get
-                    .find<CartController>()
-                    .addToCartList
-                    .value
-                    .length,
+                itemCount:
+                    Get.find<CartController>().addToCartList.value.length,
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
                 itemBuilder: (BuildContext context, int index) {
                   var currentItem =
-                  Get
-                      .find<CartController>()
-                      .addToCartList
-                      .value[index];
+                      Get.find<CartController>().addToCartList.value[index];
                   double itemQty =
-                  double.parse(currentItem.quantity.toString());
-                  double itemPrc =
-                  double.parse(currentItem.price.toString());
+                      double.parse(currentItem.quantity.toString());
+                  double itemPrc = double.parse(currentItem.price.toString());
                   double itemPrice = itemQty * itemPrc;
                   return Container(
-                    color:
-                    Colors.grey.withOpacity(0.1),
+                    color: Colors.grey.withOpacity(0.1),
                     child: Row(
                       children: [
                         Expanded(
                           flex: 1,
                           child: Column(
-                            crossAxisAlignment:
-                            CrossAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               FittedBox(
                                 child: CustomText().createText(
@@ -66,8 +56,8 @@ class ShowFactor extends StatelessWidget {
                               ),
                               Row(
                                 children: [
-                                  CustomText().createText(
-                                      title: '#${index + 1}'),
+                                  CustomText()
+                                      .createText(title: '#${index + 1}'),
                                   const SizedBox(
                                     width: 5,
                                   ),
@@ -76,13 +66,15 @@ class ShowFactor extends StatelessWidget {
                                     width: 8,
                                   ),
                                   CustomText().createText(
-                                      title: '${currentItem.price}',
+                                      title: double.parse(
+                                              currentItem.price.toString())
+                                          .toStringAsFixed(3),
                                       fontWeight: FontWeight.bold),
                                   const SizedBox(
                                     width: 5,
                                   ),
                                   CustomText().createText(
-                                      title: itemPrice.toString(),
+                                      title: itemPrice.toStringAsFixed(3),
                                       fontWeight: FontWeight.bold),
                                 ],
                               )
@@ -111,30 +103,23 @@ class ShowFactor extends StatelessWidget {
               const Divider(),
               keyValText(
                   title: 'Subtotal',
-                  value: Get
-                      .find<CartController>()
+                  value: Get.find<CartController>()
                       .totalAmount
-                      .toString()),
+                      .toStringAsFixed(3)),
               const SizedBox(
                 height: 8,
               ),
               keyValText(
                   title: 'Discount',
                   value:
-                  '- ${Get
-                      .find<CartController>()
-                      .discountAmount
-                      .toString()}'),
+                      '- ${Get.find<CartController>().discountAmount.toStringAsFixed(3)}'),
               const SizedBox(
                 height: 8,
               ),
               keyValText(
                   title: 'Delivery',
                   value:
-                  '+ ${Get
-                      .find<CartController>()
-                      .deliveryAmount
-                      .toString()}'),
+                      '+ ${Get.find<CartController>().deliveryAmount.toStringAsFixed(3)}'),
               const SizedBox(
                 height: 8,
               ),
@@ -154,16 +139,10 @@ class ShowFactor extends StatelessWidget {
               ),
               keyValText(
                   title: 'total'.tr,
-                  value: (Get
-                      .find<CartController>()
-                      .totalAmount +
-                      Get
-                          .find<CartController>()
-                          .deliveryAmount -
-                      Get
-                          .find<CartController>()
-                          .discountAmount)
-                      .toString(),
+                  value: (Get.find<CartController>().totalAmount +
+                          Get.find<CartController>().deliveryAmount -
+                          Get.find<CartController>().discountAmount)
+                      .toStringAsFixed(3),
                   keyWeight: FontWeight.bold,
                   valWeight: FontWeight.bold,
                   keySize: 22,
@@ -176,12 +155,13 @@ class ShowFactor extends StatelessWidget {
     );
   }
 
-  Widget keyValText({required title,
-    required value,
-    dynamic keyWeight,
-    dynamic valWeight,
-    dynamic keySize,
-    dynamic valSize}) {
+  Widget keyValText(
+      {required title,
+      required value,
+      dynamic keyWeight,
+      dynamic valWeight,
+      dynamic keySize,
+      dynamic valSize}) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -206,26 +186,23 @@ class ShowFactor extends StatelessWidget {
 
   void _refresh() {
     var data = jsonDecode(LocalStorageHelper.getValue('cartData'));
-    Get
-        .find<CartController>()
-        .addToCartList
-        .value
-        .clear();
+    Get.find<CartController>().addToCartList.value.clear();
     data['data'].forEach((element) {
-      Get
-          .find<CartController>()
-          .addToCartList
-          .value
-          .add(CartProductModel(mId: element['id'],
+      Get.find<CartController>().addToCartList.value.add(CartProductModel(
+          mId: element['id'],
           pId: element['productId'],
           mPrice: element['price'],
           mQuantity: element['quantity'],
           mTitle: element['title'],
-          mTempUniqueId: element['tempUniqueId'], mTitleAr: element['title']));
+          mTempUniqueId: element['tempUniqueId'],
+          mTitleAr: element['title']));
     });
-    Get.find<CartController>().totalAmount=double.parse(data['subTotal'].toString());
-    Get.find<CartController>().discountAmount=double.parse(data['discount'].toString());
-    Get.find<CartController>().deliveryAmount=double.parse(data['delivery'].toString());
+    Get.find<CartController>().totalAmount =
+        double.parse(data['subTotal'].toString());
+    Get.find<CartController>().discountAmount =
+        double.parse(data['discount'].toString());
+    Get.find<CartController>().deliveryAmount =
+        double.parse(data['delivery'].toString());
     Get.find<CartController>().update();
   }
 }

@@ -25,66 +25,12 @@ class DashboardMain {
             child: isLarge == true
                 ? Row(
                     children: [
-                      // const SizedBox(
-                      //   width: 6,
-                      // ),
-                      // InkWell(
-                      //     onTap: () => controller.changeSearchType(id: 1),
-                      //     child: Icon(
-                      //       Icons.qr_code_scanner,
-                      //       size: 45,
-                      //       color: controller.searchId.value.isEqual(1)
-                      //           ? Colors.blue
-                      //           : Colors.black,
-                      //     )),
-                      // const SizedBox(
-                      //   width: 6,
-                      // ),
-                      // const VerticalDivider(),
-                      // const SizedBox(
-                      //   width: 6,
-                      // ),
-                      // InkWell(
-                      //     onTap: () => controller.changeSearchType(id: 2),
-                      //     child: CustomText().createText(
-                      //       title: '123',
-                      //       fontWeight: FontWeight.bold,
-                      //       size: 20,
-                      //       color: controller.searchId.value.isEqual(2)
-                      //           ? Colors.blue
-                      //           : Colors.black,
-                      //     )),
-                      // const SizedBox(
-                      //   width: 6,
-                      // ),
-                      // const VerticalDivider(),
-                      // const SizedBox(
-                      //   width: 6,
-                      // ),
-                      // InkWell(
-                      //     onTap: () => controller.changeSearchType(id: 3),
-                      //     child: Icon(
-                      //       Icons.label,
-                      //       size: 45,
-                      //       color: controller.searchId.value.isEqual(3)
-                      //           ? Colors.blue
-                      //           : Colors.black,
-                      //     )),
-                      // const SizedBox(
-                      //   width: 6,
-                      // ),
-                      // const VerticalDivider(),
                       const SizedBox(
                         width: 6,
                       ),
                       Expanded(
                           child: CustomTextField().createTextField(
                               hint: 'Search anything...',
-                              // controller.searchId.value.isEqual(1)
-                              //     ? 'search product by barcode'
-                              //     : controller.searchId.value.isEqual(3)
-                              //         ? 'search product by name'
-                              //         : 'search product by code',
                               onSubmitted: (_) async {
                                 LoadingDialog.showCustomDialog(
                                     msg: 'Loading ...');
@@ -307,14 +253,23 @@ class DashboardMain {
                                     titleColor: Colors.black);
                               }
                             } else {
-                              Fluttertoast.showToast(
-                                  msg:
-                                      "this item already exist in your cart", // message
-                                  toastLength: Toast.LENGTH_SHORT, // length
-                                  gravity: ToastGravity.CENTER, // location
-                                  webPosition: 'center',
-                                  timeInSecForIosWeb: 2 // duration
-                                  );
+                              // Fluttertoast.showToast(
+                              //     msg:
+                              //         "this item already exist in your cart", // message
+                              //     toastLength: Toast.LENGTH_SHORT, // length
+                              //     gravity: ToastGravity.CENTER, // location
+                              //     webPosition: 'center',
+                              //     timeInSecForIosWeb: 2 // duration
+                              //     );
+                              Snack().createSnack(
+                                  title: '',
+                                  msg: 'this item already exist in your cart',
+                                  bgColor: Colors.yellow,
+                                  msgColor: Colors.black,
+                                  icon: const Icon(
+                                    Icons.check,
+                                    color: Colors.white,
+                                  ));
                             }
                           } else {
                             bool contain = Get.find<CartController>()
@@ -385,14 +340,23 @@ class DashboardMain {
                                     titleColor: Colors.black);
                               }
                             } else {
-                              Fluttertoast.showToast(
-                                  msg:
-                                      "this item already exist in your cart", // message
-                                  toastLength: Toast.LENGTH_SHORT, // length
-                                  gravity: ToastGravity.CENTER, // location
-                                  webPosition: 'center',
-                                  timeInSecForIosWeb: 2 // duration
-                                  );
+                              // Fluttertoast.showToast(
+                              //     msg:
+                              //         "this item already exist in your cart", // message
+                              //     toastLength: Toast.LENGTH_SHORT, // length
+                              //     gravity: ToastGravity.CENTER, // location
+                              //     webPosition: 'center',
+                              //     timeInSecForIosWeb: 2 // duration
+                              //     );
+                              Snack().createSnack(
+                                  title: '',
+                                  msg: 'this item already exist in your cart',
+                                  bgColor: Colors.green,
+                                  msgColor: Colors.black,
+                                  icon: const Icon(
+                                    Icons.check,
+                                    color: Colors.white,
+                                  ));
                             }
                           }
                         },
@@ -421,7 +385,8 @@ class DashboardMain {
                           height: 10,
                         ),
                         CustomText().createText(
-                            title: currentItem.retailPrice.toString() + ' KD',
+                            title: currentItem.retailPrice!.toStringAsFixed(3) +
+                                ' KD',
                             fontWeight: FontWeight.bold,
                             size: 14),
                         const SizedBox(

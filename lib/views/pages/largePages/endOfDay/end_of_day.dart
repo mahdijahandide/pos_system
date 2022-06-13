@@ -36,9 +36,7 @@ class EndOfDay extends GetView<ShiftController> {
                       child: SimpleCalculator(
                         value: 0.0,
                         hideExpression: true,
-                        onChanged: (key, value, expression) {
-                          /*...*/
-                        },
+                        onChanged: (key, value, expression) {},
                         theme: const CalculatorThemeData(
                           displayColor: Colors.white,
                           displayStyle:
@@ -202,8 +200,8 @@ class EndOfDay extends GetView<ShiftController> {
                                     ),
                                     title: CustomText().createSpaceKeyVal(
                                         keyText: 'Total Founds',
-                                        valText:
-                                            '${controller.totalFunds.value}',
+                                        valText: controller.totalFunds.value
+                                            .toStringAsFixed(3),
                                         keyColor: Colors.black,
                                         keyFontWeight: FontWeight.bold,
                                         keySize: 22),
@@ -217,32 +215,35 @@ class EndOfDay extends GetView<ShiftController> {
                                           children: [
                                             CustomText().createSpaceKeyVal(
                                                 keyText: 'startCash',
-                                                valText:
-                                                    '${controller.startCash.value}',
+                                                valText: controller
+                                                    .startCash.value
+                                                    .toStringAsFixed(3),
                                                 valFontWeight: FontWeight.bold),
                                             const SizedBox(
                                               height: 15,
                                             ),
                                             CustomText().createSpaceKeyVal(
                                                 keyText: 'sellCash',
-                                                valText:
-                                                    '${controller.sellCash.value}',
+                                                valText: controller
+                                                    .sellCash.value
+                                                    .toStringAsFixed(3),
                                                 valFontWeight: FontWeight.bold),
                                             const SizedBox(
                                               height: 15,
                                             ),
                                             CustomText().createSpaceKeyVal(
                                                 keyText: 'sellCard',
-                                                valText:
-                                                    '${controller.sellCard.value}',
+                                                valText: controller
+                                                    .sellCard.value
+                                                    .toStringAsFixed(3),
                                                 valFontWeight: FontWeight.bold),
                                             const SizedBox(
                                               height: 15,
                                             ),
                                             CustomText().createSpaceKeyVal(
                                                 keyText: 'cashIn',
-                                                valText:
-                                                    '${controller.cashIn.value}',
+                                                valText: controller.cashIn.value
+                                                    .toStringAsFixed(3),
                                                 valFontWeight: FontWeight.bold),
 
                                             // const SizedBox(
@@ -271,8 +272,8 @@ class EndOfDay extends GetView<ShiftController> {
                                     ),
                                     title: CustomText().createSpaceKeyVal(
                                       keyText: 'Total Refunds',
-                                      valText:
-                                          '${controller.totalRefund.value}',
+                                      valText: controller.totalRefund.value
+                                          .toStringAsFixed(3),
                                       keySize: 22,
                                       keyColor: Colors.black,
                                       keyFontWeight: FontWeight.bold,
@@ -290,16 +291,18 @@ class EndOfDay extends GetView<ShiftController> {
                                             ),
                                             CustomText().createSpaceKeyVal(
                                                 keyText: 'refundCard',
-                                                valText:
-                                                    '${controller.refundCard.value}',
+                                                valText: controller
+                                                    .refundCard.value
+                                                    .toStringAsFixed(3),
                                                 valFontWeight: FontWeight.bold),
                                             const SizedBox(
                                               height: 15,
                                             ),
                                             CustomText().createSpaceKeyVal(
                                                 keyText: 'refundCash',
-                                                valText:
-                                                    '${controller.refundCash.value}',
+                                                valText: controller
+                                                    .refundCash.value
+                                                    .toStringAsFixed(3),
                                                 valFontWeight: FontWeight.bold),
                                           ],
                                         ),
@@ -443,6 +446,27 @@ class EndOfDay extends GetView<ShiftController> {
                                 controller.refundCard.value)
                             .toString()) {
                   controller.endCashRequest();
+                } else if (controller.cashCount.value.text.toString() !=
+                        controller.totalCashFunds.value.toString() &&
+                    controller.cardCount.value.text.toString() !=
+                        (controller.sellCard.value -
+                                controller.refundCard.value)
+                            .toString()) {
+                  ShiftWarningDialog.showCustomDialog(
+                      msg: double.parse(controller.cardCount.value.text
+                                      .toString()) -
+                                  (controller.sellCard.value -
+                                      controller.refundCard.value) >
+                              0
+                          ? 'Your account balance is ${double.parse(controller.cardCount.value.text.toString()) - (controller.sellCard.value - controller.refundCard.value)} more than your sales in card count'
+                          : 'You have less than ${double.parse(controller.cardCount.value.text.toString()) - (controller.sellCard.value - controller.refundCard.value)} in card count',
+                      title: double.parse(controller.cashCount.value.text
+                                      .toString()) -
+                                  double.parse(controller.totalCashFunds.value
+                                      .toString()) >
+                              0
+                          ? 'Your account balance is ${double.parse(controller.cashCount.value.text.toString()) - double.parse(controller.totalCashFunds.value.toString())} more than your sales in cash count'
+                          : 'You have less than ${(double.parse(controller.cashCount.value.text.toString()) - double.parse(controller.totalCashFunds.value.toString()))} in cash count');
                 } else if (controller.cashCount.value.text.toString() !=
                     controller.totalCashFunds.value.toString()) {
                   if (double.parse(controller.cashCount.value.text.toString()) -

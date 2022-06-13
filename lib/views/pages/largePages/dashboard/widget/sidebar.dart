@@ -10,10 +10,6 @@ import 'package:pos_system/views/dialogs/edit_qty_dialog.dart';
 import 'package:pos_system/views/pages/largePages/dashboard/widget/iconTextBox.dart';
 import 'package:pos_system/views/pages/largePages/modals/checkout_modal.dart';
 import 'package:pos_system/views/pages/largePages/modals/temp_orders_modal.dart';
-import 'package:pos_system/views/pages/largePages/secondMonitor/show_factor.dart';
-import 'package:universal_html/html.dart' as html;
-
-import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../dialogs/area_province_dialog.dart';
 import '../../../../dialogs/customer_autocomplete_dialog.dart';
@@ -233,13 +229,17 @@ class DashboardSidebar {
                                               width: 8,
                                             ),
                                             CustomText().createText(
-                                                title: '${currentItem.price}',
+                                                title: double.parse(currentItem
+                                                        .price
+                                                        .toString())
+                                                    .toStringAsFixed(3),
                                                 fontWeight: FontWeight.bold),
                                             const SizedBox(
                                               width: 5,
                                             ),
                                             CustomText().createText(
-                                                title: itemPrice.toString(),
+                                                title: itemPrice
+                                                    .toStringAsFixed(3),
                                                 fontWeight: FontWeight.bold),
                                           ],
                                         )
@@ -274,21 +274,22 @@ class DashboardSidebar {
             const Divider(),
             keyValText(
                 title: 'Subtotal',
-                value: Get.find<CartController>().totalAmount.toString()),
+                value:
+                    Get.find<CartController>().totalAmount.toStringAsFixed(3)),
             const SizedBox(
               height: 8,
             ),
             keyValText(
                 title: 'Discount',
                 value:
-                    '- ${Get.find<CartController>().discountAmount.toString()}'),
+                    '- ${Get.find<CartController>().discountAmount.toStringAsFixed(3)}'),
             const SizedBox(
               height: 8,
             ),
             keyValText(
                 title: 'Delivery',
                 value:
-                    '+ ${Get.find<CartController>().deliveryAmount.toString()}'),
+                    '+ ${Get.find<CartController>().deliveryAmount.toStringAsFixed(3)}'),
             const SizedBox(
               height: 8,
             ),
@@ -311,7 +312,7 @@ class DashboardSidebar {
                 value: (Get.find<CartController>().totalAmount +
                         Get.find<CartController>().deliveryAmount -
                         Get.find<CartController>().discountAmount)
-                    .toString(),
+                    .toStringAsFixed(3),
                 keyWeight: FontWeight.bold,
                 valWeight: FontWeight.bold,
                 keySize: 22,

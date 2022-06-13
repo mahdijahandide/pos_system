@@ -87,11 +87,14 @@ class EditQtyDialog {
               .value
               .where((element) => element.productId == productId.toString())
               .toList()[0];
+
           if (int.parse(qtyController.text.toString()) >
               int.parse(Get.find<ProductController>()
                   .productList
                   .value
-                  .where((element) => element.id == current.id)
+                  .where((element) =>
+                      element.id!.toInt() ==
+                      int.parse(current.productId.toString()))
                   .first
                   .quantity
                   .toString())) {
@@ -103,7 +106,7 @@ class EditQtyDialog {
                 titleColor: Colors.black);
           } else {
             Get.find<CartController>().editCartProductQuantity(
-                tempId: current.productId,
+                tempId: current.id.toString(),
                 quantity: qtyController.text,
                 tempUniqueId: Get.find<CartController>().uniqueId,
                 index: Get.find<CartController>()

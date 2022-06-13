@@ -9,120 +9,190 @@ import '../../../../services/model/product_size_model.dart';
 import '../../../components/texts/customText.dart';
 
 class ProductDetails extends StatelessWidget {
-  const ProductDetails({Key? key,dynamic title}) : super(key: key);
+  const ProductDetails({Key? key, dynamic title}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey.shade200,
       appBar: AppBar(
-        centerTitle: true,backgroundColor: Colors.grey.withOpacity(0.5),
+        centerTitle: true,
+        backgroundColor: Colors.grey.withOpacity(0.5),
         title: CustomText().createText(
-            title: Get.arguments['title'], size: 18, fontWeight: FontWeight.bold),
+            title: Get.arguments['title'],
+            size: 18,
+            fontWeight: FontWeight.bold),
       ),
       body: ListView(
         children: [
           SizedBox(
-            width: Get.width,height: 350,
+            width: Get.width,
+            height: 350,
             child: CarouselSlider.builder(
               itemCount: Get.arguments['gallery'].length,
               itemBuilder:
                   (BuildContext context, int itemIndex, int pageViewIndex) =>
-                  SizedBox(
-                    width: Get.width,
-                    height: 150,
-                    child: Image(
-                      image: NetworkImage(Get.arguments['gallery'][itemIndex]['large']),
-                      fit: BoxFit.fill,
-                    ),
-                  ),
+                      SizedBox(
+                width: Get.width,
+                height: 150,
+                child: Image(
+                  image: NetworkImage(
+                      Get.arguments['gallery'][itemIndex]['large']),
+                  fit: BoxFit.fill,
+                ),
+              ),
               options: CarouselOptions(
-                  autoPlay: true,
-                  viewportFraction: 1,
-                  ),
+                autoPlay: true,
+                viewportFraction: 1,
+              ),
             ),
           ),
-          const SizedBox(height: 25,),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 25),
-            child: CustomText().createText(title: 'About',fontWeight: FontWeight.bold,size: 22),
+          const SizedBox(
+            height: 25,
           ),
-          Container(
-            margin: const EdgeInsets.only(top: 25),
-              padding: const EdgeInsets.symmetric(vertical: 15,horizontal: 25),
-              color: Colors.white,
-              child: CustomText().createText(title: Get.arguments['details_ios'],size: 22,fontWeight: FontWeight.w400)),
-          const SizedBox(height: 25,),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 25),
-            child: CustomText().createText(title: 'Details',fontWeight: FontWeight.bold,size: 22,),
+            child: CustomText().createText(
+                title: 'About', fontWeight: FontWeight.bold, size: 22),
           ),
           Container(
               margin: const EdgeInsets.only(top: 25),
-              padding: const EdgeInsets.symmetric(vertical: 15,horizontal: 25),
+              padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 25),
+              color: Colors.white,
+              child: CustomText().createText(
+                  title: Get.arguments['details_ios'],
+                  size: 22,
+                  fontWeight: FontWeight.w400)),
+          const SizedBox(
+            height: 25,
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 25),
+            child: CustomText().createText(
+              title: 'Details',
+              fontWeight: FontWeight.bold,
+              size: 22,
+            ),
+          ),
+          Container(
+              margin: const EdgeInsets.only(top: 25),
+              padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 25),
               color: Colors.white,
               child: Column(
                 children: [
-                  CustomText().createSpaceKeyVal(keyText: 'Quantity: ', valText: Get.arguments['quantity'].toString(),valFontWeight: FontWeight.bold,keySize: 20,valSize: 20),
-                  const SizedBox(height: 10,),
-                  CustomText().createSpaceKeyVal(keyText: 'Retail Price: ', valText: Get.arguments['retail_price'].toString()+' KD',valFontWeight: FontWeight.bold,keySize: 20,valSize: 20),
-                  const SizedBox(height: 10,),
-                  CustomText().createSpaceKeyVal(keyText: 'Old Price: ', valText: Get.arguments['old_price'].toString()+' KD',valFontWeight: FontWeight.bold,keySize: 20,valSize: 20),
+                  CustomText().createSpaceKeyVal(
+                      keyText: 'Quantity: ',
+                      valText: Get.arguments['quantity'].toString(),
+                      valFontWeight: FontWeight.bold,
+                      keySize: 20,
+                      valSize: 20),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  CustomText().createSpaceKeyVal(
+                      keyText: 'Retail Price: ',
+                      valText:
+                          Get.arguments['retail_price'].toStringAsFixed(3) +
+                              ' KD',
+                      valFontWeight: FontWeight.bold,
+                      keySize: 20,
+                      valSize: 20),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  CustomText().createSpaceKeyVal(
+                      keyText: 'Old Price: ',
+                      valText:
+                          Get.arguments['old_price'].toStringAsFixed(3) + ' KD',
+                      valFontWeight: FontWeight.bold,
+                      keySize: 20,
+                      valSize: 20),
                 ],
               )),
-
-          const SizedBox(height: 25,),
-         Get.arguments['options']['section_id']==0?const SizedBox(): Column(children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 25),
-              child: CustomText().createText(title: 'Options',fontWeight: FontWeight.bold,size: 22,),
-            ),
-            Container(
-                margin: const EdgeInsets.only(top: 25),
-                padding: const EdgeInsets.symmetric(vertical: 15,horizontal: 25),
-                color: Colors.white,
-                child: optionWidget()),
-          ],)
-
+          const SizedBox(
+            height: 25,
+          ),
+          Get.arguments['options']['section_id'] == 0
+              ? const SizedBox()
+              : Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 25),
+                      child: CustomText().createText(
+                        title: 'Options',
+                        fontWeight: FontWeight.bold,
+                        size: 22,
+                      ),
+                    ),
+                    Container(
+                        margin: const EdgeInsets.only(top: 25),
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 15, horizontal: 25),
+                        color: Colors.white,
+                        child: optionWidget()),
+                  ],
+                )
         ],
       ),
     );
   }
-  Widget optionWidget(){
-    switch(Get.arguments['options']['section_id']){
+
+  Widget optionWidget() {
+    switch (Get.arguments['options']['section_id']) {
       case 1:
         var sizeArray = Get.arguments['options']['sizes'];
-        String title='';
+        String title = '';
         Get.find<ProductController>().productSizeList.clear();
         sizeArray.forEach((element) {
-          Get.find<ProductController>().productSizeList.add(ProductSizeModel(data: element));
-          title=title+' ' +element['size_name'].toString();
+          Get.find<ProductController>()
+              .productSizeList
+              .add(ProductSizeModel(data: element));
+          title = title + ' ' + element['size_name'].toString();
         });
-        return CustomText().createSpaceKeyVal(keyText: 'Available Sizes: ', valText: title,valFontWeight: FontWeight.bold,keySize: 20,valSize: 20);
+        return CustomText().createSpaceKeyVal(
+            keyText: 'Available Sizes: ',
+            valText: title,
+            valFontWeight: FontWeight.bold,
+            keySize: 20,
+            valSize: 20);
       case 2:
         var colorArray = Get.arguments['options']['colors'];
-        String title='';
+        String title = '';
         Get.find<ProductController>().productColorList.clear();
         colorArray.forEach((element) {
-          Get.find<ProductController>().productColorList.add(ProductColorModel(data: element));
-          title=title+' ' +element['color_name'].toString();
+          Get.find<ProductController>()
+              .productColorList
+              .add(ProductColorModel(data: element));
+          title = title + ' ' + element['color_name'].toString();
         });
-        return CustomText().createSpaceKeyVal(keyText: 'Available Colors: ', valText: title,valFontWeight: FontWeight.bold,keySize: 20,valSize: 20);
+        return CustomText().createSpaceKeyVal(
+            keyText: 'Available Colors: ',
+            valText: title,
+            valFontWeight: FontWeight.bold,
+            keySize: 20,
+            valSize: 20);
       case 3:
         return Container();
       case 4:
         var othersObj = Get.arguments['options']['others'];
-        String title='';
-        var type=othersObj['type'];
-        var isRequired=othersObj['is_required'];
-        var otherId=othersObj['id'];
-        var valuesArray=othersObj['values'];
+        String title = '';
+        var type = othersObj['type'];
+        var isRequired = othersObj['is_required'];
+        var otherId = othersObj['id'];
+        var valuesArray = othersObj['values'];
         Get.find<ProductController>().productOthersList.clear();
         valuesArray.forEach((element) {
-          Get.find<ProductController>().productOthersList.add(ProductOthersModel(data: element));
-          title=title+' ' +element['title'].toString();
+          Get.find<ProductController>()
+              .productOthersList
+              .add(ProductOthersModel(data: element));
+          title = title + ' ' + element['title'].toString();
         });
-        return CustomText().createSpaceKeyVal(keyText: 'Available Options: ', valText: title,valFontWeight: FontWeight.bold,keySize: 20,valSize: 20);
+        return CustomText().createSpaceKeyVal(
+            keyText: 'Available Options: ',
+            valText: title,
+            valFontWeight: FontWeight.bold,
+            keySize: 20,
+            valSize: 20);
     }
     return const SizedBox();
   }
