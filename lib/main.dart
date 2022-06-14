@@ -1,13 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pos_system/services/bindings/bindings.dart';
-import 'package:pos_system/services/controller/auth_controller.dart';
-import 'package:pos_system/services/controller/cart_controller.dart';
-import 'package:pos_system/services/controller/category_controller.dart';
-import 'package:pos_system/services/controller/customer_controller.dart';
-import 'package:pos_system/services/controller/dashboard_controller.dart';
-import 'package:pos_system/services/controller/product_controller.dart';
-import 'package:pos_system/services/controller/user_controller.dart';
 import 'package:pos_system/services/internationalization/messages.dart';
 import 'package:pos_system/views/pages/largePages/cash/cash_in_out.dart';
 import 'package:pos_system/views/pages/largePages/customer/customer.dart';

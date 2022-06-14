@@ -1,5 +1,3 @@
-import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pos_system/services/controller/cart_controller.dart';
@@ -13,8 +11,6 @@ import 'package:pos_system/views/pages/largePages/dashboard/widget/dashboard_mai
 import 'package:pos_system/views/pages/largePages/dashboard/widget/iconTextBox.dart';
 import 'package:pos_system/views/pages/largePages/dashboard/widget/sidebar.dart';
 import 'package:vk/vk.dart';
-import 'package:pdf/pdf.dart';
-import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
 import 'package:xid/xid.dart';
 
@@ -87,6 +83,7 @@ class DesktopDashboard extends StatelessWidget {
                                   .orderItemsList
                                   .clear();
                               Get.find<OrderController>().hasList.value = false;
+                              controller.update();
                             } else {
                               RefundFactorNumDialog.showCustomDialog(
                                   title: 'Refund');

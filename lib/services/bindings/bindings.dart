@@ -22,7 +22,7 @@ class AppBindings extends Bindings {
     Get.put(CategoryController());
     Get.put(CartController());
     Get.put(CustomerController());
+    Get.put(CashController());
     Get.lazyPut(() => ShiftController());
-    Get.lazyPut(() => CashController());
   }
 }
