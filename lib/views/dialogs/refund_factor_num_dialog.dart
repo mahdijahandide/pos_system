@@ -4,7 +4,6 @@ import 'package:get/get.dart';
 import 'package:pos_system/services/controller/auth_controller.dart';
 import 'package:pos_system/services/controller/cart_controller.dart';
 import 'package:pos_system/services/controller/order_controller.dart';
-import 'package:pos_system/services/controller/product_controller.dart';
 import 'package:pos_system/views/components/snackbar/snackbar.dart';
 import 'package:pos_system/views/components/textfields/textfield.dart';
 import 'package:pos_system/views/components/texts/customText.dart';
@@ -19,7 +18,6 @@ class RefundFactorNumDialog {
   factory RefundFactorNumDialog() => _instance;
 
   static void showCustomDialog({required title}) {
-    Get.lazyPut(() => OrderController());
     Get.defaultDialog(
       title: title,
       content: GetBuilder(builder: (CartController controller) {

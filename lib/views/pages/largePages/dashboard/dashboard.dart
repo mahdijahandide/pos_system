@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pos_system/services/controller/category_controller.dart';
+import 'package:pos_system/services/controller/order_controller.dart';
 import 'package:pos_system/services/controller/product_controller.dart';
 import 'package:pos_system/views/pages/largePages/dashboard/desktop_dashboard.dart';
 import 'package:pos_system/views/pages/largePages/dashboard/mobile_dashboard.dart';
@@ -14,13 +15,14 @@ class Dashboard extends StatelessWidget {
   Widget build(BuildContext context) {
     Get.find<ProductController>().getAllProducts(keyword: '', catId: '');
     Get.find<CategoryController>().getAllCategory();
-   return GetBuilder<ProductController>(
+    Get.lazyPut(() => OrderController());
+    return GetBuilder<ProductController>(
       builder: (logic) {
         return ScreenTypeLayout(
-          desktop:  DesktopDashboard(),
-          tablet:   TabletDashboard(),
-          mobile:   MobileDashboard(),
-          watch:    Container(color:Colors.white),
+          desktop: DesktopDashboard(),
+          tablet: TabletDashboard(),
+          mobile: MobileDashboard(),
+          watch: Container(color: Colors.white),
         );
       },
     );

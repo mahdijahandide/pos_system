@@ -16,6 +16,7 @@ import 'package:pos_system/services/remotes/remote_status_handler.dart';
 import 'package:pos_system/views/components/snackbar/snackbar.dart';
 import 'package:pos_system/views/dialogs/area_province_dialog.dart';
 import 'package:pos_system/views/dialogs/loading_dialogs.dart';
+import 'package:pos_system/views/pages/largePages/modals/success_modal.dart';
 import 'package:printing/printing.dart';
 import 'package:xid/xid.dart';
 import '../../views/components/buttons/custom_text_button.dart';
@@ -26,11 +27,14 @@ import 'customer_controller.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 
+import 'order_controller.dart';
+
 class CartController extends GetxController {
   String uniqueId = 'pos${Xid()}';
   late RxString cartPrice;
   double totalAmount = 0.0;
   double totalAmountForPrint = 0.0;
+  double subTotalAmountForPrint = 0.0;
   double totalPaidForPrint = 0.0;
   double discountAmount = 0.0;
   double discountAmountForPrint = 0.0;
@@ -97,9 +101,9 @@ class CartController extends GetxController {
           if (otherAttribute != null) 'option': {"$otherId": otherValue}
         }));
     if (response.statusCode == 200) {
-      // AudioPlayer audioPlayer = AudioPlayer();
-      // const alarmAudioPath = "assets/sounds/beep.mp3";
-      // audioPlayer.play(alarmAudioPath);
+      AudioPlayer audioPlayer = AudioPlayer();
+      const alarmAudioPath = "assets/sounds/beep.mp3";
+      audioPlayer.play(alarmAudioPath);
 
       var jsonObject = convert.jsonDecode(response.body);
       addToCartList.value.add(CartProductModel(
@@ -288,6 +292,38 @@ class CartController extends GetxController {
 
   Future<void> checkoutCart() async {
     LoadingDialog.showCustomDialog(msg: 'Please wait ...');
+    print(jsonEncode(<String, dynamic>{
+      'temp_uniqueid': uniqueId,
+      if (Get.find<CustomerController>()
+          .customerNumberController
+          .text
+          .isNotEmpty)
+        'customer_id': Get.find<CustomerController>()
+            .customerList
+            .where((element) =>
+                element.mobile.toString() ==
+                Get.find<CustomerController>()
+                    .customerNumberController
+                    .text
+                    .toString())
+            .first
+            .id
+            .toString(),
+      'name': Get.find<CustomerController>().customerNameController.text,
+      'mobile': Get.find<CustomerController>().customerNumberController.text,
+      'email': Get.find<CustomerController>().customerEmailController.text,
+      'delivery_status': deliveryAmount > 0 ? '1' : '0',
+      if (deliveryAmount > 0) 'area': selectedAreaId.toString(),
+      'user_discount': discountAmount.toString(),
+      'transactions': [
+        {
+          'type': selectedPaymentType.value,
+          'amount': (totalAmount - discountAmount + deliveryAmount)
+              .toString(), //calController.text,
+          'status': 'CAPTURED',
+        }
+      ]
+    }));
     var url = CHECKOUT_CART;
     final http.Response response = await http.post(Uri.parse(url),
         headers: <String, String>{
@@ -316,11 +352,13 @@ class CartController extends GetxController {
               Get.find<CustomerController>().customerNumberController.text,
           'email': Get.find<CustomerController>().customerEmailController.text,
           'delivery_status': deliveryAmount > 0 ? '1' : '0',
+          if (deliveryAmount > 0) 'area': selectedAreaId.toString(),
           'user_discount': discountAmount.toString(),
           'transactions': [
             {
               'type': selectedPaymentType.value,
-              'amount': calController.text,
+              'amount': (totalAmount - discountAmount + deliveryAmount)
+                  .toString(), //calController.text,
               'status': 'CAPTURED',
             }
           ]
@@ -371,111 +409,7 @@ class CartController extends GetxController {
             color: Colors.white,
           ));
       Get.bottomSheet(
-        Container(
-          color: Colors.white,
-          height: Get.height,
-          width: Get.width,
-          child: Column(
-            children: [
-              Container(
-                width: Get.width,
-                color: Colors.grey.withOpacity(0.5),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const SizedBox(),
-                    CustomText().createText(
-                        title: 'Success',
-                        size: 18,
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold),
-                    IconButton(
-                        onPressed: () {
-                          Get.back();
-                        },
-                        icon: const Icon(
-                          Icons.close,
-                          color: Colors.red,
-                          size: 23,
-                        ))
-                  ],
-                ),
-              ),
-              const SizedBox(
-                height: 25,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Icon(Icons.monetization_on),
-                  CustomText().createText(
-                      title: balanceStatus.value == ''
-                          ? 'change: 0.0'
-                          : 'change: ${balanceStatus.value}',
-                      fontWeight: FontWeight.bold,
-                      size: 22,
-                      color: Colors.green),
-                ],
-              ),
-              const SizedBox(
-                height: 25,
-              ),
-              CustomText().createText(
-                  title: 'How would the customer like their receipt? ',
-                  size: 25),
-              const SizedBox(
-                height: 25,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  SizedBox(
-                    width: 250,
-                    height: 150,
-                    child: CustomTextButton().createTextButton(
-                        buttonText: 'Print',
-                        buttonColor: Colors.white,
-                        elevation: 6,
-                        textColor: Colors.black,
-                        icon: const Icon(Icons.print),
-                        onPress: () async {
-                          Get.back();
-                          await Printing.layoutPdf(
-                              onLayout: (_) => generatePdf());
-                        }),
-                  ),
-                  SizedBox(
-                    width: 250,
-                    height: 150,
-                    child: CustomTextButton().createTextButton(
-                        buttonText: 'Save',
-                        buttonColor: Colors.white,
-                        elevation: 6,
-                        textColor: Colors.black,
-                        icon: const Icon(Icons.save),
-                        onPress: () async {
-                          //Get.back();
-                        }),
-                  ),
-                  SizedBox(
-                    width: 250,
-                    height: 150,
-                    child: CustomTextButton().createTextButton(
-                        buttonText: 'Email',
-                        buttonColor: Colors.white,
-                        elevation: 6,
-                        textColor: Colors.black,
-                        icon: const Icon(Icons.mail),
-                        onPress: () async {
-                          // Get.back();
-                          // await Printing.layoutPdf(onLayout: (_) => generatePdf());
-                        }),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
+        const SuccessModal(),
         isScrollControlled: true,
         enableDrag: true,
         shape: RoundedRectangleBorder(
@@ -520,6 +454,12 @@ class CartController extends GetxController {
       deliveryAmount = 0.0;
       discountAmount = 0.0;
       uniqueId = 'pos${Xid()}';
+      isRefund.value = false;
+
+      Get.find<OrderController>().orderList.value.clear();
+      Get.find<OrderController>().orderFilteredList.value.clear();
+      Get.find<OrderController>().orderItemsList.clear();
+      Get.find<OrderController>().hasList.value = false;
 
       // Fluttertoast.showToast(
       //     msg: "cart Refund successfully", // message
@@ -528,7 +468,7 @@ class CartController extends GetxController {
       //     webPosition: 'center',
       //     timeInSecForIosWeb: 2 // duration
       //     );
-      isRefund.value = false;
+
       Get.back(closeOverlays: true);
       Snack().createSnack(
           title: '',
@@ -573,15 +513,12 @@ class CartController extends GetxController {
       deliveryAmount = 0.0;
       discountAmount = 0.0;
       uniqueId = 'pos${Xid()}';
-
-      // Fluttertoast.showToast(
-      //     msg: "cart item Refund successfully", // message
-      //     toastLength: Toast.LENGTH_SHORT, // length
-      //     gravity: ToastGravity.CENTER, // location
-      //     webPosition: 'center',
-      //     timeInSecForIosWeb: 2 // duration
-      //     );
       isRefund.value = false;
+
+      Get.find<OrderController>().orderList.value.clear();
+      Get.find<OrderController>().orderFilteredList.value.clear();
+      Get.find<OrderController>().orderItemsList.clear();
+      Get.find<OrderController>().hasList.value = false;
       Get.back(closeOverlays: true);
       Snack().createSnack(
           title: '',
@@ -834,7 +771,8 @@ class CartController extends GetxController {
               pw.Row(
                   mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
                   children: [
-                    pw.Text('Total: ', style: const pw.TextStyle(fontSize: 20)),
+                    pw.Text('Subtotal: ',
+                        style: const pw.TextStyle(fontSize: 20)),
                     pw.Text(totalAmountForPrint.toStringAsFixed(3),
                         style: const pw.TextStyle(fontSize: 20)),
                   ]),
@@ -844,7 +782,24 @@ class CartController extends GetxController {
                   children: [
                     pw.Text('Qty: ${addToCartListForPrint.length}',
                         style: const pw.TextStyle(fontSize: 20)),
-                    pw.Text('Total:  ${totalAmountForPrint.toStringAsFixed(3)}',
+                    pw.Text(
+                        'Delivery: ${deliveryAmountForPrint.toStringAsFixed(3)}',
+                        style: const pw.TextStyle(fontSize: 20)),
+                  ]),
+              pw.Row(
+                  mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                  children: [
+                    pw.SizedBox(),
+                    pw.Text(
+                        'Discount: ${discountAmountForPrint.toStringAsFixed(3)}',
+                        style: const pw.TextStyle(fontSize: 20)),
+                  ]),
+              pw.Row(
+                  mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                  children: [
+                    pw.SizedBox(),
+                    pw.Text(
+                        'Total:  ${(totalAmountForPrint - discountAmountForPrint + deliveryAmountForPrint).toStringAsFixed(3)}',
                         style: const pw.TextStyle(fontSize: 20)),
                   ]),
               pw.Row(
@@ -859,7 +814,7 @@ class CartController extends GetxController {
                   children: [
                     pw.SizedBox(),
                     pw.Text(
-                        'Balance: ${(totalPaidForPrint - totalAmountForPrint).toStringAsFixed(3)}',
+                        'Balance: ${(totalPaidForPrint - (totalAmountForPrint - discountAmountForPrint + deliveryAmountForPrint)).toStringAsFixed(3)}',
                         style: const pw.TextStyle(fontSize: 20)),
                   ]),
               pw.SizedBox(height: 25),

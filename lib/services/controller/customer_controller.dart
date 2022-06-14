@@ -18,6 +18,7 @@ class CustomerController extends GetxController {
   List<StringWithString> customerName = [];
   RxString selectedCustomerName = ''.obs;
   var selectedCustomer;
+  RxBool hasCustomer = false.obs;
 
   TextEditingController customerNameController = TextEditingController();
   TextEditingController customerEmailController = TextEditingController();
@@ -76,6 +77,7 @@ class CustomerController extends GetxController {
     });
     if (response.statusCode == 200) {
       var jsonObject = convert.jsonDecode(response.body);
+      hasCustomer.value = true;
       Get.log(jsonObject.toString());
       jsonObject['data'].forEach((element) {
         customerList.add(CustomerModel(data: element));

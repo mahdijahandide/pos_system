@@ -13,7 +13,6 @@ class CashInOut extends GetView<CashController> {
 
   @override
   Widget build(BuildContext context) {
-    Get.lazyPut(() => CashController());
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(

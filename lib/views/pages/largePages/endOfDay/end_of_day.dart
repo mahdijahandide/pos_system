@@ -17,8 +17,9 @@ class EndOfDay extends GetView<ShiftController> {
 
   @override
   Widget build(BuildContext context) {
-    Get.put(ShiftController());
+    Get.lazyPut(() => ShiftController());
     Get.lazyPut(() => CashController());
+    controller.shiftDetailsRequest();
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,

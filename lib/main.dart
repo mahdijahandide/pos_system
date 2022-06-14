@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:pos_system/services/bindings/bindings.dart';
 import 'package:pos_system/services/controller/auth_controller.dart';
 import 'package:pos_system/services/controller/cart_controller.dart';
 import 'package:pos_system/services/controller/category_controller.dart';
@@ -29,14 +30,6 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    Get.put(AuthController());
-    Get.put(ProductController());
-    Get.put(DashboardController());
-    Get.put(UserController());
-    Get.put(CategoryController());
-    Get.put(CartController());
-
-    Get.put(CustomerController());
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'POS System',
@@ -66,7 +59,8 @@ class MyApp extends StatelessWidget {
         GetPage(name: '/showFactor', page: () => ShowFactor()),
       ],
       initialRoute: '/login',
-      unknownRoute: GetPage(name: '/nothingFound', page: () => const MyApp()),
+      initialBinding: AppBindings(),
+      unknownRoute: GetPage(name: '/nothingFound', page: () => Login()),
     );
   }
 }

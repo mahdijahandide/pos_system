@@ -62,13 +62,13 @@ class OrderController extends GetxController {
               msg: 'can not refund this invoice',
               bgColor: Colors.red);
         }
-      } else {
-        jsonObject['data']['orders'].forEach((element) {
-          orderList.value.add(OrderModel(data: element));
-        });
-        orderFilteredList.value = orderList.value;
-        hasList.value = true;
       }
+      jsonObject['data']['orders'].forEach((element) {
+        orderList.value.add(OrderModel(data: element));
+      });
+      orderFilteredList.value = orderList.value;
+      hasList.value = true;
+
       if (reqStatus == 'refund') {
         Get.back();
       }
@@ -81,7 +81,8 @@ class OrderController extends GetxController {
     }
   }
 
-  Future<void> getOrderProducts({required id, dynamic current}) async {
+  Future<void> getOrderProducts(
+      {required id, dynamic current, dynamic showModal}) async {
     orderItemsList.clear();
     LoadingDialog.showCustomDialog(msg: 'Please wait ...');
     var url = GET_ORDER_ITEMS;
@@ -100,10 +101,16 @@ class OrderController extends GetxController {
         jsonObject['data']['orderItems'].forEach((element) {
           orderItemsList.add(OrderItemsModel(data: element));
         });
-        Get.find<CartController>().totalAmountForPrint =
-            double.parse(jsonObject['data']['total'].toString());
-        Get.find<CartController>().totalPaidForPrint =
-            double.parse(jsonObject['data']['pay'].toString());
+        var discount = jsonObject['data']['details']['seller_discount'];
+        var delivery = jsonObject['data']['details']['delivery_charges'];
+        var subtotal = jsonObject['data']['subTotal'];
+        var totalPaid = jsonObject['data']['pay'];
+        var totalAmount = jsonObject['data']['total'];
+        Get.find<CartController>().totalAmountForPrint = totalAmount ?? 0.0;
+        Get.find<CartController>().totalPaidForPrint = totalPaid ?? 0.0;
+        Get.find<CartController>().subTotalAmountForPrint = subtotal ?? 0.0;
+        Get.find<CartController>().discountAmountForPrint = discount ?? 0.0;
+        Get.find<CartController>().deliveryAmountForPrint = delivery ?? 0.0;
         Get.back();
         selectedItem = current;
         Get.bottomSheet(
@@ -126,6 +133,30 @@ class OrderController extends GetxController {
                   mTitleAr: element['translate']['ar'].toString(),
                   mTempUniqueId: ''));
           Get.back(closeOverlays: true);
+          if (showModal == true) {
+            selectedItem = current;
+            jsonObject['data']['orderItems'].forEach((element) {
+              orderItemsList.add(OrderItemsModel(data: element));
+            });
+            var discount = jsonObject['data']['details']['seller_discount'];
+            var delivery = jsonObject['data']['details']['delivery_charges'];
+            var subtotal = jsonObject['data']['subTotal'];
+            var totalPaid = jsonObject['data']['pay'];
+            var totalAmount = jsonObject['data']['total'];
+            Get.find<CartController>().totalAmountForPrint = totalAmount ?? 0.0;
+            Get.find<CartController>().totalPaidForPrint = totalPaid ?? 0.0;
+            Get.find<CartController>().subTotalAmountForPrint = subtotal ?? 0.0;
+            Get.find<CartController>().discountAmountForPrint = discount ?? 0.0;
+            Get.find<CartController>().deliveryAmountForPrint = delivery ?? 0.0;
+            Get.bottomSheet(
+              OrderItemsModal().orderItems(),
+              isScrollControlled: true,
+              enableDrag: true,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(35),
+              ),
+            );
+          }
         });
       }
     } else {
