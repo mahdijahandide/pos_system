@@ -54,6 +54,8 @@ class DesktopLogin extends GetView<AuthController> {
               SizedBox(
                   width: 600,
                   child: CustomTextField().createTextField(
+                      autoFocus: true,
+                      node: controller.userFocusNode,
                       hint: '',
                       height: 45.0,
                       controller:
@@ -63,8 +65,8 @@ class DesktopLogin extends GetView<AuthController> {
                       hasSuffixIcon: false,
                       hasPrefixIcon: true,
                       onTap: () {
+                        controller.passFocus.value = false;
                         controller.userFocus.value = true;
-                        print(controller.userFocus.value);
                         controller.update();
                       },
                       prefixIcon: Icons.person)),
@@ -75,10 +77,11 @@ class DesktopLogin extends GetView<AuthController> {
                 width: 600,
                 child: CustomTextField().createTextField(
                     hint: '',
+                    node: controller.passFocusNode,
                     height: 45.0,
                     onTap: () {
                       controller.userFocus.value = false;
-                      print(controller.userFocus.value);
+                      controller.passFocus.value = true;
                       controller.update();
                     },
                     controller:
@@ -97,24 +100,21 @@ class DesktopLogin extends GetView<AuthController> {
               const SizedBox(
                 height: 20,
               ),
-              CustomText().createText(
-                  title: 'forgot_password'.tr,
-                  fontWeight: FontWeight.normal,
-                  size: 16,
-                  color: Colors.blue),
+              // CustomText().createText(
+              //     title: 'forgot_password'.tr,
+              //     fontWeight: FontWeight.normal,
+              //     size: 16,
+              //     color: Colors.blue),
               const Expanded(child: SizedBox()),
               Container(
                 color: const Color(0xffeeeeee),
                 child: VirtualKeyboard(
-                  textColor: Colors.black,
-                  type: Get.find<AuthController>().isNumericMode
-                      ? VirtualKeyboardType.Numeric
-                      : VirtualKeyboardType.Alphanumeric,
-                  textController: controller.userFocus.value == true
-                      ? controller.loginControllerUserText
-                      : controller.loginControllerPasswordText,
-                ),
-              ),
+                    textColor: Colors.black,
+                    type: VirtualKeyboardType.Alphanumeric,
+                    textController: controller.userFocus.isTrue
+                        ? controller.loginControllerUserText
+                        : controller.loginControllerPasswordText),
+              )
             ],
           ),
         );

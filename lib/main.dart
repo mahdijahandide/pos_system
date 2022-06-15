@@ -34,9 +34,7 @@ class MyApp extends StatelessWidget {
         Locale("ar", "KW"),
         Locale("en", "US"),
       ],
-      theme: ThemeData(
-        primarySwatch: Colors.teal,
-      ),
+      theme: ThemeData(primarySwatch: Colors.teal, fontFamily: 'pelak'),
       defaultTransition: Transition.cupertino,
       getPages: [
         GetPage(name: '/login', page: () => Login()),

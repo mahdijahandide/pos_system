@@ -36,7 +36,11 @@ class AuthController extends GetxController {
       TextEditingController(text: 'admin');
   final TextEditingController loginControllerPasswordText =
       TextEditingController(text: 'kash5admin');
-  RxBool userFocus = true.obs;
+
+  RxBool userFocus = false.obs;
+  RxBool passFocus = false.obs;
+  FocusNode userFocusNode = FocusNode();
+  FocusNode passFocusNode = FocusNode();
 
   @override
   void onInit() {

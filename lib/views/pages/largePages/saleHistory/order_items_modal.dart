@@ -5,6 +5,8 @@ import 'package:pos_system/views/pages/largePages/saleHistory/printing_history_v
 import 'package:printing/printing.dart';
 
 import '../../../components/texts/customText.dart';
+import 'package:pdf/widgets.dart' as pw;
+import 'package:pdf/pdf.dart';
 
 class OrderItemsModal {
   Widget orderItems() {
@@ -17,9 +19,19 @@ class OrderItemsModal {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              IconButton(onPressed: ()async{
-                await Printing.layoutPdf(onLayout: (_) => PrintingHistoryView().generatePdf());
-              }, icon: const Icon(Icons.print)),
+              IconButton(
+                  onPressed: () async {
+                    // await for (var page in Printing.raster(await PrintingHistoryView().generatePdf().save(),
+                    //     pages: [0, 1], dpi: 72)) {
+                    //   final image = page.toImage(); // ...or page.toPng()
+                    //   print(image);
+                    // }
+
+                    await Printing.layoutPdf(
+                      onLayout: (_) => PrintingHistoryView().generatePdf(),
+                    );
+                  },
+                  icon: const Icon(Icons.print)),
               CustomText().createText(
                   title: 'Order Items',
                   size: 18,
@@ -44,7 +56,7 @@ class OrderItemsModal {
           itemBuilder: (context, index) {
             var currentItem = Get.find<OrderController>().orderItemsList[index];
             return Container(
-              width: Get.width,
+                width: Get.width,
                 decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(12),
@@ -60,12 +72,19 @@ class OrderItemsModal {
                 child: Row(
                   children: [
                     Container(
-                      width: 150,height: 150,
+                      width: 150,
+                      height: 150,
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(6),
-                          image: DecorationImage(image: NetworkImage(currentItem.imageUrl.toString(),),fit: BoxFit.fill)),
+                          image: DecorationImage(
+                              image: NetworkImage(
+                                currentItem.imageUrl.toString(),
+                              ),
+                              fit: BoxFit.fill)),
                     ),
-                    const SizedBox(width: 20,),
+                    const SizedBox(
+                      width: 20,
+                    ),
                     Expanded(
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -73,20 +92,32 @@ class OrderItemsModal {
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                            CustomText().createText(title: currentItem.title,size: 18),
-                            CustomText().createText(title: 'quantity: '+currentItem.quantity.toString(),size: 18),
-                          ],),
+                              CustomText().createText(
+                                  title: currentItem.title, size: 18),
+                              CustomText().createText(
+                                  title: 'quantity: ' +
+                                      currentItem.quantity.toString(),
+                                  size: 18),
+                            ],
+                          ),
                           const Expanded(child: SizedBox()),
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                            CustomText().createText(title: 'unitPrice: ${currentItem.unitPrice}',size: 18),
-                            CustomText().createText(title: 'subtotal: ${currentItem.subtotal}',size: 18),
-                          ],),
+                              CustomText().createText(
+                                  title: 'unitPrice: ${currentItem.unitPrice}',
+                                  size: 18),
+                              CustomText().createText(
+                                  title: 'subtotal: ${currentItem.subtotal}',
+                                  size: 18),
+                            ],
+                          ),
                         ],
                       ),
                     ),
-                    const SizedBox(width: 20,),
+                    const SizedBox(
+                      width: 20,
+                    ),
                   ],
                 ));
           },

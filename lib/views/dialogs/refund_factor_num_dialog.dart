@@ -21,12 +21,15 @@ class RefundFactorNumDialog {
     Get.defaultDialog(
       title: title,
       content: GetBuilder(builder: (CartController controller) {
+        controller.refundFactorNumController.text = '';
+
         return Container(
           width: 300,
           padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 15),
           child: Column(
             children: [
               CustomTextField().createTextField(
+                  autoFocus: true,
                   hint: 'Enter Invoice Number',
                   height: 50,
                   keyboardType: TextInputType.number,

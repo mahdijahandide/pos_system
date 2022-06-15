@@ -1,5 +1,7 @@
+import 'dart:convert';
 import 'dart:typed_data';
 
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
@@ -13,8 +15,18 @@ import '../../../../services/controller/user_controller.dart';
 class PrintingHistoryView {
   OrderController controller = Get.put((OrderController()));
   Future<Uint8List> generatePdf() async {
-    final pdf = pw.Document(version: PdfVersion.pdf_1_5, compress: true);
+    // final pdf = pw.Document(
+    //   version: PdfVersion.pdf_1_5,
+    //   compress: true,
+    // );
+
+    final ByteData fontData = await rootBundle.load("fonts/pelak.ttf");
+    var font = pw.Font.ttf(await rootBundle.load("fonts/pelak.ttf"));
+    final ttf = pw.Font.ttf(fontData);
+    final pdf = pw.Document();
+
     var coData = Get.find<AuthController>().coDetails;
+    // final font = await rootBundle.load('fonts/pelak.ttf');
 
     pdf.addPage(
       pw.Page(
@@ -73,6 +85,9 @@ class PrintingHistoryView {
                     itemCount: controller.orderItemsList.length,
                     itemBuilder: (pw.Context context, int index) {
                       var currentItem = controller.orderItemsList[index];
+                      List<int> bytes =
+                          utf8.encode(currentItem.titleAr.toString());
+
                       double itemQty =
                           double.parse(currentItem.quantity.toString());
                       double itemPrc = double.parse(
@@ -96,7 +111,8 @@ class PrintingHistoryView {
                                         overflow: pw.TextOverflow.clip,
                                       ),
                                       pw.Text(
-                                        currentItem.titleAr.toString(),
+                                        '${currentItem.titleAr}',
+                                        style: pw.TextStyle(font: font),
                                       ),
                                     ])),
                             pw.Expanded(

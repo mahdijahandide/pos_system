@@ -22,6 +22,7 @@ class CustomTextField {
       dynamic align,
       dynamic onSubmitted,
       dynamic onTap,
+      dynamic autoFocus,
       dynamic maxLength,
       dynamic controller,
       dynamic borderColor}) {
@@ -35,6 +36,7 @@ class CustomTextField {
       child: TextField(
           textInputAction: textInputAction,
           onSubmitted: onSubmitted,
+          autofocus: autoFocus ?? false,
           onTap: onTap,
           keyboardType: keyboardType,
           inputFormatters: inputFormatters,
