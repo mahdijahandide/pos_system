@@ -28,6 +28,8 @@ class OrderController extends GetxController {
 
   RxBool hasList = false.obs;
 
+  var discountNesbat;
+
   Future<void> getOrders({dynamic id, dynamic reqStatus}) async {
     orderList.value.clear();
     if (reqStatus == 'refund') {
@@ -70,9 +72,16 @@ class OrderController extends GetxController {
       hasList.value = true;
 
       if (reqStatus == 'refund') {
+        discountNesbat = double.parse(
+                jsonObject['data']['details']['seller_discount'].toString()) /
+            (double.parse(
+                    jsonObject['data']['details']['total_amount'].toString()) -
+                double.parse(jsonObject['data']['details']['delivery_charges']
+                    .toString()) +
+                double.parse(jsonObject['data']['details']['seller_discount']
+                    .toString()));
         Get.back();
       }
-      //Get.toNamed('/saleHistory');
     } else {
       Get.back();
       RemoteStatusHandler().errorHandler(

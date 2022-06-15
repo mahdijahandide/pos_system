@@ -117,14 +117,7 @@ class CartController extends GetxController {
       totalAmount = double.parse(jsonObject['data']['total_amount'].toString());
 
       saveCartForSecondMonitor();
-      // Fluttertoast.showToast(
-      //     msg: "item added to cart successfully", // message
-      //     toastLength: Toast.LENGTH_SHORT, // length
-      //     gravity: ToastGravity.CENTER, // location
-      //     fontSize: 26,
-      //     webPosition: 'center',
-      //     timeInSecForIosWeb: 2 // duration,
-      //     );
+
       Get.back(closeOverlays: true);
       Snack().createSnack(
           title: '',
@@ -630,7 +623,10 @@ class CartController extends GetxController {
   Future<Uint8List> generatePdf() async {
     // final ttf = await fontFromAssetBundle('assets/fonts/pelak.ttf');
     var coData = Get.find<AuthController>().coDetails;
-    final pdf = pw.Document(version: PdfVersion.pdf_1_5, compress: true);
+    final pdf = pw.Document(
+      version: PdfVersion.pdf_1_5,
+      compress: false,
+    );
 
     pdf.addPage(
       pw.Page(
