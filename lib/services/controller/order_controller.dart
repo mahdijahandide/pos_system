@@ -57,6 +57,17 @@ class OrderController extends GetxController {
               !Get.find<CartController>().isRefund.value;
           Get.find<CartController>().refundFactorItemList.value.clear();
           getOrderProducts(id: jsonObject['data']['orders'][0]['id']);
+
+          Get.find<CartController>().newSale(canTemp: true);
+          Get.find<CartController>().update();
+          discountNesbat = double.parse(
+                  jsonObject['data']['details']['seller_discount'].toString()) /
+              (double.parse(jsonObject['data']['details']['total_amount']
+                      .toString()) -
+                  double.parse(jsonObject['data']['details']['delivery_charges']
+                      .toString()) +
+                  double.parse(jsonObject['data']['details']['seller_discount']
+                      .toString()));
         } else {
           Get.back();
           Snack().createSnack(
@@ -64,24 +75,13 @@ class OrderController extends GetxController {
               msg: 'can not refund this invoice',
               bgColor: Colors.red);
         }
+        Get.back();
       }
       jsonObject['data']['orders'].forEach((element) {
         orderList.value.add(OrderModel(data: element));
       });
       orderFilteredList.value = orderList.value;
       hasList.value = true;
-
-      if (reqStatus == 'refund') {
-        discountNesbat = double.parse(
-                jsonObject['data']['details']['seller_discount'].toString()) /
-            (double.parse(
-                    jsonObject['data']['details']['total_amount'].toString()) -
-                double.parse(jsonObject['data']['details']['delivery_charges']
-                    .toString()) +
-                double.parse(jsonObject['data']['details']['seller_discount']
-                    .toString()));
-        Get.back();
-      }
     } else {
       Get.back();
       RemoteStatusHandler().errorHandler(

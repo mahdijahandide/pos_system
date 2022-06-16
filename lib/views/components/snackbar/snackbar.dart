@@ -15,12 +15,14 @@ class Snack {
         duration: const Duration(seconds: 3),
         titleText: Text(
           '$title',
-          textDirection: TextDirection.rtl,
+          textAlign: TextAlign.center,
+          textDirection: TextDirection.ltr,
           style: TextStyle(color: titleColor ?? Colors.white),
         ),
         messageText: Text(
           '$msg',
-          textDirection: TextDirection.rtl,
+          textAlign: TextAlign.center,
+          textDirection: TextDirection.ltr,
           style: TextStyle(color: msgColor ?? Colors.white),
         ),
         icon: icon ??

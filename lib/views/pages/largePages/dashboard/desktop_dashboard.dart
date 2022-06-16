@@ -46,6 +46,7 @@ class DesktopDashboard extends StatelessWidget {
                           title: 'new_sale'.tr,
                           onTap: () {
                             Get.find<CartController>().newSale();
+                            controller.isRefund.value = false;
                           }),
                       const SizedBox(
                         width: 12,
@@ -64,11 +65,7 @@ class DesktopDashboard extends StatelessWidget {
                           textSize: controller.isRefund.isTrue ? 22 : 16,
                           onTap: () {
                             if (controller.isRefund.isTrue) {
-                              controller.addToCartList.value.clear();
-                              controller.totalAmount = 0.0;
-                              controller.deliveryAmount = 0.0;
-                              controller.discountAmount = 0.0;
-                              controller.uniqueId = 'pos${Xid()}';
+                              controller.newSale();
                               controller.isRefund.value = false;
 
                               Get.find<OrderController>()

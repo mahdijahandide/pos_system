@@ -25,11 +25,16 @@ class CheckoutModal extends GetView<CartController> {
     if (Get.find<CustomerController>().selectedCustomer != null) {
       Get.find<CustomerController>().customerNameController.text =
           Get.find<CustomerController>().selectedCustomer.name ?? '';
+      Get.find<CustomerController>().searchController.text =
+          Get.find<CustomerController>().selectedCustomer.name ?? '';
       Get.find<CustomerController>().customerEmailController.text =
           Get.find<CustomerController>().selectedCustomer.email ?? '';
       Get.find<CustomerController>().customerNumberController.text =
           Get.find<CustomerController>().selectedCustomer.mobile ?? '';
+      searchController.text =
+          Get.find<CustomerController>().selectedCustomer.name ?? '';
     } else {
+      searchController.text = '';
       Get.find<CustomerController>().customerNameController.text = '';
       Get.find<CustomerController>().customerEmailController.text = '';
       Get.find<CustomerController>().customerNumberController.text = '';

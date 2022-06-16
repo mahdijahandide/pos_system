@@ -50,9 +50,11 @@ class TempOrderModal extends StatelessWidget {
                   var currentItem = cartController.openCartsUDID[index];
                   return InkWell(
                     onTap: () {
-                      if (cartController.addToCartList.value.isNotEmpty) {
-                        cartController.newSale();
+                      cartController.newSale();
+                      if (Get.find<CartController>().isRefund.isTrue) {
+                        Get.find<CartController>().isRefund.value = false;
                       }
+
                       cartController.getTempOrders(
                           cartId: currentItem.tempId, index: index);
                     },

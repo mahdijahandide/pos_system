@@ -28,6 +28,8 @@ class CustomerController extends GetxController {
   TextEditingController addCustomerNumberController = TextEditingController();
   TextEditingController addCustomerEmailController = TextEditingController();
 
+  TextEditingController searchController = TextEditingController();
+
   TextEditingController customerController = TextEditingController();
 
   Rx<List<CustomerModel>> foundPlayers = Rx<List<CustomerModel>>([]);
@@ -132,6 +134,10 @@ class CustomerController extends GetxController {
       customerName.add(StringWithString(
           mName: jsonObject['data']['name'],
           mNum: jsonObject['data']['mobile']));
+
+      addCustomerNameController.text = '';
+      addCustomerEmailController.text = '';
+      addCustomerNumberController.text = '';
       update();
     } else {
       Get.back();

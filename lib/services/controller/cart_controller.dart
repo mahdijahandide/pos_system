@@ -581,22 +581,36 @@ class CartController extends GetxController {
     }
   }
 
-  void newSale() {
-    if (addToCartList.value.isNotEmpty) {
+  void newSale({dynamic canTemp}) {
+    if (addToCartList.value.isNotEmpty && isRefund.isFalse) {
       openCartsUDID.add(TempOrderModel(mId: uniqueId));
-      totalAmount = 0.0;
-      deliveryAmount = 0.0;
-      discountAmount = 0.0;
-      uniqueId = 'pos${Xid()}';
       addToCartList.value.clear();
       update();
-    } else {
-      totalAmount = 0.0;
-      deliveryAmount = 0.0;
-      discountAmount = 0.0;
-      uniqueId = 'pos${Xid()}';
+    } else if (addToCartList.value.isNotEmpty && canTemp == true) {
+      openCartsUDID.add(TempOrderModel(mId: uniqueId));
+      addToCartList.value.clear();
       update();
     }
+    totalAmount = 0.0;
+    discountAmount = 0.0;
+    uniqueId = 'pos${Xid()}';
+    deliveryAmount = 0.0;
+    selectedCountryName.value = '';
+    selectedCountryId = '';
+    selectedProvinceName.value = '';
+    selectedProvinceId = '';
+    selectedAreaName.value = '';
+    selectedAreaId = '';
+    //isRefund.value = false;
+    Get.find<CustomerController>().selectedCustomerName.value = '';
+    Get.find<CustomerController>().selectedCustomer = null;
+    Get.find<CustomerController>().customerNameController.text = '';
+    Get.find<CustomerController>().customerEmailController.text = '';
+    Get.find<CustomerController>().customerNumberController.text = '';
+    Get.find<CustomerController>().customerController.text = '';
+    Get.find<CustomerController>().customerController.text = '';
+    addToCartList.value.clear();
+    update();
   }
 
   void saveCartForSecondMonitor() {

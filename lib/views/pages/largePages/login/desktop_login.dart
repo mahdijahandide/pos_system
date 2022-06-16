@@ -84,6 +84,9 @@ class DesktopLogin extends GetView<AuthController> {
                       controller.passFocus.value = true;
                       controller.update();
                     },
+                    onSubmitted: (_) async {
+                      controller.loginRequest();
+                    },
                     controller:
                         Get.find<AuthController>().loginControllerPasswordText,
                     borderColor: Colors.blue,

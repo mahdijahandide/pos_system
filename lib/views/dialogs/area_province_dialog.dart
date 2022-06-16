@@ -24,7 +24,8 @@ class AreaProvinceDialog {
             children: [
               //country
               DropdownButton<String>(
-                isExpanded: true,focusColor: Colors.white,
+                isExpanded: true,
+                focusColor: Colors.white,
                 hint: Text(
                     Get.find<CartController>().selectedCountryName.toString()),
                 onChanged: (val) {
@@ -36,10 +37,10 @@ class AreaProvinceDialog {
                               element.id == int.parse(val.toString()))
                           .first
                           .name!;
-                  Get.find<CartController>().selectedProvinceId='';
-                  Get.find<CartController>().selectedAreaId='';
-                  Get.find<CartController>().selectedProvinceName.value='';
-                  Get.find<CartController>().selectedAreaName.value='';
+                  Get.find<CartController>().selectedProvinceId = '';
+                  Get.find<CartController>().selectedAreaId = '';
+                  Get.find<CartController>().selectedProvinceName.value = '';
+                  Get.find<CartController>().selectedAreaName.value = '';
                   controller.update();
                 },
                 items: Get.find<CartController>()
@@ -55,7 +56,7 @@ class AreaProvinceDialog {
               Get.find<CartController>().selectedCountryId == ''
                   ? const SizedBox()
                   : DropdownButton<String>(
-                focusColor: Colors.white,
+                      focusColor: Colors.white,
                       isExpanded: true,
                       hint: Text(Get.find<CartController>()
                           .selectedProvinceName
@@ -78,8 +79,8 @@ class AreaProvinceDialog {
                                 .first
                                 .name
                                 .toString();
-                        Get.find<CartController>().selectedAreaId='';
-                        Get.find<CartController>().selectedAreaName.value='';
+                        Get.find<CartController>().selectedAreaId = '';
+                        Get.find<CartController>().selectedAreaName.value = '';
                         controller.update();
                       },
                       items: Get.find<CartController>()
@@ -102,20 +103,79 @@ class AreaProvinceDialog {
               Get.find<CartController>().selectedProvinceId == ''
                   ? const SizedBox()
                   : DropdownButton<String>(
-                focusColor: Colors.white,
+                      focusColor: Colors.white,
                       isExpanded: true,
                       hint: Text(Get.find<CartController>()
                           .selectedAreaName
                           .toString()),
                       onChanged: (val) {
-                        Get.find<CartController>().selectedAreaId = val.toString();
+                        Get.find<CartController>().selectedAreaId =
+                            val.toString();
 
-                        Get.find<CartController>().selectedAreaName.value = Get.find<CartController>().countryList.where((element) => element.name == Get.find<CartController>().selectedCountryName.value).first.provinceList.where((element) => element.id.toString() == Get.find<CartController>().selectedProvinceId.toString()).first.areaList.where((element) => element.id.toString() == val.toString()).first.name.toString();
-                        Get.find<CartController>().deliveryAmount=double.parse(Get.find<CartController>().countryList.where((element) => element.name == Get.find<CartController>().selectedCountryName.value).first.provinceList.where((element) => element.id.toString() == Get.find<CartController>().selectedProvinceId.toString()).first.areaList.where((element) => element.id.toString() == val.toString()).first.deliveryFee.toString());
+                        Get.find<CartController>().selectedAreaName.value =
+                            Get.find<CartController>()
+                                .countryList
+                                .where((element) =>
+                                    element.name ==
+                                    Get.find<CartController>()
+                                        .selectedCountryName
+                                        .value)
+                                .first
+                                .provinceList
+                                .where((element) =>
+                                    element.id.toString() ==
+                                    Get.find<CartController>()
+                                        .selectedProvinceId
+                                        .toString())
+                                .first
+                                .areaList
+                                .where((element) =>
+                                    element.id.toString() == val.toString())
+                                .first
+                                .name
+                                .toString();
+                        Get.find<CartController>().deliveryAmount =
+                            double.parse(Get.find<CartController>()
+                                .countryList
+                                .where((element) =>
+                                    element.name ==
+                                    Get.find<CartController>()
+                                        .selectedCountryName
+                                        .value)
+                                .first
+                                .provinceList
+                                .where((element) =>
+                                    element.id.toString() ==
+                                    Get.find<CartController>()
+                                        .selectedProvinceId
+                                        .toString())
+                                .first
+                                .areaList
+                                .where((element) =>
+                                    element.id.toString() == val.toString())
+                                .first
+                                .deliveryFee
+                                .toString());
                         print(Get.find<CartController>().deliveryAmount);
                         controller.update();
                       },
-                      items: Get.find<CartController>().countryList.where((element) => element.name == Get.find<CartController>().selectedCountryName.toString()).first.provinceList.where((element) => element.name == Get.find<CartController>().selectedProvinceName.toString()).first.areaList.map((AreaModel value) {
+                      items: Get.find<CartController>()
+                          .countryList
+                          .where((element) =>
+                              element.name ==
+                              Get.find<CartController>()
+                                  .selectedCountryName
+                                  .toString())
+                          .first
+                          .provinceList
+                          .where((element) =>
+                              element.name ==
+                              Get.find<CartController>()
+                                  .selectedProvinceName
+                                  .toString())
+                          .first
+                          .areaList
+                          .map((AreaModel value) {
                         return DropdownMenuItem<String>(
                           value: value.id.toString(),
                           child: Text(value.name.toString()),
@@ -132,21 +192,32 @@ class AreaProvinceDialog {
             Get.find<CartController>().getTempOrders(
                 cartId: Get.find<CartController>().uniqueId.toString(),
                 areaId: Get.find<CartController>().selectedAreaId.toString(),
-                userDiscount: Get.find<CartController>().discountAmount.toString());
+                userDiscount:
+                    Get.find<CartController>().discountAmount.toString());
           },
-          child:
-              Container(
-                  width: 110,height: 50,alignment: Alignment.center,
-                  color: Colors.green.withOpacity(0.2),
-                  child: CustomText().createText(title: 'Submit', color: Colors.teal))),
+          child: Container(
+              width: 110,
+              height: 50,
+              alignment: Alignment.center,
+              color: Colors.green.withOpacity(0.2),
+              child: CustomText()
+                  .createText(title: 'Submit', color: Colors.teal))),
       cancel: InkWell(
           onTap: () {
             Get.find<CartController>().deliveryAmount = 0.0;
+            Get.find<CartController>().selectedCountryName.value = '';
+            Get.find<CartController>().selectedCountryId = '';
+            Get.find<CartController>().selectedProvinceName.value = '';
+            Get.find<CartController>().selectedProvinceId = '';
+            Get.find<CartController>().selectedAreaName.value = '';
+            Get.find<CartController>().selectedAreaId = '';
             Get.find<CartController>().update();
             Get.back();
           },
           child: Container(
-            width: 110,height: 50,alignment: Alignment.center,
+            width: 110,
+            height: 50,
+            alignment: Alignment.center,
             color: Colors.red.withOpacity(0.2),
             child: CustomText()
                 .createText(title: 'Cancel delivery', color: Colors.red),
