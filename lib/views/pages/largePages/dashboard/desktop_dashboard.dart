@@ -5,6 +5,7 @@ import 'package:pos_system/services/controller/dashboard_controller.dart';
 import 'package:pos_system/services/controller/order_controller.dart';
 import 'package:pos_system/services/controller/product_controller.dart';
 import 'package:pos_system/views/components/shimmer/product_shimmer.dart';
+import 'package:pos_system/views/components/snackbar/snackbar.dart';
 import 'package:pos_system/views/dialogs/refund_factor_num_dialog.dart';
 import 'package:pos_system/views/pages/largePages/dashboard/widget/dashboard_drawer.dart';
 import 'package:pos_system/views/pages/largePages/dashboard/widget/dashboard_main.dart';
@@ -45,8 +46,23 @@ class DesktopDashboard extends StatelessWidget {
                           icon: Icons.add,
                           title: 'new_sale'.tr,
                           onTap: () {
-                            Get.find<CartController>().newSale();
-                            controller.isRefund.value = false;
+                            if (controller.isRefund.isFalse) {
+                              Get.find<CartController>().newSale();
+                              Get.find<ProductController>()
+                                  .productList
+                                  .value
+                                  .clear();
+                              Get.find<ProductController>().hasProduct.value =
+                                  false;
+                              Get.find<ProductController>()
+                                  .getAllProducts(catId: '', keyword: '');
+                            } else {
+                              Snack().createSnack(
+                                  title: 'warning',
+                                  msg:
+                                      'can not using this option on refund mode',
+                                  bgColor: Colors.yellow,msgColor: Colors.black,titleColor: Colors.black);
+                            }
                           }),
                       const SizedBox(
                         width: 12,
@@ -67,6 +83,12 @@ class DesktopDashboard extends StatelessWidget {
                             if (controller.isRefund.isTrue) {
                               controller.newSale();
                               controller.isRefund.value = false;
+                              Get.find<ProductController>()
+                                  .productList
+                                  .value
+                                  .clear();
+                              Get.find<ProductController>()
+                                  .getAllProducts(catId: '', keyword: '');
 
                               Get.find<OrderController>()
                                   .orderList
@@ -113,42 +135,48 @@ class DesktopDashboard extends StatelessWidget {
             ),
           ),
         ),
-        body: ListView(
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 12),
-              child: Row(
-                children: [
-                  Expanded(
-                      flex: 2,
-                      child: Container(
-                          padding: const EdgeInsets.all(8.0),
-                          height: Get.height,
-                          decoration: BoxDecoration(
-                              border: Border.all(color: Colors.black)),
-                          child: DashboardSidebar().createSidebar())),
-                  const SizedBox(
-                    width: 12,
-                  ),
-                  Expanded(
-                      flex: 8,
-                      child: Container(
-                          padding: const EdgeInsets.all(8.0),
-                          height: Get.height,
-                          decoration: BoxDecoration(
-                              border: Border.all(color: Colors.black)),
-                          child: Get.find<ProductController>()
-                                  .productList
-                                  .value
-                                  .isEmpty
-                              ? ProductShimmer().createProductShimmer(
-                                  gridCnt: 5, isLarge: true)
-                              : DashboardMain()
-                                  .createMain(gridCnt: 5, isLarge: true))),
-                ],
+        body: Obx(
+          () => ListView(
+            children: [
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 6, horizontal: 12),
+                child: Row(
+                  children: [
+                    Expanded(
+                        flex: 2,
+                        child: Container(
+                            padding: const EdgeInsets.all(8.0),
+                            height: Get.height,
+                            decoration: BoxDecoration(
+                                border: Border.all(color: Colors.black)),
+                            child: DashboardSidebar().createSidebar())),
+                    const SizedBox(
+                      width: 12,
+                    ),
+                    Expanded(
+                        flex: 8,
+                        child: Container(
+                            padding: const EdgeInsets.all(8.0),
+                            height: Get.height,
+                            decoration: BoxDecoration(
+                                border: Border.all(color: Colors.black)),
+                            child: Get.find<ProductController>()
+                                        .productList
+                                        .value
+                                        .isEmpty ||
+                                    Get.find<ProductController>()
+                                        .hasProduct
+                                        .isFalse
+                                ? ProductShimmer().createProductShimmer(
+                                    gridCnt: 5, isLarge: true)
+                                : DashboardMain()
+                                    .createMain(gridCnt: 5, isLarge: true))),
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
         bottomNavigationBar: Obx(
           () => Get.find<DashboardController>().isShowKeyboard.isTrue

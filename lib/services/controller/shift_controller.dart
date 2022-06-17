@@ -132,7 +132,8 @@ class ShiftController extends GetxController {
 
       selectStartShift.value = true;
       Get.back();
-      await Printing.layoutPdf(onLayout: (_) => generatePdf());
+      await Printing.layoutPdf(
+          onLayout: (_) => generatePdf(data: jsonObject['data']));
     } else {
       Get.back();
       RemoteStatusHandler().errorHandler(
@@ -140,7 +141,7 @@ class ShiftController extends GetxController {
     }
   }
 
-  Future<Uint8List> generatePdf() async {
+  Future<Uint8List> generatePdf({required data}) async {
     // final ttf = await fontFromAssetBundle('assets/fonts/pelak.ttf');
     var coData = Get.find<AuthController>().coDetails;
     final pdf = pw.Document(version: PdfVersion.pdf_1_5, compress: true);
@@ -170,16 +171,10 @@ class ShiftController extends GetxController {
                             'Cashier: ${Get.find<UserController>().name}')),
                     pw.Column(children: [
                       pw.Center(
-                        child: pw.Text(DateTime.now().year.toString() +
-                            '-' +
-                            DateTime.now().month.toString() +
-                            '-' +
-                            DateTime.now().day.toString()),
+                        child: pw.Text('Start at: ' + data['start'].toString()),
                       ),
                       pw.Center(
-                        child: pw.Text(DateTime.now().hour.toString() +
-                            ':' +
-                            DateTime.now().minute.toString()),
+                        child: pw.Text('End at: ' + data['ended'].toString()),
                       )
                     ])
                   ]),
@@ -188,61 +183,75 @@ class ShiftController extends GetxController {
                   mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
                   children: [
                     pw.Text('Start Cash: '),
-                    pw.Text(startCash.value.toString()),
+                    pw.Text(startCash.value.toStringAsFixed(3)),
                   ]),
               pw.Row(
                   mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
                   children: [
                     pw.Text('Sell Cash: '),
-                    pw.Text(sellCash.value.toString()),
+                    pw.Text(sellCash.value.toStringAsFixed(3)),
                   ]),
               pw.Row(
                   mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
                   children: [
                     pw.Text('Sell Card: '),
-                    pw.Text(sellCard.value.toString()),
+                    pw.Text(sellCard.value.toStringAsFixed(3)),
                   ]),
               pw.Row(
                   mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
                   children: [
                     pw.Text('Cash in: '),
-                    pw.Text(cashIn.value.toString()),
+                    pw.Text(cashIn.value.toStringAsFixed(3)),
                   ]),
               pw.Row(
                   mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
                   children: [
                     pw.Text('Total Sell: '),
-                    pw.Text(totalSell.value.toString()),
+                    pw.Text(totalSell.value.toStringAsFixed(3)),
                   ]),
               pw.Row(
                   mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
                   children: [
                     pw.Text('Total Funds: '),
-                    pw.Text(totalFunds.value.toString()),
+                    pw.Text(totalFunds.value.toStringAsFixed(3)),
                   ]),
               pw.Row(
                   mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
                   children: [
                     pw.Text('Total Refunds: '),
-                    pw.Text(totalRefund.value.toString()),
+                    pw.Text(totalRefund.value.toStringAsFixed(3)),
                   ]),
               pw.Row(
                   mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
                   children: [
                     pw.Text('Refund Cash: '),
-                    pw.Text(refundCash.value.toString()),
+                    pw.Text(refundCash.value.toStringAsFixed(3)),
                   ]),
               pw.Row(
                   mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
                   children: [
                     pw.Text('Refund Card: '),
-                    pw.Text(refundCard.value.toString()),
+                    pw.Text(refundCard.value.toStringAsFixed(3)),
                   ]),
               pw.Row(
                   mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
                   children: [
                     pw.Text('Total Cash funds: '),
-                    pw.Text(totalCashFunds.value.toString()),
+                    pw.Text(totalCashFunds.value.toStringAsFixed(3)),
+                  ]),
+              pw.Row(
+                  mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                  children: [
+                    pw.Text('Total Cash Count: '),
+                    pw.Text(
+                        double.parse(cashCount.value.text).toStringAsFixed(3)),
+                  ]),
+              pw.Row(
+                  mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                  children: [
+                    pw.Text('Total Card Count: '),
+                    pw.Text(
+                        double.parse(cardCount.value.text).toStringAsFixed(3)),
                   ]),
               pw.Divider(),
               pw.Row(mainAxisAlignment: pw.MainAxisAlignment.start, children: [
@@ -281,7 +290,8 @@ class ShiftController extends GetxController {
                                     ])),
                             pw.Expanded(
                                 flex: 1,
-                                child: pw.Text(currentItem.amount.toString())),
+                                child: pw.Text(
+                                    currentItem.amount!.toStringAsFixed(3))),
                           ]);
                     },
                     separatorBuilder: (pw.Context context, int index) {

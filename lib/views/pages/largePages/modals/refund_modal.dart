@@ -116,7 +116,8 @@ class RefundModal extends GetView<CartController> {
                                 height: 50,
                                 keyboardType: TextInputType.number,
                                 inputFormatters: <TextInputFormatter>[
-                                  FilteringTextInputFormatter.digitsOnly
+                                  FilteringTextInputFormatter.allow(
+                                      (RegExp("[0-9.]")))
                                 ],
                                 controller: controller.calController,
                                 onSubmitted: (_) async {
@@ -243,10 +244,7 @@ class RefundModal extends GetView<CartController> {
   void refundCalculation() {
     String total = isWholeCart == true
         ? controller.refundCartTotalPrice
-        : (controller.totalAmount +
-                controller.discountAmount +
-                controller.deliveryAmount)
-            .toString();
+        : (controller.totalAmount - controller.discountAmount).toString();
 
     if (double.parse(controller.calController.text).toStringAsFixed(3) ==
         double.parse(total).toStringAsFixed(3)) {

@@ -3,6 +3,8 @@ import 'package:get/get.dart';
 import 'package:pos_system/services/controller/cart_controller.dart';
 import 'package:pos_system/views/components/texts/customText.dart';
 
+import '../../../../services/controller/product_controller.dart';
+
 class TempOrderModal extends StatelessWidget {
   String title;
   TempOrderModal({
@@ -53,6 +55,9 @@ class TempOrderModal extends StatelessWidget {
                       cartController.newSale();
                       if (Get.find<CartController>().isRefund.isTrue) {
                         Get.find<CartController>().isRefund.value = false;
+                        Get.find<ProductController>().productList.value.clear();
+                        Get.find<ProductController>()
+                            .getAllProducts(catId: '', keyword: '');
                       }
 
                       cartController.getTempOrders(

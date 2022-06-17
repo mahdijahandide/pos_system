@@ -113,7 +113,10 @@ class SaleHistory extends GetView<OrderController> {
                                       width: 130,
                                       height: 50,
                                       decoration: BoxDecoration(
-                                          color: Colors.greenAccent,
+                                          color: currentItem.orderStatus ==
+                                                  'returned'
+                                              ? Colors.red
+                                              : Colors.greenAccent,
                                           borderRadius:
                                               BorderRadius.circular(12)),
                                       child: Center(

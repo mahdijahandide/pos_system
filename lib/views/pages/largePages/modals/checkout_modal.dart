@@ -21,6 +21,10 @@ class CheckoutModal extends GetView<CartController> {
 
   @override
   Widget build(BuildContext context) {
+    if (Get.find<CustomerController>().hasCustomer.isFalse) {
+      Get.find<CustomerController>()
+          .getCustomers(doInBackground: true, hasLoading: false);
+    }
     TextEditingController searchController = TextEditingController();
     if (Get.find<CustomerController>().selectedCustomer != null) {
       Get.find<CustomerController>().customerNameController.text =
@@ -76,123 +80,132 @@ class CheckoutModal extends GetView<CartController> {
                   const SizedBox(
                     height: 38,
                   ),
-                  Row(
-                    children: [
-                      CustomText().createText(title: 'Customer Name: '),
-                      const SizedBox(
-                        width: 12,
-                      ),
-                      PopupMenuButton(
-                          icon: const Icon(Icons.info),
-                          itemBuilder: (BuildContext context) =>
-                              <PopupMenuEntry>[
-                                PopupMenuItem(
-                                  child: ListTile(
-                                      onTap: () {},
-                                      leading: const Icon(
-                                        Icons.mail,
-                                        color: Colors.black,
-                                      ),
-                                      title: Text(
-                                        Get.find<CustomerController>()
-                                            .selectedCustomer
-                                            .email,
-                                        style: const TextStyle(
-                                          color: Colors.black,
+                  Obx(
+                    () => Get.find<CustomerController>().hasCustomer.isFalse
+                        ? const Center(
+                            child: CircularProgressIndicator(),
+                          )
+                        : Row(
+                            children: [
+                              CustomText().createText(title: 'Customer Name: '),
+                              const SizedBox(
+                                width: 12,
+                              ),
+                              PopupMenuButton(
+                                  icon: const Icon(Icons.info),
+                                  itemBuilder: (BuildContext context) =>
+                                      <PopupMenuEntry>[
+                                        PopupMenuItem(
+                                          child: ListTile(
+                                              onTap: () {},
+                                              leading: const Icon(
+                                                Icons.mail,
+                                                color: Colors.black,
+                                              ),
+                                              title: Text(
+                                                Get.find<CustomerController>()
+                                                    .selectedCustomer
+                                                    .email,
+                                                style: const TextStyle(
+                                                  color: Colors.black,
+                                                ),
+                                              )),
                                         ),
-                                      )),
-                                ),
-                                PopupMenuItem(
-                                  child: ListTile(
-                                      onTap: () {},
-                                      leading: const Icon(
-                                        Icons.phone,
-                                        color: Colors.black,
-                                      ),
-                                      title: Text(
-                                        Get.find<CustomerController>()
-                                            .selectedCustomer
-                                            .mobile,
-                                        style: const TextStyle(
-                                          color: Colors.black,
+                                        PopupMenuItem(
+                                          child: ListTile(
+                                              onTap: () {},
+                                              leading: const Icon(
+                                                Icons.phone,
+                                                color: Colors.black,
+                                              ),
+                                              title: Text(
+                                                Get.find<CustomerController>()
+                                                    .selectedCustomer
+                                                    .mobile,
+                                                style: const TextStyle(
+                                                  color: Colors.black,
+                                                ),
+                                              )),
                                         ),
-                                      )),
-                                ),
-                              ]),
-                      const SizedBox(
-                        width: 12,
-                      ),
-                      Expanded(
-                        flex: 9,
-                        child: TextFieldSearch(
-                          hasKeyboard: true,
-                          initialList:
-                              Get.find<CustomerController>().customerName,
-                          label: 'Customer Name/No',
-                          controller: searchController,
-                          getSelectedValue: (selected) {
-                            Get.find<CustomerController>().selectedCustomer =
-                                Get.find<CustomerController>()
-                                    .customerList
-                                    .where(
-                                        (element) => element.name == selected)
-                                    .first;
+                                      ]),
+                              const SizedBox(
+                                width: 12,
+                              ),
+                              Expanded(
+                                flex: 9,
+                                child: TextFieldSearch(
+                                  hasKeyboard: true,
+                                  initialList: Get.find<CustomerController>()
+                                      .customerName,
+                                  label: 'Customer Name/No',
+                                  controller: searchController,
+                                  getSelectedValue: (selected) {
+                                    Get.find<CustomerController>()
+                                            .selectedCustomer =
+                                        Get.find<CustomerController>()
+                                            .customerList
+                                            .where((element) =>
+                                                element.name == selected)
+                                            .first;
 
-                            if (Get.find<CustomerController>()
-                                    .selectedCustomer !=
-                                null) {
-                              Get.find<CustomerController>()
-                                  .customerNameController
-                                  .text = Get.find<CustomerController>()
-                                      .selectedCustomer
-                                      .name ??
-                                  '';
-                              Get.find<CustomerController>()
-                                  .customerEmailController
-                                  .text = Get.find<CustomerController>()
-                                      .selectedCustomer
-                                      .email ??
-                                  '';
-                              Get.find<CustomerController>()
-                                  .customerNumberController
-                                  .text = Get.find<CustomerController>()
-                                      .selectedCustomer
-                                      .mobile ??
-                                  '';
-                            } else {
-                              Get.find<CustomerController>()
-                                  .customerNameController
-                                  .text = '';
-                              Get.find<CustomerController>()
-                                  .customerEmailController
-                                  .text = '';
-                              Get.find<CustomerController>()
-                                  .customerNumberController
-                                  .text = '';
-                            }
-                          },
-                        ),
-                      ),
-                      const SizedBox(
-                        width: 12,
-                      ),
-                      SizedBox(
-                        width: 120,
-                        height: 60,
-                        child: CustomTextButton().createTextButton(
-                            buttonText: 'Create',
-                            icon: const Icon(
-                              Icons.add,
-                              color: Colors.white,
-                            ),
-                            buttonColor: Colors.teal,
-                            textColor: Colors.white,
-                            onPress: () {
-                              Get.bottomSheet(AddCustomerModal().createModal());
-                            }),
-                      )
-                    ],
+                                    if (Get.find<CustomerController>()
+                                            .selectedCustomer !=
+                                        null) {
+                                      Get.find<CustomerController>()
+                                          .customerNameController
+                                          .text = Get.find<CustomerController>()
+                                              .selectedCustomer
+                                              .name ??
+                                          '';
+                                      Get.find<CustomerController>()
+                                          .customerEmailController
+                                          .text = Get.find<CustomerController>()
+                                              .selectedCustomer
+                                              .email ??
+                                          '';
+                                      Get.find<CustomerController>()
+                                          .customerNumberController
+                                          .text = Get.find<CustomerController>()
+                                              .selectedCustomer
+                                              .mobile ??
+                                          '';
+                                    } else {
+                                      Get.find<CustomerController>()
+                                          .customerNameController
+                                          .text = '';
+                                      Get.find<CustomerController>()
+                                          .customerEmailController
+                                          .text = '';
+                                      Get.find<CustomerController>()
+                                          .customerNumberController
+                                          .text = '';
+                                    }
+                                  },
+                                ),
+                              ),
+                              const SizedBox(
+                                width: 12,
+                              ),
+                              SizedBox(
+                                width: 120,
+                                height: 60,
+                                child: CustomTextButton().createTextButton(
+                                    buttonText: 'Create',
+                                    icon: const Icon(
+                                      Icons.add,
+                                      color: Colors.white,
+                                    ),
+                                    buttonColor: Colors.teal,
+                                    textColor: Colors.white,
+                                    onPress: () {
+                                      Get.bottomSheet(
+                                          AddCustomerModal().createModal());
+                                    }),
+                              )
+                            ],
+                          ),
                   ),
+
                   // const SizedBox(
                   //   height: 8,
                   // ),

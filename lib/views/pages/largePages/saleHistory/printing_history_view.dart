@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:pdf/pdf.dart';
@@ -15,18 +16,12 @@ import '../../../../services/controller/user_controller.dart';
 class PrintingHistoryView {
   OrderController controller = Get.put((OrderController()));
   Future<Uint8List> generatePdf() async {
-    // final pdf = pw.Document(
-    //   version: PdfVersion.pdf_1_5,
-    //   compress: true,
-    // );
+    final gf = await PdfGoogleFonts.notoSansArabicBlack();
 
-    final ByteData fontData = await rootBundle.load("fonts/pelak.ttf");
-    var font = pw.Font.ttf(await rootBundle.load("fonts/pelak.ttf"));
-    final ttf = pw.Font.ttf(fontData);
     final pdf = pw.Document();
 
     var coData = Get.find<AuthController>().coDetails;
-    // final font = await rootBundle.load('fonts/pelak.ttf');
+    
 
     pdf.addPage(
       pw.Page(
@@ -112,7 +107,10 @@ class PrintingHistoryView {
                                       ),
                                       pw.Text(
                                         '${currentItem.titleAr}',
-                                        style: pw.TextStyle(font: font),
+                                        textDirection: pw.TextDirection.rtl,
+                                        style: pw.TextStyle(
+                                          font: gf,
+                                        ),
                                       ),
                                     ])),
                             pw.Expanded(
@@ -190,7 +188,6 @@ class PrintingHistoryView {
         },
       ),
     );
-
     return pdf.save();
   }
 }

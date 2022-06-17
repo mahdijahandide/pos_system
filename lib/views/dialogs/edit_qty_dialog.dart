@@ -26,47 +26,52 @@ class EditQtyDialog {
           child: Column(
             children: [
               CustomTextField().createTextField(
-                  hint: 'Enter New Quantity',
-                  height: 50,
-                  keyboardType: TextInputType.number,
-                  inputFormatters: <TextInputFormatter>[
-                    FilteringTextInputFormatter.digitsOnly
-                  ],
-                  controller: qtyController,
-                  onSubmitted: (_) async {
-                    var current = Get.find<CartController>()
-                        .addToCartList
-                        .value
-                        .where((element) =>
-                            element.productId == productId.toString())
-                        .toList()[0];
-                    if (int.parse(qtyController.text.toString()) >
-                        int.parse(Get.find<ProductController>()
-                            .productList
+                hint: 'Enter New Quantity',
+                height: 50,
+                autoFocus: true,
+                keyboardType: TextInputType.number,
+                inputFormatters: <TextInputFormatter>[
+                  FilteringTextInputFormatter.digitsOnly
+                ],
+                controller: qtyController,
+                onSubmitted: (_) async {
+                  var current = Get.find<CartController>()
+                      .addToCartList
+                      .value
+                      .where((element) =>
+                          element.productId == productId.toString())
+                      .toList()[0];
+
+                  if (int.parse(qtyController.text.toString()) >
+                      int.parse(Get.find<ProductController>()
+                          .productList
+                          .value
+                          .where((element) =>
+                              element.productId!.toInt() ==
+                              int.parse(current.productId.toString()))
+                          .first
+                          .quantity
+                          .toString())) {
+                    Snack().createSnack(
+                        title:
+                            'selected quantity is bigger than existed item quantity',
+                        msg: '',
+                        bgColor: Colors.yellow,
+                        msgColor: Colors.black,
+                        titleColor: Colors.black);
+                  } else {
+                    Get.find<CartController>().editCartProductQuantity(
+                        tempId: current.id.toString(),
+                        quantity: qtyController.text,
+                        tempUniqueId: Get.find<CartController>().uniqueId,
+                        index: Get.find<CartController>()
+                            .addToCartList
                             .value
-                            .where((element) => element.id == current.id)
-                            .first
-                            .quantity
-                            .toString())) {
-                      Snack().createSnack(
-                          title:
-                              'selected quantity is bigger than existed item quantity',
-                          msg: '',
-                          bgColor: Colors.yellow,
-                          msgColor: Colors.black,
-                          titleColor: Colors.black);
-                    } else {
-                      Get.find<CartController>().editCartProductQuantity(
-                          tempId: current.productId,
-                          quantity: qtyController.text,
-                          tempUniqueId: Get.find<CartController>().uniqueId,
-                          index: Get.find<CartController>()
-                              .addToCartList
-                              .value
-                              .indexWhere((element) =>
-                                  element.productId == current.productId));
-                    }
-                  }),
+                            .indexWhere((element) =>
+                                element.productId == current.productId));
+                  }
+                },
+              ),
               Container(
                 color: const Color(0xffeeeeee),
                 child: VirtualKeyboard(
@@ -93,7 +98,7 @@ class EditQtyDialog {
                   .productList
                   .value
                   .where((element) =>
-                      element.id!.toInt() ==
+                      element.productId!.toInt() ==
                       int.parse(current.productId.toString()))
                   .first
                   .quantity

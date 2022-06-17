@@ -393,6 +393,7 @@ class EndOfDay extends GetView<ShiftController> {
                                                       const Color(0xffdcdcdc)),
                                               color: Colors.white),
                                           child: CalculatorTextField(
+                                            
                                             textAlign: TextAlign.end,
                                             operatorButtonColor: Colors.teal,
                                             title: 'Card count',

@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pos_system/services/controller/auth_controller.dart';
+import 'package:pos_system/services/controller/cart_controller.dart';
 import 'package:pos_system/services/controller/customer_controller.dart';
 import 'package:pos_system/services/controller/dashboard_controller.dart';
 import 'package:pos_system/views/components/texts/customText.dart';
 import 'package:universal_html/html.dart' as html;
+
+import '../../../../components/snackbar/snackbar.dart';
 
 class DashboardDrawer {
   Widget createDrawer() {
@@ -64,8 +67,17 @@ class DashboardDrawer {
             leading: const Icon(Icons.workspaces_filled),
             title: CustomText().createText(title: 'View All Products'),
             onTap: () {
-              Get.find<DashboardController>().showProductDetails.value = true;
-              Get.toNamed('/allProduct');
+              if (Get.find<CartController>().isRefund.isFalse) {
+                Get.find<DashboardController>().showProductDetails.value = true;
+                Get.toNamed('/allProduct');
+              } else {
+                Snack().createSnack(
+                    title: 'warning',
+                    msg: 'can not using this option on refund mode',
+                    bgColor: Colors.yellow,
+                    msgColor: Colors.black,
+                    titleColor: Colors.black);
+              }
             },
           ),
           const Divider(),

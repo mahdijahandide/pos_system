@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:pos_system/services/controller/cart_controller.dart';
 import 'package:pos_system/services/controller/dashboard_controller.dart';
-import 'package:pos_system/services/controller/order_controller.dart';
 import 'package:pos_system/services/controller/product_controller.dart';
 import 'package:pos_system/views/components/snackbar/snackbar.dart';
 import 'package:pos_system/views/components/textfields/textfield.dart';
@@ -23,62 +21,70 @@ class DashboardMain {
         children: [
           IntrinsicHeight(
             child: isLarge == true
-                ? Row(
-                    children: [
-                      const SizedBox(
-                        width: 6,
-                      ),
-                      Expanded(
-                          child: CustomTextField().createTextField(
-                              hint: 'Search anything...',
-                              onSubmitted: (_) async {
-                                LoadingDialog.showCustomDialog(
-                                    msg: 'Loading ...');
-                                Get.find<ProductController>().getAllProducts(
-                                    openModal: true,
-                                    openModalTap: ontap,
-                                    title: controller.searchController.text
-                                        .toString(),
-                                    keyword: controller.searchController.text
-                                        .toString(),
-                                    catId: '');
+                ? Get.find<CartController>().isRefund.isTrue
+                    ? const SizedBox()
+                    : Row(
+                        children: [
+                          const SizedBox(
+                            width: 6,
+                          ),
+                          Expanded(
+                              child: CustomTextField().createTextField(
+                                  hint: 'Search anything...',
+                                  onSubmitted: (_) async {
+                                    LoadingDialog.showCustomDialog(
+                                        msg: 'Loading ...');
+                                    Get.find<ProductController>()
+                                        .getAllProducts(
+                                            openModal: true,
+                                            openModalTap: ontap,
+                                            title: controller
+                                                .searchController.text
+                                                .toString(),
+                                            keyword: controller
+                                                .searchController.text
+                                                .toString(),
+                                            catId: '');
+                                  },
+                                  controller: Get.find<DashboardController>()
+                                      .searchController,
+                                  height: 60.0,
+                                  align: TextAlign.start,
+                                  suffixPress: () {
+                                    LoadingDialog.showCustomDialog(
+                                        msg: 'Loading ...');
+                                    Get.find<ProductController>()
+                                        .getAllProducts(
+                                            openModal: true,
+                                            openModalTap: ontap,
+                                            title: controller
+                                                .searchController.text
+                                                .toString(),
+                                            keyword: controller
+                                                .searchController.text
+                                                .toString(),
+                                            catId: '');
+                                  },
+                                  hasSuffixIcon: true)),
+                          const SizedBox(
+                            width: 6,
+                          ),
+                          InkWell(
+                              onTap: () {
+                                controller.isShowKeyboard.value =
+                                    !controller.isShowKeyboard.value;
+                                controller.update();
                               },
-                              controller: Get.find<DashboardController>()
-                                  .searchController,
-                              height: 60.0,
-                              align: TextAlign.start,
-                              suffixPress: () {
-                                LoadingDialog.showCustomDialog(
-                                    msg: 'Loading ...');
-                                Get.find<ProductController>().getAllProducts(
-                                    openModal: true,
-                                    openModalTap: ontap,
-                                    title: controller.searchController.text
-                                        .toString(),
-                                    keyword: controller.searchController.text
-                                        .toString(),
-                                    catId: '');
-                              },
-                              hasSuffixIcon: true)),
-                      const SizedBox(
-                        width: 6,
-                      ),
-                      InkWell(
-                          onTap: () {
-                            controller.isShowKeyboard.value =
-                                !controller.isShowKeyboard.value;
-                            controller.update();
-                          },
-                          child: Icon(Icons.keyboard,
-                              size: 45,
-                              color: controller.isShowKeyboard.isTrue
-                                  ? Colors.blue
-                                  : Colors.black)),
-                      const SizedBox(
-                        width: 6,
-                      ),
-                    ],
-                  )
+                              child: Icon(Icons.keyboard,
+                                  size: 45,
+                                  color: controller.isShowKeyboard.isTrue
+                                      ? Colors.blue
+                                      : Colors.black)),
+                          const SizedBox(
+                            width: 6,
+                          ),
+                        ],
+                      )
                 : Row(
                     children: [
                       const SizedBox(
@@ -136,13 +142,17 @@ class DashboardMain {
                     ],
                   ),
           ),
-          const Divider(),
+          Get.find<CartController>().isRefund.isTrue
+              ? const SizedBox()
+              : const Divider(),
           const SizedBox(
             height: 4,
           ),
-          CategoryWidget(
-            ontap: ontap,
-          ),
+          Get.find<CartController>().isRefund.isTrue
+              ? const SizedBox()
+              : CategoryWidget(
+                  ontap: ontap,
+                ),
           const SizedBox(
             height: 14,
           ),
@@ -165,29 +175,26 @@ class DashboardMain {
                           Get.find<ProductController>().getProductDetails(
                               productId: currentItem.id, showDetails: true);
                         }
-                      : () {
-                          if (currentItem.isAttribute == 0) {
-                            bool contain = Get.find<CartController>()
-                                .addToCartList
-                                .value
-                                .where((element) =>
-                                    element.productId.toString() ==
-                                    currentItem.id.toString())
-                                .isEmpty;
-
-                            if (contain) {
+                      : Get.find<CartController>().isRefund.isTrue
+                          ? () {
+                              bool contain = Get.find<CartController>()
+                                  .addToCartList
+                                  .value
+                                  .where((element) =>
+                                      element.productId.toString() ==
+                                      currentItem.productId.toString())
+                                  .isEmpty;
                               if (Get.isSnackbarOpen) {
                                 Get.closeCurrentSnackbar();
                               }
-                              if (int.parse(currentItem.quantity.toString()) >
-                                  0) {
-                                if (Get.find<CartController>()
-                                    .isRefund
-                                    .isFalse) {
+                              if (contain) {
+                                if (int.parse(currentItem.quantity.toString()) >
+                                    0) {
                                   Get.find<CartController>().addToCart(
                                       optionSc: '0',
-                                      productId: currentItem.id.toString(),
-                                      price: currentItem.retailPrice.toString(),
+                                      productId:
+                                          currentItem.productId.toString(),
+                                      price: currentItem.unitPrice.toString(),
                                       quantity: '1',
                                       title: currentItem.title,
                                       titleAr: currentItem.titleAr.toString(),
@@ -195,25 +202,45 @@ class DashboardMain {
                                           .uniqueId
                                           .toString());
                                 } else {
-                                  var product = Get.find<CartController>()
-                                      .refundFactorItemList
-                                      .value
-                                      .where((product) =>
-                                          product.productId.toString() ==
-                                          currentItem.id.toString())
-                                      .first
-                                      .productId
-                                      .toString();
+                                  Snack().createSnack(
+                                      title: 'warning',
+                                      msg: 'No enough quantity',
+                                      bgColor: Colors.yellow,
+                                      msgColor: Colors.black,
+                                      titleColor: Colors.black);
+                                }
+                              } else {
+                                Snack().createSnack(
+                                    title: '',
+                                    msg: 'this item already exist in your cart',
+                                    bgColor: Colors.yellow,
+                                    msgColor: Colors.black,
+                                    icon: const Icon(
+                                      Icons.check,
+                                      color: Colors.white,
+                                    ));
+                              }
+                            }
+                          : () {
+                              if (currentItem.isAttribute == 0) {
+                                bool contain = Get.find<CartController>()
+                                    .addToCartList
+                                    .value
+                                    .where((element) =>
+                                        element.productId.toString() ==
+                                        currentItem.id.toString())
+                                    .isEmpty;
 
-                                  final index = Get.find<CartController>()
-                                      .addToCartList
-                                      .value
-                                      .indexWhere((element) =>
-                                          element.productId.toString() ==
-                                          product);
-
-                                  if (product == currentItem.id.toString()) {
-                                    if (index < 0) {
+                                if (contain) {
+                                  if (Get.isSnackbarOpen) {
+                                    Get.closeCurrentSnackbar();
+                                  }
+                                  if (int.parse(
+                                          currentItem.quantity.toString()) >
+                                      0) {
+                                    if (Get.find<CartController>()
+                                        .isRefund
+                                        .isFalse) {
                                       Get.find<CartController>().addToCart(
                                           optionSc: '0',
                                           productId: currentItem.id.toString(),
@@ -228,12 +255,56 @@ class DashboardMain {
                                                   .uniqueId
                                                   .toString());
                                     } else {
-                                      Snack().createSnack(
-                                          title: 'warning',
-                                          msg: 'item exist in cart',
-                                          bgColor: Colors.yellow,
-                                          msgColor: Colors.black,
-                                          titleColor: Colors.black);
+                                      var product = Get.find<CartController>()
+                                          .refundFactorItemList
+                                          .value
+                                          .where((product) =>
+                                              product.productId.toString() ==
+                                              currentItem.id.toString())
+                                          .first
+                                          .productId
+                                          .toString();
+
+                                      final index = Get.find<CartController>()
+                                          .addToCartList
+                                          .value
+                                          .indexWhere((element) =>
+                                              element.productId.toString() ==
+                                              product);
+
+                                      if (product ==
+                                          currentItem.id.toString()) {
+                                        if (index < 0) {
+                                          Get.find<CartController>().addToCart(
+                                              optionSc: '0',
+                                              productId:
+                                                  currentItem.id.toString(),
+                                              price: currentItem.retailPrice
+                                                  .toString(),
+                                              quantity: '1',
+                                              title: currentItem.title,
+                                              titleAr: currentItem.titleAr
+                                                  .toString(),
+                                              tempUniqueId:
+                                                  Get.find<CartController>()
+                                                      .uniqueId
+                                                      .toString());
+                                        } else {
+                                          Snack().createSnack(
+                                              title: 'warning',
+                                              msg: 'item exist in cart',
+                                              bgColor: Colors.yellow,
+                                              msgColor: Colors.black,
+                                              titleColor: Colors.black);
+                                        }
+                                      } else {
+                                        Snack().createSnack(
+                                            title: 'warning',
+                                            msg: 'No enough quantity',
+                                            bgColor: Colors.yellow,
+                                            msgColor: Colors.black,
+                                            titleColor: Colors.black);
+                                      }
                                     }
                                   } else {
                                     Snack().createSnack(
@@ -243,84 +314,80 @@ class DashboardMain {
                                         msgColor: Colors.black,
                                         titleColor: Colors.black);
                                   }
+                                } else {
+                                  Snack().createSnack(
+                                      title: '',
+                                      msg:
+                                          'this item already exist in your cart',
+                                      bgColor: Colors.yellow,
+                                      msgColor: Colors.black,
+                                      icon: const Icon(
+                                        Icons.check,
+                                        color: Colors.white,
+                                      ));
                                 }
                               } else {
-                                Snack().createSnack(
-                                    title: 'warning',
-                                    msg: 'No enough quantity',
-                                    bgColor: Colors.yellow,
-                                    msgColor: Colors.black,
-                                    titleColor: Colors.black);
-                              }
-                            } else {
-                              // Fluttertoast.showToast(
-                              //     msg:
-                              //         "this item already exist in your cart", // message
-                              //     toastLength: Toast.LENGTH_SHORT, // length
-                              //     gravity: ToastGravity.CENTER, // location
-                              //     webPosition: 'center',
-                              //     timeInSecForIosWeb: 2 // duration
-                              //     );
-                              Snack().createSnack(
-                                  title: '',
-                                  msg: 'this item already exist in your cart',
-                                  bgColor: Colors.yellow,
-                                  msgColor: Colors.black,
-                                  icon: const Icon(
-                                    Icons.check,
-                                    color: Colors.white,
-                                  ));
-                            }
-                          } else {
-                            bool contain = Get.find<CartController>()
-                                .addToCartList
-                                .value
-                                .where((element) =>
-                                    element.productId.toString() ==
-                                    currentItem.id.toString())
-                                .isEmpty;
-                            if (contain) {
-                              if (int.parse(currentItem.quantity.toString()) >
-                                  0) {
-                                if (Get.find<CartController>()
-                                    .isRefund
-                                    .isFalse) {
-                                  Get.find<ProductController>()
-                                      .getProductDetails(
-                                          productId: currentItem.id.toString(),
-                                          title: currentItem.title);
-                                } else {
-                                  var product = Get.find<CartController>()
-                                      .refundFactorItemList
-                                      .value
-                                      .where((product) =>
-                                          product.productId.toString() ==
-                                          currentItem.id.toString())
-                                      .first
-                                      .productId
-                                      .toString();
-
-                                  final index = Get.find<CartController>()
-                                      .addToCartList
-                                      .value
-                                      .indexWhere((element) =>
-                                          element.productId.toString() ==
-                                          product);
-
-                                  if (product == currentItem.id.toString()) {
-                                    if (index < 0) {
+                                bool contain = Get.find<CartController>()
+                                    .addToCartList
+                                    .value
+                                    .where((element) =>
+                                        element.productId.toString() ==
+                                        currentItem.id.toString())
+                                    .isEmpty;
+                                if (contain) {
+                                  if (int.parse(
+                                          currentItem.quantity.toString()) >
+                                      0) {
+                                    if (Get.find<CartController>()
+                                        .isRefund
+                                        .isFalse) {
                                       Get.find<ProductController>()
                                           .getProductDetails(
                                               productId:
                                                   currentItem.id.toString(),
                                               title: currentItem.title);
                                     } else {
-                                      Snack().createSnack(
-                                          title: 'warning',
-                                          msg: 'item exist in cart',
-                                          bgColor: Colors.yellow,
-                                          msgColor: Colors.black,
-                                          titleColor: Colors.black);
+                                      var product = Get.find<CartController>()
+                                          .refundFactorItemList
+                                          .value
+                                          .where((product) =>
+                                              product.productId.toString() ==
+                                              currentItem.id.toString())
+                                          .first
+                                          .productId
+                                          .toString();
+
+                                      final index = Get.find<CartController>()
+                                          .addToCartList
+                                          .value
+                                          .indexWhere((element) =>
+                                              element.productId.toString() ==
+                                              product);
+
+                                      if (product ==
+                                          currentItem.id.toString()) {
+                                        if (index < 0) {
+                                          Get.find<ProductController>()
+                                              .getProductDetails(
+                                                  productId:
+                                                      currentItem.id.toString(),
+                                                  title: currentItem.title);
+                                        } else {
+                                          Snack().createSnack(
+                                              title: 'warning',
+                                              msg: 'item exist in cart',
+                                              bgColor: Colors.yellow,
+                                              msgColor: Colors.black,
+                                              titleColor: Colors.black);
+                                        }
+                                      } else {
+                                        Snack().createSnack(
+                                            title: 'warning',
+                                            msg: 'No enough quantity',
+                                            bgColor: Colors.yellow,
+                                            msgColor: Colors.black,
+                                            titleColor: Colors.black);
+                                      }
                                     }
                                   } else {
                                     Snack().createSnack(
@@ -330,36 +397,28 @@ class DashboardMain {
                                         msgColor: Colors.black,
                                         titleColor: Colors.black);
                                   }
+                                } else {
+                                  // Fluttertoast.showToast(
+                                  //     msg:
+                                  //         "this item already exist in your cart", // message
+                                  //     toastLength: Toast.LENGTH_SHORT, // length
+                                  //     gravity: ToastGravity.CENTER, // location
+                                  //     webPosition: 'center',
+                                  //     timeInSecForIosWeb: 2 // duration
+                                  //     );
+                                  Snack().createSnack(
+                                      title: '',
+                                      msg:
+                                          'this item already exist in your cart',
+                                      bgColor: Colors.green,
+                                      msgColor: Colors.black,
+                                      icon: const Icon(
+                                        Icons.check,
+                                        color: Colors.white,
+                                      ));
                                 }
-                              } else {
-                                Snack().createSnack(
-                                    title: 'warning',
-                                    msg: 'No enough quantity',
-                                    bgColor: Colors.yellow,
-                                    msgColor: Colors.black,
-                                    titleColor: Colors.black);
                               }
-                            } else {
-                              // Fluttertoast.showToast(
-                              //     msg:
-                              //         "this item already exist in your cart", // message
-                              //     toastLength: Toast.LENGTH_SHORT, // length
-                              //     gravity: ToastGravity.CENTER, // location
-                              //     webPosition: 'center',
-                              //     timeInSecForIosWeb: 2 // duration
-                              //     );
-                              Snack().createSnack(
-                                  title: '',
-                                  msg: 'this item already exist in your cart',
-                                  bgColor: Colors.green,
-                                  msgColor: Colors.black,
-                                  icon: const Icon(
-                                    Icons.check,
-                                    color: Colors.white,
-                                  ));
-                            }
-                          }
-                        },
+                            },
                   child: Container(
                     decoration: BoxDecoration(
                         border: Border.all(
@@ -385,13 +444,48 @@ class DashboardMain {
                           height: 10,
                         ),
                         CustomText().createText(
-                            title: currentItem.retailPrice!.toStringAsFixed(3) +
-                                ' KD',
+                            title: Get.find<CartController>().isRefund.isTrue
+                                ? currentItem.unitPrice!.toStringAsFixed(3)
+                                : currentItem.retailPrice!.toStringAsFixed(3) +
+                                    ' KD',
                             fontWeight: FontWeight.bold,
                             size: 14),
                         const SizedBox(
                           height: 10,
                         ),
+                        Get.find<CartController>().isRefund.isTrue
+                            ? currentItem.itemOptionsList.isNotEmpty
+                                ? ListView.builder(
+                                    shrinkWrap: true,
+                                    itemCount:
+                                        currentItem.itemOptionsList.length,
+                                    physics:
+                                        const NeverScrollableScrollPhysics(),
+                                    itemBuilder: (BuildContext ctx, int i) {
+                                      var current =
+                                          currentItem.itemOptionsList[i];
+                                      return Column(
+                                        children: [
+                                          Row(
+                                            children: [
+                                              CustomText().createText(
+                                                  title: '${current.type}: ',
+                                                  fontWeight: FontWeight.normal,
+                                                  size: 13),
+                                              CustomText().createText(
+                                                  title: current.name,
+                                                  fontWeight: FontWeight.normal,
+                                                  size: 13),
+                                            ],
+                                          ),
+                                          const SizedBox(
+                                            height: 2,
+                                          ),
+                                        ],
+                                      );
+                                    })
+                                : const SizedBox()
+                            : const SizedBox()
                       ],
                     ),
                   ),

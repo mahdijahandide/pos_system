@@ -52,6 +52,8 @@ class ProductController extends GetxController {
       dynamic openModal,
       dynamic openModalTap,
       dynamic title}) async {
+    productList.value.clear();
+    update();
     var url = PRODUCTS_BY_CATEGORIES_ROUTE;
     final http.Response response = await http.post(Uri.parse(url),
         headers: <String, String>{
@@ -90,9 +92,6 @@ class ProductController extends GetxController {
           ),
         );
       } else {
-        if (productArray.length > 0) {
-          productList.value.clear();
-        }
         productArray.forEach((element) {
           productList.value.add((ProductModel(data: element)));
         });

@@ -7,6 +7,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'dart:convert' as convert;
 import 'package:http/http.dart' as http;
+import 'package:pos_system/services/controller/product_controller.dart';
 import 'package:pos_system/services/controller/user_controller.dart';
 import 'package:pos_system/services/model/cart_product_model.dart';
 import 'package:pos_system/services/model/province_model.dart';
@@ -106,6 +107,17 @@ class CartController extends GetxController {
       audioPlayer.play(alarmAudioPath);
 
       var jsonObject = convert.jsonDecode(response.body);
+
+      if (isRefund.isTrue) {
+        if (addToCartList.value.isEmpty) {
+          discountAmount = 0.0;
+        }
+        discountAmount = discountAmount +
+            (double.parse(price.toString()) * int.parse(quantity.toString())) *
+                double.parse(
+                    Get.find<OrderController>().discountNesbat.toString());
+      }
+
       addToCartList.value.add(CartProductModel(
           mId: jsonObject['data']['cart_item_id'],
           mPrice: price,
@@ -167,6 +179,10 @@ class CartController extends GetxController {
       }
       totalAmount = double.parse(jsonObject['data']['total_amount'].toString());
 
+      if (isRefund.isTrue) {
+        discountAmount = calculateRefundDiscount();
+      }
+
       Get.back(closeOverlays: true);
       update();
     } else {
@@ -210,6 +226,9 @@ class CartController extends GetxController {
       if (addToCartList.value.isEmpty) {
         discountAmount = 0.0;
         deliveryAmount = 0.0;
+      }
+      if (isRefund.isTrue) {
+        discountAmount = calculateRefundDiscount();
       }
       update();
     } else {
@@ -434,7 +453,7 @@ class CartController extends GetxController {
           'transactions': [
             {
               'type': selectedPaymentType.value,
-              'amount': calController.text,
+              'amount': (totalAmount - discountAmount).toString()
             }
           ]
         }));
@@ -448,6 +467,8 @@ class CartController extends GetxController {
       discountAmount = 0.0;
       uniqueId = 'pos${Xid()}';
       isRefund.value = false;
+      Get.find<ProductController>().productList.value.clear();
+      Get.find<ProductController>().getAllProducts(catId: '', keyword: '');
 
       Get.find<OrderController>().orderList.value.clear();
       Get.find<OrderController>().orderFilteredList.value.clear();
@@ -493,7 +514,7 @@ class CartController extends GetxController {
           'transactions': [
             {
               'type': selectedPaymentType.value,
-              'amount': calController.text,
+              'amount': (totalAmount - discountAmount).toString(),
             }
           ]
         }));
@@ -507,6 +528,8 @@ class CartController extends GetxController {
       discountAmount = 0.0;
       uniqueId = 'pos${Xid()}';
       isRefund.value = false;
+      Get.find<ProductController>().productList.value.clear();
+      Get.find<ProductController>().getAllProducts(catId: '', keyword: '');
 
       Get.find<OrderController>().orderList.value.clear();
       Get.find<OrderController>().orderFilteredList.value.clear();
@@ -591,6 +614,7 @@ class CartController extends GetxController {
       addToCartList.value.clear();
       update();
     }
+
     totalAmount = 0.0;
     discountAmount = 0.0;
     uniqueId = 'pos${Xid()}';
@@ -635,7 +659,7 @@ class CartController extends GetxController {
   }
 
   Future<Uint8List> generatePdf() async {
-    // final ttf = await fontFromAssetBundle('assets/fonts/pelak.ttf');
+    final gf = await PdfGoogleFonts.notoSansArabicBlack();
     var coData = Get.find<AuthController>().coDetails;
     final pdf = pw.Document(
       version: PdfVersion.pdf_1_5,
@@ -751,9 +775,9 @@ class CartController extends GetxController {
                                         style: const pw.TextStyle(fontSize: 20),
                                         overflow: pw.TextOverflow.clip,
                                       ),
-                                      pw.Text(currentItem.titleAr.toString(),
+                                      pw.Text(currentItem.titleAr.toString(),textDirection: pw.TextDirection.rtl,
                                           style:
-                                              const pw.TextStyle(fontSize: 20)),
+                                               pw.TextStyle(font: gf)),
                                     ])),
                             pw.Expanded(
                                 flex: 1,
@@ -838,5 +862,20 @@ class CartController extends GetxController {
     );
 
     return pdf.save();
+  }
+
+  double calculateRefundDiscount() {
+    double discount = 0.0;
+    discountAmount = 0.0;
+    double total = 0.0;
+    if (isRefund.isTrue) {
+      for (int i = 0; i < addToCartList.value.length; i++) {
+        discount = (double.parse(addToCartList.value[i].price.toString()) *
+                int.parse(addToCartList.value[i].quantity.toString())) *
+            double.parse(Get.find<OrderController>().discountNesbat.toString());
+        total = total + discount;
+      }
+    }
+    return total;
   }
 }

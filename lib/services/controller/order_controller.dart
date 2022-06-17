@@ -3,9 +3,11 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pos_system/services/controller/cart_controller.dart';
+import 'package:pos_system/services/controller/product_controller.dart';
 import 'package:pos_system/services/model/cart_product_model.dart';
 import 'package:pos_system/services/model/order_item_model.dart';
 import 'package:pos_system/services/model/order_model.dart';
+import 'package:pos_system/services/model/product_model.dart';
 import 'package:pos_system/services/remotes/api_routes.dart';
 import 'package:pos_system/views/pages/largePages/saleHistory/order_items_modal.dart';
 
@@ -25,6 +27,10 @@ class OrderController extends GetxController {
   RxString selectedFilteredDate = ''.obs;
 
   late OrderModel selectedItem;
+
+  double orderRefundSellerDiscount = 0.0;
+  double orderRefundTotalAmount = 0.0;
+  double orderRefundDeliveryAmount = 0.0;
 
   RxBool hasList = false.obs;
 
@@ -56,18 +62,12 @@ class OrderController extends GetxController {
           Get.find<CartController>().isRefund.value =
               !Get.find<CartController>().isRefund.value;
           Get.find<CartController>().refundFactorItemList.value.clear();
+          Get.find<ProductController>().productList.value.clear();
+          Get.find<ProductController>().update();
           getOrderProducts(id: jsonObject['data']['orders'][0]['id']);
 
           Get.find<CartController>().newSale(canTemp: true);
           Get.find<CartController>().update();
-          discountNesbat = double.parse(
-                  jsonObject['data']['details']['seller_discount'].toString()) /
-              (double.parse(jsonObject['data']['details']['total_amount']
-                      .toString()) -
-                  double.parse(jsonObject['data']['details']['delivery_charges']
-                      .toString()) +
-                  double.parse(jsonObject['data']['details']['seller_discount']
-                      .toString()));
         } else {
           Get.back();
           Snack().createSnack(
@@ -105,7 +105,7 @@ class OrderController extends GetxController {
         }));
     if (response.statusCode == 200) {
       var jsonObject = convert.jsonDecode(response.body);
-      Get.log(jsonObject.toString());
+
       if (Get.find<CartController>().isRefund.isFalse) {
         jsonObject['data']['orderItems'].forEach((element) {
           orderItemsList.add(OrderItemsModel(data: element));
@@ -131,6 +131,29 @@ class OrderController extends GetxController {
           ),
         );
       } else {
+        Get.find<CartController>().refundFactorItemList.value.clear();
+        Get.find<ProductController>().productList.value.clear();
+        orderRefundTotalAmount = double.parse(
+            jsonObject['data']['details']['total_amount'].toString());
+
+        if (jsonObject['data']['details']['delivery_charges'].toString() !=
+            'null') {
+          orderRefundDeliveryAmount = double.parse(
+              jsonObject['data']['details']['delivery_charges'].toString());
+        }
+
+        if (jsonObject['data']['details']['seller_discount'].toString() !=
+            'null') {
+          orderRefundSellerDiscount = double.parse(
+              jsonObject['data']['details']['seller_discount'].toString());
+
+          discountNesbat = orderRefundSellerDiscount /
+              (orderRefundTotalAmount -
+                  orderRefundDeliveryAmount +
+                  orderRefundSellerDiscount);
+          Get.find<CartController>().discountAmount = orderRefundSellerDiscount;
+        }
+
         jsonObject['data']['orderItems'].forEach((element) {
           Get.find<CartController>().refundFactorItemList.value.add(
               CartProductModel(
@@ -141,8 +164,16 @@ class OrderController extends GetxController {
                   mTitle: element['translate']['en'].toString(),
                   mTitleAr: element['translate']['ar'].toString(),
                   mTempUniqueId: ''));
+
+          Get.find<ProductController>()
+              .productList
+              .value
+              .add(ProductModel(data: element));
+          Get.find<ProductController>().update();
+
           Get.back(closeOverlays: true);
           if (showModal == true) {
+            orderItemsList.clear();
             selectedItem = current;
             jsonObject['data']['orderItems'].forEach((element) {
               orderItemsList.add(OrderItemsModel(data: element));
@@ -167,6 +198,9 @@ class OrderController extends GetxController {
             );
           }
         });
+        Get.find<CartController>().totalAmount =
+            orderRefundTotalAmount + orderRefundSellerDiscount;
+        // Get.find<CartController>().deliveryAmount = orderRefundDeliveryAmount;
       }
     } else {
       Get.back();

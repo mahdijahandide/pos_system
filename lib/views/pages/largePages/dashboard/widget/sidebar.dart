@@ -327,9 +327,18 @@ class DashboardSidebar {
                       icon: Icons.remove,
                       title: 'discount'.tr,
                       onTap: () {
-                        DiscountDialog.showCustomDialog(
-                          title: 'Enter Discount Amount',
-                        );
+                        if (controller.isRefund.isFalse) {
+                          DiscountDialog.showCustomDialog(
+                            title: 'Enter Discount Amount',
+                          );
+                        } else {
+                          Snack().createSnack(
+                              title: 'warning',
+                              msg: 'can not using this option on refund mode',
+                              bgColor: Colors.yellow,
+                              msgColor: Colors.black,
+                              titleColor: Colors.black);
+                        }
                       }),
                 ),
                 const SizedBox(
@@ -353,15 +362,24 @@ class DashboardSidebar {
                       icon: Icons.person,
                       title: 'customer'.tr,
                       onTap: () {
-                        if (Get.find<CustomerController>()
-                            .customerList
-                            .isNotEmpty) {
-                          CustomerAutoCompleteDialog.showCustomDialog(
-                              title: 'Customer',
-                              list:
-                                  Get.find<CustomerController>().customerName);
+                        if (controller.isRefund.isFalse) {
+                          if (Get.find<CustomerController>()
+                              .customerList
+                              .isNotEmpty) {
+                            CustomerAutoCompleteDialog.showCustomDialog(
+                                title: 'Customer',
+                                list: Get.find<CustomerController>()
+                                    .customerName);
+                          } else {
+                            Get.find<CustomerController>().getCustomers();
+                          }
                         } else {
-                          Get.find<CustomerController>().getCustomers();
+                          Snack().createSnack(
+                              title: 'warning',
+                              msg: 'can not using this option on refund mode',
+                              bgColor: Colors.yellow,
+                              msgColor: Colors.black,
+                              titleColor: Colors.black);
                         }
                       }),
                 ),
@@ -472,11 +490,22 @@ class DashboardSidebar {
                       icon: Icons.delivery_dining,
                       title: 'delivery'.tr,
                       onTap: () {
-                        if (Get.find<CartController>().countryList.isNotEmpty) {
-                          AreaProvinceDialog.showCustomDialog(
-                              title: 'Province & Areas');
+                        if (controller.isRefund.isFalse) {
+                          if (Get.find<CartController>()
+                              .countryList
+                              .isNotEmpty) {
+                            AreaProvinceDialog.showCustomDialog(
+                                title: 'Province & Areas');
+                          } else {
+                            Get.find<CartController>().getAreas();
+                          }
                         } else {
-                          Get.find<CartController>().getAreas();
+                          Snack().createSnack(
+                              title: 'warning',
+                              msg: 'can not using this option on refund mode',
+                              bgColor: Colors.yellow,
+                              msgColor: Colors.black,
+                              titleColor: Colors.black);
                         }
                       }),
                 ),
