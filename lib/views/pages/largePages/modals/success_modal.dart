@@ -51,8 +51,7 @@ class SuccessModal extends GetView<CartController> {
               CustomText().createText(
                   title: controller.balanceStatus.value == ''
                       ? 'change: 0.000'
-                      : double.parse(controller.balanceStatus.value.toString())
-                          .toStringAsFixed(3),
+                      :controller.balanceStatus.value,
                   fontWeight: FontWeight.bold,
                   size: 22,
                   color: Colors.green),

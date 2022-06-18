@@ -19,7 +19,7 @@ class CashInOut extends GetView<CashController> {
           leading: IconButton(
             icon: const Icon(Icons.arrow_back_ios),
             onPressed: () {
-              Get.toNamed('/dashboard', preventDuplicates: false);
+              Get.offNamed('/dashboard', preventDuplicates: false);
             },
           ),
           centerTitle: true,

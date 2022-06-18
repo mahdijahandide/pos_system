@@ -259,8 +259,9 @@ class CheckoutModal extends GetView<CartController> {
                           width: 200,
                           child: CustomText().createText(
                               title: (controller.totalAmount -
-                                      controller.discountAmount +
-                                      controller.deliveryAmount)
+                                      controller.discountAmount 
+                                  + controller.deliveryAmount
+                              )
                                   .toStringAsFixed(3),
                               size: 26,
                               fontWeight: FontWeight.bold),
@@ -271,9 +272,7 @@ class CheckoutModal extends GetView<CartController> {
                         CustomText().createText(
                             title: controller.balanceStatus.value == ''
                                 ? ''
-                                : double.parse(controller.balanceStatus.value
-                                        .toString())
-                                    .toStringAsFixed(3),
+                                : controller.balanceStatus.value,
                             size: 18,
                             fontWeight: FontWeight.bold,
                             color: controller.calController.text == ''
@@ -329,14 +328,14 @@ class CheckoutModal extends GetView<CartController> {
                                       0) {
                                     controller.checkoutCart();
                                     controller.balanceStatus.value =
-                                        'Change: ${double.parse(controller.calController.text.toString()) - double.parse(total.toString())}';
+                                        'Change: ${(double.parse(controller.calController.text.toString()) - double.parse(total.toString())).toStringAsFixed(3)}';
                                   } else if (double.parse(controller
                                               .calController.text
                                               .toString()) -
                                           double.parse(total) <
                                       0) {
                                     controller.balanceStatus.value =
-                                        'Balance: ${double.parse(controller.calController.text.toString()) - double.parse(total)}';
+                                        'Balance: ${(double.parse(controller.calController.text.toString()) - double.parse(total)).toStringAsFixed(3)}';
                                   }
                                 }),
                           ),
@@ -373,14 +372,14 @@ class CheckoutModal extends GetView<CartController> {
                                       0) {
                                     controller.checkoutCart();
                                     controller.balanceStatus.value =
-                                        'Change: ${double.parse(controller.calController.text.toString()) - double.parse(total)}';
+                                        'Change: ${(double.parse(controller.calController.text.toString()) - double.parse(total)).toStringAsFixed(3)}';
                                   } else if (double.parse(controller
                                               .calController.text
                                               .toString()) -
                                           double.parse(total) <
                                       0) {
                                     controller.balanceStatus.value =
-                                        'Balance: ${double.parse(controller.calController.text.toString()) - double.parse(total)}';
+                                        'Balance: ${(double.parse(controller.calController.text.toString()) - double.parse(total)).toStringAsFixed(3)}';
                                   }
                                 },
                                 buttonText: 'Accept payment',

@@ -34,7 +34,16 @@ class DashboardDrawer {
             title: CustomText().createText(title: 'View Sales history'),
             onTap: () {
               //Get.find<OrderController>().getOrders();
-              Get.toNamed('/saleHistory');
+              if (Get.find<CartController>().isRefund.isFalse) {
+                Get.toNamed('/saleHistory');
+              }else {
+                Snack().createSnack(
+                    title: 'warning',
+                    msg: 'can not using this option on refund mode',
+                    bgColor: Colors.yellow,
+                    msgColor: Colors.black,
+                    titleColor: Colors.black);
+              }
             },
           ),
           ListTile(

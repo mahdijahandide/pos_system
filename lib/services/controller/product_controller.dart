@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pos_system/services/controller/auth_controller.dart';
+import 'package:pos_system/services/controller/dashboard_controller.dart';
 import 'package:pos_system/services/model/product_color_model.dart';
 import 'package:pos_system/services/model/product_model.dart';
 import 'dart:convert' as convert;
@@ -52,8 +53,15 @@ class ProductController extends GetxController {
       dynamic openModal,
       dynamic openModalTap,
       dynamic title}) async {
-    productList.value.clear();
-    update();
+    if(openModal!=true){
+      productList.value.clear();
+      update();
+    }
+    if(Get.find<DashboardController>().isShowKeyboard.isTrue){Get.find<DashboardController>().isShowKeyboard.value=false;
+    Get.find<DashboardController>().update();
+    }
+    Get.find<DashboardController>().searchController.text='';
+
     var url = PRODUCTS_BY_CATEGORIES_ROUTE;
     final http.Response response = await http.post(Uri.parse(url),
         headers: <String, String>{

@@ -80,9 +80,7 @@ class RefundModal extends GetView<CartController> {
                         CustomText().createText(
                             title: controller.balanceStatus.value == ''
                                 ? ''
-                                : double.parse(controller.balanceStatus.value
-                                        .toString())
-                                    .toStringAsFixed(3),
+                                : controller.balanceStatus.value,
                             size: 18,
                             fontWeight: FontWeight.bold,
                             color: controller.balanceStatus.value == ''
@@ -91,7 +89,7 @@ class RefundModal extends GetView<CartController> {
                                                 .toString()) -
                                             double.parse((controller
                                                         .totalAmount +
-                                                    controller.discountAmount +
+                                                    controller.discountAmount -
                                                     controller.deliveryAmount)
                                                 .toString()) <
                                         0
@@ -261,12 +259,12 @@ class RefundModal extends GetView<CartController> {
           ? controller.refundCartRequest()
           : controller.refundCartItemRequest();
       controller.balanceStatus.value =
-          'Change: ${double.parse(controller.calController.text.toString()) - double.parse(total)}';
+          'Change: ${(double.parse(controller.calController.text.toString()) - double.parse(total)).toStringAsFixed(3)}';
     } else if (double.parse(controller.calController.text.toString()) -
             double.parse(total) <
         0) {
       controller.balanceStatus.value =
-          'Balance: ${double.parse(controller.calController.text.toString()) - double.parse(total)}';
+          'Balance: ${(double.parse(controller.calController.text.toString()) - double.parse(total)).toStringAsFixed(3)}';
     }
   }
 }

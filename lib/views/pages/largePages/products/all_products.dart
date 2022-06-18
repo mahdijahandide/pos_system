@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:pos_system/services/controller/dashboard_controller.dart';
 import 'package:pos_system/views/pages/largePages/dashboard/widget/dashboard_main.dart';
 import 'package:responsive_builder/responsive_builder.dart';
+import 'package:vk/vk.dart';
 import '../../../components/texts/customText.dart';
 
 class AllProduct extends StatelessWidget {
@@ -41,6 +42,21 @@ class AllProduct extends StatelessWidget {
               watch: Container(color: Colors.white),
             )),
       ),
+        bottomNavigationBar: Obx(
+              () => Get.find<DashboardController>().isShowKeyboard.isTrue
+              ? Container(
+            color: const Color(0xffeeeeee),
+            child: VirtualKeyboard(
+                focusNode: FocusNode(),
+                textColor: Colors.black,
+                type: Get.find<DashboardController>().isNumericMode
+                    ? VirtualKeyboardType.Numeric
+                    : VirtualKeyboardType.Alphanumeric,
+                textController:
+                Get.find<DashboardController>().searchController),
+          )
+              : const SizedBox(),
+        )
     );
   }
 

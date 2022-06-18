@@ -602,13 +602,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.2"
-  virtual_keyboard_flutter:
-    dependency: "direct main"
-    description:
-      name: virtual_keyboard_flutter
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.0.0"
   vk:
     dependency: "direct main"
     description:

@@ -56,8 +56,10 @@ class OrderController extends GetxController {
       if (reqStatus == 'refund') {
         if (jsonObject['data']['orders'][0]['order_status'].toString() ==
             'completed') {
+          double delivery=jsonObject['data']['orders'][0]['delivery_charges']??0.0;
           Get.find<CartController>().refundCartTotalPrice =
-              jsonObject['data']['orders'][0]['total_amount'].toString();
+          (double.parse(jsonObject['data']['orders'][0]['total_amount'].toString())-
+              delivery).toString();
           // Get.find<CartController>().discountAmount=jsonObject
           Get.find<CartController>().isRefund.value =
               !Get.find<CartController>().isRefund.value;
@@ -204,9 +206,9 @@ class OrderController extends GetxController {
             );
           }
         });
+        Get.find<CartController>().deliveryAmount = orderRefundDeliveryAmount;
         Get.find<CartController>().totalAmount =
-            orderRefundTotalAmount + orderRefundSellerDiscount;
-        // Get.find<CartController>().deliveryAmount = orderRefundDeliveryAmount;
+            orderRefundTotalAmount + orderRefundSellerDiscount-orderRefundDeliveryAmount;
       }
     } else {
       Get.back();

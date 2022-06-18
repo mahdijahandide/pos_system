@@ -19,7 +19,7 @@ class Customer extends GetView<CustomerController> {
           leading: IconButton(
             icon: const Icon(Icons.arrow_back_ios),
             onPressed: () {
-              Get.toNamed('/dashboard', preventDuplicates: false);
+              Get.offNamed('/dashboard', preventDuplicates: false);
             },
           ),
           centerTitle: true,

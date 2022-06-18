@@ -309,8 +309,8 @@ class DashboardSidebar {
             ),
             keyValText(
                 title: 'total'.tr,
-                value: (Get.find<CartController>().totalAmount +
-                        Get.find<CartController>().deliveryAmount -
+                value: (Get.find<CartController>().totalAmount -
+
                         Get.find<CartController>().discountAmount)
                     .toStringAsFixed(3),
                 keyWeight: FontWeight.bold,
@@ -406,10 +406,9 @@ class DashboardSidebar {
                                   ? CheckoutModal(title: 'Checkout')
                                   : RefundModal(
                                       title: 'Refund',
-                                      total: (controller.totalAmount -
-                                              controller.discountAmount +
-                                              controller.deliveryAmount)
-                                          .toString(),
+                                      total: (Get.find<CartController>().totalAmount -
+                                          Get.find<CartController>().discountAmount)
+                                          .toStringAsFixed(3),
                                       isWholeCart: controller
                                               .addToCartList.value.isNotEmpty
                                           ? false
@@ -428,7 +427,9 @@ class DashboardSidebar {
                             Get.bottomSheet(
                               RefundModal(
                                 title: 'Refund',
-                                total: controller.refundCartTotalPrice,
+                                total: (Get.find<CartController>().totalAmount -
+                                    Get.find<CartController>().discountAmount)
+                                    .toStringAsFixed(3),
                                 isWholeCart: true,
                               ),
                               isScrollControlled: true,

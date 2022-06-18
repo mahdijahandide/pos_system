@@ -194,6 +194,7 @@ class AreaProvinceDialog {
                 areaId: Get.find<CartController>().selectedAreaId.toString(),
                 userDiscount:
                     Get.find<CartController>().discountAmount.toString());
+            Get.find<CartController>().saveCartForSecondMonitor();
           },
           child: Container(
               width: 110,
