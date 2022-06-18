@@ -30,10 +30,13 @@ class TextFieldSearch extends StatefulWidget {
   /// The minimum length of characters to be entered into the TextField before executing a search
   final int minStringLength;
 
+  final FocusNode focusNode;
+
   /// Creates a TextFieldSearch for displaying selected elements and retrieving a selected element
   const TextFieldSearch(
       {Key? key,
       this.initialList,
+      required this.focusNode,
       required this.label,
       required this.controller,
       required this.hasKeyboard,
@@ -51,7 +54,7 @@ class TextFieldSearch extends StatefulWidget {
 class _TextFieldSearchState extends State<TextFieldSearch> {
   late OverlayEntry _overlayEntry;
 
-  FocusNode _focusNode = FocusNode();
+  // FocusNode _focusNode = FocusNode();
 
   final LayerLink _layerLink = LayerLink();
   List? filteredList = <StringWithString>[];
@@ -143,6 +146,7 @@ class _TextFieldSearchState extends State<TextFieldSearch> {
   }
 
   void updateList() {
+    // widget.focusNode.requestFocus();
     setLoading();
     // set the filtered list using the initial list
     filteredList = widget.initialList;
@@ -171,6 +175,9 @@ class _TextFieldSearchState extends State<TextFieldSearch> {
   @override
   void initState() {
     super.initState();
+    Timer? _timer;
+    _timer =
+        Timer.periodic(const Duration(seconds: 1), (Timer t) => updateList());
 
     // throw error if we don't have an initial list or a future
     if (widget.initialList == null && widget.future == null) {
@@ -183,8 +190,8 @@ class _TextFieldSearchState extends State<TextFieldSearch> {
     }
     // add event listener to the focus node and only give an overlay if an entry
     // has focus and insert the overlay into Overlay context otherwise remove it
-    _focusNode.addListener(() {
-      if (_focusNode.hasFocus) {
+    widget.focusNode.addListener(() {
+      if (widget.focusNode.hasFocus) {
         _overlayEntry = _createOverlayEntry();
         Overlay.of(context)!.insert(_overlayEntry);
       } else {
@@ -207,7 +214,7 @@ class _TextFieldSearchState extends State<TextFieldSearch> {
           } else {
             textMatchesItem = filteredList!.contains(widget.controller.text);
           }
-          if (textMatchesItem == false) widget.controller.clear();
+          //if (textMatchesItem == false) widget.controller.clear();
           resetList();
         }
       }
@@ -363,7 +370,7 @@ class _TextFieldSearchState extends State<TextFieldSearch> {
         children: [
           TextField(
             controller: widget.controller,
-            focusNode: _focusNode,
+            focusNode: widget.focusNode,
             decoration:
                 widget.decoration ?? InputDecoration(labelText: widget.label),
             style: widget.textStyle,

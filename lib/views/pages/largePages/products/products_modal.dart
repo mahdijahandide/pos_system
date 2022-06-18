@@ -110,10 +110,10 @@ class ProductsModal extends StatelessWidget {
                               //     timeInSecForIosWeb: 2 // duration
                               //     );
                               Snack().createSnack(
-                                  title: '',
+                                  title: 'warning',
                                   msg: 'this item already exist in your cart',
                                   bgColor: Colors.green,
-                                  msgColor: Colors.black,
+                                  msgColor: Colors.black,titleColor: Colors.black,
                                   icon: const Icon(
                                     Icons.check,
                                     color: Colors.white,
@@ -142,10 +142,10 @@ class ProductsModal extends StatelessWidget {
                               //     timeInSecForIosWeb: 2 // duration
                               //     );
                               Snack().createSnack(
-                                  title: '',
+                                  title: 'warning',
                                   msg: 'this item already exist in your cart',
                                   bgColor: Colors.green,
-                                  msgColor: Colors.black,
+                                  msgColor: Colors.black,titleColor: Colors.black,
                                   icon: const Icon(
                                     Icons.check,
                                     color: Colors.white,

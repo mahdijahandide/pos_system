@@ -26,6 +26,7 @@ class CustomerAutoCompleteDialog {
         return Column(
           children: [
             TextFieldSearch(
+                focusNode: focusNode,
                 hasKeyboard: true,
                 initialList: list,
                 label: 'Customer Name',
@@ -35,6 +36,7 @@ class CustomerAutoCompleteDialog {
               margin: const EdgeInsets.only(top: 10),
               color: const Color(0xffeeeeee),
               child: VirtualKeyboard(
+                focusNode: focusNode,
                 textColor: Colors.black,
                 type: VirtualKeyboardType.Alphanumeric,
                 textController: customerController,

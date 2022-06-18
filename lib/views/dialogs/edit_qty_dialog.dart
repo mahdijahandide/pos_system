@@ -54,8 +54,8 @@ class EditQtyDialog {
                           .toString())) {
                     Snack().createSnack(
                         title:
-                            'selected quantity is bigger than existed item quantity',
-                        msg: '',
+                            'warning',
+                        msg: 'selected quantity is bigger than existed item quantity',
                         bgColor: Colors.yellow,
                         msgColor: Colors.black,
                         titleColor: Colors.black);
@@ -75,6 +75,7 @@ class EditQtyDialog {
               Container(
                 color: const Color(0xffeeeeee),
                 child: VirtualKeyboard(
+                  focusNode: FocusNode(),
                   textColor: Colors.black,
                   type: VirtualKeyboardType.Numeric,
                   textController: qtyController,
@@ -104,8 +105,8 @@ class EditQtyDialog {
                   .quantity
                   .toString())) {
             Snack().createSnack(
-                title: 'selected quantity is bigger than existed item quantity',
-                msg: '',
+                title: 'warning',
+                msg: 'selected quantity is bigger than existed item quantity',
                 bgColor: Colors.yellow,
                 msgColor: Colors.black,
                 titleColor: Colors.black);

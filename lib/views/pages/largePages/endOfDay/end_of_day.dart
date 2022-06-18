@@ -22,10 +22,16 @@ class EndOfDay extends GetView<ShiftController> {
     controller.shiftDetailsRequest();
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios),
+          onPressed: () {
+            Get.toNamed('/dashboard', preventDuplicates: false);
+          },
+        ),
         centerTitle: true,
         backgroundColor: Colors.grey.withOpacity(0.5),
         title: CustomText().createText(
-            title: 'EndOfDay'.tr, size: 18, fontWeight: FontWeight.bold),
+            title: 'Start/End shift', size: 18, fontWeight: FontWeight.bold),
         actions: [
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 12),
@@ -175,6 +181,7 @@ class EndOfDay extends GetView<ShiftController> {
                                     Container(
                                       color: const Color(0xffeeeeee),
                                       child: VirtualKeyboard(
+                                        focusNode: FocusNode(),
                                         textColor: Colors.black,
                                         type: VirtualKeyboardType.Numeric,
                                         textController:
@@ -393,7 +400,6 @@ class EndOfDay extends GetView<ShiftController> {
                                                       const Color(0xffdcdcdc)),
                                               color: Colors.white),
                                           child: CalculatorTextField(
-                                            
                                             textAlign: TextAlign.end,
                                             operatorButtonColor: Colors.teal,
                                             title: 'Card count',

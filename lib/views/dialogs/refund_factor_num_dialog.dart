@@ -56,6 +56,7 @@ class RefundFactorNumDialog {
               Container(
                 color: const Color(0xffeeeeee),
                 child: VirtualKeyboard(
+                  focusNode: FocusNode(),
                   textColor: Colors.black,
                   type: VirtualKeyboardType.Numeric,
                   textController: controller.refundFactorNumController,

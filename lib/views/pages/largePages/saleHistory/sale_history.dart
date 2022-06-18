@@ -20,6 +20,12 @@ class SaleHistory extends GetView<OrderController> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios),
+          onPressed: () {
+            Get.toNamed('/dashboard', preventDuplicates: false);
+          },
+        ),
         backgroundColor: Colors.grey.withOpacity(0.5),
         title: CustomText().createText(
             title: 'Sale History'.tr, size: 18, fontWeight: FontWeight.bold),
@@ -132,9 +138,9 @@ class SaleHistory extends GetView<OrderController> {
                                       width: 15,
                                     ),
                                     CustomText().createText(
-                                        title:
-                                            currentItem.totalAmount.toString() +
-                                                ' KD',
+                                        title: currentItem.totalAmount!
+                                                .toStringAsFixed(3) +
+                                            ' KD',
                                         size: 22,
                                         fontWeight: FontWeight.bold,
                                         color: Colors.black),

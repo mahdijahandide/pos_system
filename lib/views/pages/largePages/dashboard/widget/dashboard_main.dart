@@ -211,7 +211,7 @@ class DashboardMain {
                                 }
                               } else {
                                 Snack().createSnack(
-                                    title: '',
+                                    title: 'warning',
                                     msg: 'this item already exist in your cart',
                                     bgColor: Colors.yellow,
                                     msgColor: Colors.black,
@@ -316,7 +316,7 @@ class DashboardMain {
                                   }
                                 } else {
                                   Snack().createSnack(
-                                      title: '',
+                                      title: 'warning',
                                       msg:
                                           'this item already exist in your cart',
                                       bgColor: Colors.yellow,
@@ -407,10 +407,10 @@ class DashboardMain {
                                   //     timeInSecForIosWeb: 2 // duration
                                   //     );
                                   Snack().createSnack(
-                                      title: '',
+                                      title: 'warning',
                                       msg:
                                           'this item already exist in your cart',
-                                      bgColor: Colors.green,
+                                      bgColor: Colors.yellow,
                                       msgColor: Colors.black,
                                       icon: const Icon(
                                         Icons.check,

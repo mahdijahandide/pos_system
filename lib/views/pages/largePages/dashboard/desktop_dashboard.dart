@@ -61,7 +61,9 @@ class DesktopDashboard extends StatelessWidget {
                                   title: 'warning',
                                   msg:
                                       'can not using this option on refund mode',
-                                  bgColor: Colors.yellow,msgColor: Colors.black,titleColor: Colors.black);
+                                  bgColor: Colors.yellow,
+                                  msgColor: Colors.black,
+                                  titleColor: Colors.black);
                             }
                           }),
                       const SizedBox(
@@ -183,6 +185,7 @@ class DesktopDashboard extends StatelessWidget {
               ? Container(
                   color: const Color(0xffeeeeee),
                   child: VirtualKeyboard(
+                      focusNode: FocusNode(),
                       textColor: Colors.black,
                       type: Get.find<DashboardController>().isNumericMode
                           ? VirtualKeyboardType.Numeric

@@ -21,7 +21,6 @@ class PrintingHistoryView {
     final pdf = pw.Document();
 
     var coData = Get.find<AuthController>().coDetails;
-    
 
     pdf.addPage(
       pw.Page(
@@ -37,9 +36,9 @@ class PrintingHistoryView {
               pw.Center(child: pw.Text(coData['name_en'])),
               pw.Center(child: pw.Text(coData['address_en'])),
               pw.Row(mainAxisAlignment: pw.MainAxisAlignment.center, children: [
-                pw.Center(child: pw.Text(coData['phone'])),
+                pw.Center(child: pw.Text('Phone: ' + coData['phone'])),
                 pw.SizedBox(width: 50),
-                pw.Center(child: pw.Text(coData['mobile'])),
+                pw.Center(child: pw.Text('Mobile: ' + coData['mobile'])),
               ]),
               pw.Center(child: pw.Text(Get.find<AuthController>().webSite)),
               pw.SizedBox(height: 10),

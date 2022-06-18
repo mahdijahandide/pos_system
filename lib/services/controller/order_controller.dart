@@ -75,6 +75,12 @@ class OrderController extends GetxController {
               msg: 'can not refund this invoice',
               bgColor: Colors.red);
         }
+        if (double.parse(jsonObject['data']['subtotal'].toString()) <= 0) {
+          Snack().createSnack(
+              title: 'warning',
+              msg: 'can not refund this invoice',
+              bgColor: Colors.red);
+        }
         Get.back();
       }
       jsonObject['data']['orders'].forEach((element) {

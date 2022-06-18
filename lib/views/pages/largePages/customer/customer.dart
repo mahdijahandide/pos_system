@@ -16,6 +16,12 @@ class Customer extends GetView<CustomerController> {
 
     return Scaffold(
         appBar: AppBar(
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back_ios),
+            onPressed: () {
+              Get.toNamed('/dashboard', preventDuplicates: false);
+            },
+          ),
           centerTitle: true,
           backgroundColor: Colors.grey.withOpacity(0.5),
           title: CustomText().createText(

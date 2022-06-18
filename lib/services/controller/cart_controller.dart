@@ -132,10 +132,11 @@ class CartController extends GetxController {
 
       Get.back(closeOverlays: true);
       Snack().createSnack(
-          title: '',
+          title: 'done',
           msg: 'item added to cart successfully',
           bgColor: Colors.green,
           msgColor: Colors.black,
+          titleColor: Colors.black,
           icon: const Icon(
             Icons.check,
             color: Colors.white,
@@ -264,6 +265,7 @@ class CartController extends GetxController {
       Get.back(closeOverlays: true);
       discountAmount = 0.0;
       deliveryAmount = 0.0;
+      newSale(canTemp: false);
       update();
     } else {
       Get.back();
@@ -399,21 +401,14 @@ class CartController extends GetxController {
       addToCartList.value.clear();
       newSale();
 
-      // Fluttertoast.showToast(
-      //     msg: isRefund.isFalse
-      //         ? "cart paid successfully"
-      //         : "cart Refund successfully", // message
-      //     toastLength: Toast.LENGTH_SHORT, // length
-      //     gravity: ToastGravity.CENTER, // location
-      //     timeInSecForIosWeb: 2,
-      //     fontSize: 22,
-      //     webPosition: 'center');
       Get.back(closeOverlays: true);
       Snack().createSnack(
-          title: '',
+          title: 'done',
           msg: isRefund.isFalse
               ? 'cart paid successfully'
               : 'cart refund successfully',
+          duration: 2,
+          titleColor: Colors.black,
           bgColor: Colors.green,
           msgColor: Colors.black,
           icon: const Icon(
@@ -475,19 +470,12 @@ class CartController extends GetxController {
       Get.find<OrderController>().orderItemsList.clear();
       Get.find<OrderController>().hasList.value = false;
 
-      // Fluttertoast.showToast(
-      //     msg: "cart Refund successfully", // message
-      //     toastLength: Toast.LENGTH_SHORT, // length
-      //     gravity: ToastGravity.CENTER, // location
-      //     webPosition: 'center',
-      //     timeInSecForIosWeb: 2 // duration
-      //     );
-
       Get.back(closeOverlays: true);
       Snack().createSnack(
-          title: '',
+          title: 'done',
           msg: 'cart refund successfully',
           bgColor: Colors.green,
+          titleColor: Colors.black,
           msgColor: Colors.black,
           icon: const Icon(
             Icons.check,
@@ -537,9 +525,10 @@ class CartController extends GetxController {
       Get.find<OrderController>().hasList.value = false;
       Get.back(closeOverlays: true);
       Snack().createSnack(
-          title: '',
+          title: 'done',
           msg: 'cart item refund successfully',
           bgColor: Colors.green,
+          titleColor: Colors.black,
           msgColor: Colors.black,
           icon: const Icon(
             Icons.check,
@@ -684,11 +673,11 @@ class CartController extends GetxController {
                       style: const pw.TextStyle(fontSize: 20))),
               pw.Row(mainAxisAlignment: pw.MainAxisAlignment.center, children: [
                 pw.Center(
-                    child: pw.Text(coData['phone'],
+                    child: pw.Text('Phone: ' + coData['phone'],
                         style: const pw.TextStyle(fontSize: 20))),
                 pw.SizedBox(width: 50),
                 pw.Center(
-                    child: pw.Text(coData['mobile'],
+                    child: pw.Text('Mobile: ' + coData['mobile'],
                         style: const pw.TextStyle(fontSize: 20))),
               ]),
               pw.Center(
@@ -775,9 +764,9 @@ class CartController extends GetxController {
                                         style: const pw.TextStyle(fontSize: 20),
                                         overflow: pw.TextOverflow.clip,
                                       ),
-                                      pw.Text(currentItem.titleAr.toString(),textDirection: pw.TextDirection.rtl,
-                                          style:
-                                               pw.TextStyle(font: gf)),
+                                      pw.Text(currentItem.titleAr.toString(),
+                                          textDirection: pw.TextDirection.rtl,
+                                          style: pw.TextStyle(font: gf)),
                                     ])),
                             pw.Expanded(
                                 flex: 1,

@@ -9,6 +9,8 @@ import 'package:vk/vk.dart';
 class DesktopLogin extends GetView<AuthController> {
   @override
   Widget build(BuildContext context) {
+    controller.passFocus.value = false;
+    controller.userFocus.value = true;
     return Scaffold(
       body: Obx(() {
         return Center(
@@ -109,19 +111,44 @@ class DesktopLogin extends GetView<AuthController> {
               //     size: 16,
               //     color: Colors.blue),
               const Expanded(child: SizedBox()),
-              Container(
-                color: const Color(0xffeeeeee),
-                child: VirtualKeyboard(
-                    textColor: Colors.black,
-                    type: VirtualKeyboardType.Alphanumeric,
-                    textController: controller.userFocus.isTrue
-                        ? controller.loginControllerUserText
-                        : controller.loginControllerPasswordText),
-              )
+              createUserKeyboard(),
+              createPassKeyboard(),
             ],
           ),
         );
       }),
     );
+  }
+
+  Widget createUserKeyboard() {
+    if (controller.userFocus.isTrue) {
+      return Container(
+        color: const Color(0xffeeeeee),
+        child: VirtualKeyboard(
+          textColor: Colors.black,
+          type: VirtualKeyboardType.Alphanumeric,
+          textController: controller.loginControllerUserText,
+          focusNode: controller.userFocusNode,
+        ),
+      );
+    } else {
+      return const SizedBox();
+    }
+  }
+
+  Widget createPassKeyboard() {
+    if (controller.passFocus.isTrue) {
+      return Container(
+        color: const Color(0xffeeeeee),
+        child: VirtualKeyboard(
+          textColor: Colors.black,
+          type: VirtualKeyboardType.Alphanumeric,
+          textController: controller.loginControllerPasswordText,
+          focusNode: controller.passFocusNode,
+        ),
+      );
+    } else {
+      return const SizedBox();
+    }
   }
 }

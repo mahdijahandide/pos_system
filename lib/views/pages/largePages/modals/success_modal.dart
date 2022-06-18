@@ -50,8 +50,9 @@ class SuccessModal extends GetView<CartController> {
               const Icon(Icons.monetization_on),
               CustomText().createText(
                   title: controller.balanceStatus.value == ''
-                      ? 'change: 0.0'
-                      : controller.balanceStatus.value,
+                      ? 'change: 0.000'
+                      : double.parse(controller.balanceStatus.value.toString())
+                          .toStringAsFixed(3),
                   fontWeight: FontWeight.bold,
                   size: 22,
                   color: Colors.green),

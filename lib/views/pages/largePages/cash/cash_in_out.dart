@@ -16,6 +16,12 @@ class CashInOut extends GetView<CashController> {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back_ios),
+            onPressed: () {
+              Get.toNamed('/dashboard', preventDuplicates: false);
+            },
+          ),
           centerTitle: true,
           backgroundColor: Colors.grey.withOpacity(0.5),
           title: CustomText().createText(

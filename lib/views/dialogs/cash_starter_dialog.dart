@@ -28,20 +28,23 @@ class CashStarterDialog {
             children: [
               CustomTextField().createTextField(
                   hint: 'cash starter value (optional)',
-                  height: 50,keyboardType: TextInputType.number,
+                  height: 50,
+                  keyboardType: TextInputType.number,
                   inputFormatters: <TextInputFormatter>[
                     FilteringTextInputFormatter.digitsOnly
                   ],
                   controller: valController,
-                  onSubmitted: (_)async{
-                    Get.find<ShiftController>().startCashRequest(starterValue: valController.text);
-                  }
-              ),
+                  onSubmitted: (_) async {
+                    Get.find<ShiftController>()
+                        .startCashRequest(starterValue: valController.text);
+                  }),
               Container(
                 color: const Color(0xffeeeeee),
                 child: VirtualKeyboard(
+                  focusNode: FocusNode(),
                   textColor: Colors.black,
-                  type: VirtualKeyboardType.Numeric, textController: valController,
+                  type: VirtualKeyboardType.Numeric,
+                  textController: valController,
                 ),
               ),
             ],
@@ -50,19 +53,24 @@ class CashStarterDialog {
       }),
       contentPadding: const EdgeInsets.all(15),
       confirm: InkWell(
-        onTap: (){
-          Get.find<ShiftController>().startCashRequest(starterValue: valController.text);
+        onTap: () {
+          Get.find<ShiftController>()
+              .startCashRequest(starterValue: valController.text);
         },
         child: Container(
-          width: 90,height: 50,alignment: Alignment.center,
+          width: 90,
+          height: 50,
+          alignment: Alignment.center,
           color: Colors.green.withOpacity(0.2),
           child: CustomText().createText(title: 'Submit', color: Colors.teal),
         ),
       ),
       cancel: InkWell(
-        onTap: ()=>Get.back(),
+        onTap: () => Get.back(),
         child: Container(
-          width: 90,height: 50,alignment: Alignment.center,
+          width: 90,
+          height: 50,
+          alignment: Alignment.center,
           color: Colors.red.withOpacity(0.2),
           child: CustomText().createText(title: 'Cancel', color: Colors.red),
         ),

@@ -53,6 +53,7 @@ dependencies:
   simple_autocomplete_formfield: ^0.3.0
   universal_html: ^2.0.8
   input_calculator: ^2.0.0
+  virtual_keyboard_flutter: ^1.0.0
 
 
 dev_dependencies:
@@ -94,10 +95,10 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
-  fonts:
-     - family: pelak
-       fonts:
-         - asset: assets/fonts/pelak.ttf
+  # fonts:
+  #    - family: pelak
+  #      fonts:
+  #        - asset: assets/fonts/pelak.ttf
   #       - asset: fonts/Schyler-Italic.ttf
   #         style: italic
   #   - family: Trajan Pro

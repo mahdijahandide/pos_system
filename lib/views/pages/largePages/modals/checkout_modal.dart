@@ -44,6 +44,8 @@ class CheckoutModal extends GetView<CartController> {
       Get.find<CustomerController>().customerNumberController.text = '';
     }
 
+    FocusNode focusNode = FocusNode();
+
     return Scaffold(
         backgroundColor: Colors.white,
         body: Column(
@@ -134,6 +136,7 @@ class CheckoutModal extends GetView<CartController> {
                               Expanded(
                                 flex: 9,
                                 child: TextFieldSearch(
+                                  focusNode: focusNode,
                                   hasKeyboard: true,
                                   initialList: Get.find<CustomerController>()
                                       .customerName,
@@ -268,7 +271,9 @@ class CheckoutModal extends GetView<CartController> {
                         CustomText().createText(
                             title: controller.balanceStatus.value == ''
                                 ? ''
-                                : controller.balanceStatus.value,
+                                : double.parse(controller.balanceStatus.value
+                                        .toString())
+                                    .toStringAsFixed(3),
                             size: 18,
                             fontWeight: FontWeight.bold,
                             color: controller.calController.text == ''
@@ -340,6 +345,7 @@ class CheckoutModal extends GetView<CartController> {
                                 Get.width > 600 ? Get.width / 3 : Get.width / 2,
                             color: const Color(0xffeeeeee),
                             child: VirtualKeyboard(
+                              focusNode: FocusNode(),
                               textColor: Colors.black,
                               type: VirtualKeyboardType.Numeric,
                               textController: controller.calController,
