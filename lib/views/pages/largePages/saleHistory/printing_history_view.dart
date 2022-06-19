@@ -1,8 +1,6 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
@@ -16,12 +14,15 @@ import '../../../../services/controller/user_controller.dart';
 class PrintingHistoryView {
   OrderController controller = Get.put((OrderController()));
   Future<Uint8List> generatePdf() async {
-    final gf = await PdfGoogleFonts.notoSansArabicBlack();
+    final gf = await PdfGoogleFonts.iBMPlexSansArabicLight();
 
     final pdf = pw.Document();
 
     var coData = Get.find<AuthController>().coDetails;
 
+    int pageSize = int.parse((controller.orderItemsList.length / 3).toString());
+
+    for (int i = 0; i < controller.orderItemsList.length; i++) {}
     pdf.addPage(
       pw.Page(
         pageFormat: PdfPageFormat.a4,
@@ -79,14 +80,7 @@ class PrintingHistoryView {
                     itemCount: controller.orderItemsList.length,
                     itemBuilder: (pw.Context context, int index) {
                       var currentItem = controller.orderItemsList[index];
-                      List<int> bytes =
-                          utf8.encode(currentItem.titleAr.toString());
 
-                      double itemQty =
-                          double.parse(currentItem.quantity.toString());
-                      double itemPrc = double.parse(
-                          currentItem.unitPrice!.toStringAsFixed(3));
-                      double itemPrice = itemQty * itemPrc;
                       return pw.Row(
                           mainAxisAlignment: pw.MainAxisAlignment.start,
                           children: [
@@ -187,6 +181,7 @@ class PrintingHistoryView {
         },
       ),
     );
+
     return pdf.save();
   }
 }

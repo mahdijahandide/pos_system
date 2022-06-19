@@ -96,6 +96,7 @@ class ProductsModal extends StatelessWidget {
                                   price: currentItem.retailPrice.toString(),
                                   quantity: '1',
                                   title: currentItem.title,
+                                  titleAr: current.titleAr.toString(),
                                   tempUniqueId: Get.find<CartController>()
                                       .uniqueId
                                       .toString());
@@ -113,7 +114,8 @@ class ProductsModal extends StatelessWidget {
                                   title: 'warning',
                                   msg: 'this item already exist in your cart',
                                   bgColor: Colors.green,
-                                  msgColor: Colors.black,titleColor: Colors.black,
+                                  msgColor: Colors.black,
+                                  titleColor: Colors.black,
                                   icon: const Icon(
                                     Icons.check,
                                     color: Colors.white,
@@ -145,7 +147,8 @@ class ProductsModal extends StatelessWidget {
                                   title: 'warning',
                                   msg: 'this item already exist in your cart',
                                   bgColor: Colors.green,
-                                  msgColor: Colors.black,titleColor: Colors.black,
+                                  msgColor: Colors.black,
+                                  titleColor: Colors.black,
                                   icon: const Icon(
                                     Icons.check,
                                     color: Colors.white,

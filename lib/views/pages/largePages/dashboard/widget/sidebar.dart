@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pos_system/services/controller/cart_controller.dart';
 import 'package:pos_system/services/controller/customer_controller.dart';
+import 'package:pos_system/services/controller/order_controller.dart';
 import 'package:pos_system/views/components/snackbar/snackbar.dart';
 import 'package:pos_system/views/components/texts/customText.dart';
 import 'package:pos_system/views/dialogs/discount_dialog.dart';
@@ -309,10 +310,14 @@ class DashboardSidebar {
             ),
             keyValText(
                 title: 'total'.tr,
-                value: (Get.find<CartController>().totalAmount -
-
-                        Get.find<CartController>().discountAmount)
-                    .toStringAsFixed(3),
+                value: controller.isRefund.isFalse
+                    ? (Get.find<CartController>().totalAmount -
+                            Get.find<CartController>().discountAmount +
+                            controller.deliveryAmount)
+                        .toStringAsFixed(3)
+                    : (Get.find<CartController>().totalAmount -
+                            Get.find<CartController>().discountAmount)
+                        .toStringAsFixed(3),
                 keyWeight: FontWeight.bold,
                 valWeight: FontWeight.bold,
                 keySize: 22,
@@ -406,8 +411,10 @@ class DashboardSidebar {
                                   ? CheckoutModal(title: 'Checkout')
                                   : RefundModal(
                                       title: 'Refund',
-                                      total: (Get.find<CartController>().totalAmount -
-                                          Get.find<CartController>().discountAmount)
+                                      total: (Get.find<CartController>()
+                                                  .totalAmount -
+                                              Get.find<CartController>()
+                                                  .discountAmount)
                                           .toStringAsFixed(3),
                                       isWholeCart: controller
                                               .addToCartList.value.isNotEmpty
@@ -428,7 +435,8 @@ class DashboardSidebar {
                               RefundModal(
                                 title: 'Refund',
                                 total: (Get.find<CartController>().totalAmount -
-                                    Get.find<CartController>().discountAmount)
+                                        Get.find<CartController>()
+                                            .discountAmount)
                                     .toStringAsFixed(3),
                                 isWholeCart: true,
                               ),

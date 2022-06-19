@@ -33,7 +33,7 @@ class CustomerAutoCompleteDialog {
                 controller: customerController),
             Container(
               width: 900,
-              margin: const EdgeInsets.only(top: 10),
+              margin: const EdgeInsets.only(top: 120),
               color: const Color(0xffeeeeee),
               child: VirtualKeyboard(
                 focusNode: focusNode,

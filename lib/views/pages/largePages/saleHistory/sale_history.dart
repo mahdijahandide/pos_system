@@ -14,9 +14,10 @@ class SaleHistory extends GetView<OrderController> {
   @override
   Widget build(BuildContext context) {
     Get.lazyPut(() => OrderController());
-    if (controller.hasList.isFalse) {
-      controller.getOrders();
-    }
+    // if (controller.hasList.isFalse) {
+    controller.hasList.value = false;
+    controller.getOrders();
+    // }
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,

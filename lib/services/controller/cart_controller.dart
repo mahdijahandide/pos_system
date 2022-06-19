@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'dart:convert' as convert;
 import 'package:http/http.dart' as http;
-import 'package:pos_system/services/controller/dashboard_controller.dart';
+
 import 'package:pos_system/services/controller/product_controller.dart';
 import 'package:pos_system/services/controller/user_controller.dart';
 import 'package:pos_system/services/model/cart_product_model.dart';
@@ -209,26 +209,35 @@ class CartController extends GetxController {
         }));
     if (response.statusCode == 200) {
       var jsonObject = convert.jsonDecode(response.body);
-      Get.log(jsonObject.toString());
+
       double itemQty =
           double.parse(addToCartList.value[index].quantity.toString());
       double itemPrc =
           double.parse(addToCartList.value[index].price.toString());
       double itemPrice = itemQty * itemPrc;
       totalAmount = totalAmount - itemPrice;
+
       addToCartList.value.removeAt(int.parse(index.toString()));
+
       saveCartForSecondMonitor();
-      update();
-      Get.find<CartController>().update();
+
+      if (isRefund.isFalse) {
+        if (addToCartList.value.isEmpty) {
+          discountAmount = 0.0;
+          deliveryAmount = 0.0;
+        }
+      } else {
+        for (int i = 0; i < addToCartList.value.length; i++) {
+          var current = addToCartList.value[i];
+          totalAmount = double.parse(current.price.toString());
+        }
+
+        discountAmount = calculateRefundDiscount();
+
+        deliveryAmount = Get.find<OrderController>().orderRefundDeliveryAmount;
+      }
 
       Get.back(closeOverlays: true);
-      if (addToCartList.value.isEmpty) {
-        discountAmount = 0.0;
-        deliveryAmount = 0.0;
-      }
-      if (isRefund.isTrue) {
-        discountAmount = calculateRefundDiscount();
-      }
       update();
     } else {
       Get.back();
@@ -252,19 +261,29 @@ class CartController extends GetxController {
         }));
     if (response.statusCode == 200) {
       var jsonObject = convert.jsonDecode(response.body);
-      Get.log(jsonObject.toString());
 
-      addToCartList.value.clear();
-      totalAmount = 0.0;
-      saveCartForSecondMonitor();
-      update();
-      Get.find<CartController>().update();
+      if (isRefund.isFalse) {
+        addToCartList.value.clear();
+        totalAmount = 0.0;
+        saveCartForSecondMonitor();
+        update();
+        Get.find<CartController>().update();
 
-      Get.back(closeOverlays: true);
-      discountAmount = 0.0;
-      deliveryAmount = 0.0;
-      newSale(canTemp: false);
-      update();
+        Get.back(closeOverlays: true);
+        discountAmount = 0.0;
+        deliveryAmount = 0.0;
+        newSale(canTemp: false);
+        update();
+      } else {
+        addToCartList.value.clear();
+        totalAmount = Get.find<OrderController>().orderRefundTotalAmount +
+            Get.find<OrderController>().orderRefundSellerDiscount -
+            Get.find<OrderController>().orderRefundDeliveryAmount;
+        discountAmount = Get.find<OrderController>().orderRefundSellerDiscount;
+        deliveryAmount = Get.find<OrderController>().orderRefundDeliveryAmount;
+        Get.back(closeOverlays: true);
+        update();
+      }
     } else {
       Get.back();
       RemoteStatusHandler().errorHandler(
@@ -458,6 +477,9 @@ class CartController extends GetxController {
       totalAmount = 0.0;
       deliveryAmount = 0.0;
       discountAmount = 0.0;
+      Get.find<OrderController>().orderRefundTotalAmount = 0.0;
+      Get.find<OrderController>().orderRefundDeliveryAmount = 0.0;
+      Get.find<OrderController>().orderRefundSellerDiscount = 0.0;
       uniqueId = 'pos${Xid()}';
       isRefund.value = false;
       Get.find<ProductController>().productList.value.clear();
@@ -512,6 +534,9 @@ class CartController extends GetxController {
       totalAmount = 0.0;
       deliveryAmount = 0.0;
       discountAmount = 0.0;
+      Get.find<OrderController>().orderRefundTotalAmount = 0.0;
+      Get.find<OrderController>().orderRefundDeliveryAmount = 0.0;
+      Get.find<OrderController>().orderRefundSellerDiscount = 0.0;
       uniqueId = 'pos${Xid()}';
       isRefund.value = false;
       Get.find<ProductController>().productList.value.clear();
@@ -603,6 +628,8 @@ class CartController extends GetxController {
     }
 
     totalAmount = 0.0;
+    refundCartTotalPrice = '';
+
     discountAmount = 0.0;
     uniqueId = 'pos${Xid()}';
     deliveryAmount = 0.0;
@@ -621,6 +648,9 @@ class CartController extends GetxController {
     Get.find<CustomerController>().customerController.text = '';
     Get.find<CustomerController>().customerController.text = '';
     addToCartList.value.clear();
+    Get.find<OrderController>().orderRefundTotalAmount = 0.0;
+    Get.find<OrderController>().orderRefundDeliveryAmount = 0.0;
+    Get.find<OrderController>().orderRefundSellerDiscount = 0.0;
     update();
   }
 
@@ -646,13 +676,9 @@ class CartController extends GetxController {
   }
 
   Future<Uint8List> generatePdf() async {
-    final gf = await PdfGoogleFonts.notoSansArabicBlack();
     var coData = Get.find<AuthController>().coDetails;
-    final pdf = pw.Document(
-      version: PdfVersion.pdf_1_5,
-      compress: false,
-    );
-
+    final pdf = pw.Document();
+    final gf = await PdfGoogleFonts.iBMPlexSansArabicLight();
     pdf.addPage(
       pw.Page(
         pageFormat: PdfPageFormat.a4,
@@ -853,7 +879,6 @@ class CartController extends GetxController {
 
   double calculateRefundDiscount() {
     double discount = 0.0;
-    discountAmount = 0.0;
     double total = 0.0;
     if (isRefund.isTrue) {
       for (int i = 0; i < addToCartList.value.length; i++) {
@@ -863,6 +888,7 @@ class CartController extends GetxController {
         total = total + discount;
       }
     }
+    print(total);
     return total;
   }
 }

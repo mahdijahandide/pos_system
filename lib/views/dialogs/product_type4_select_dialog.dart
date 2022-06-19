@@ -63,6 +63,7 @@ class ProductTypeSelect {
             if (int.parse(current.quantity.toString()) > 0) {
               Get.find<CartController>().addToCart(
                   title: current.title,
+                  titleAr: current.titleAr.toString(),
                   openDialog: true,
                   optionSc: '4',
                   productId: current.id.toString(),

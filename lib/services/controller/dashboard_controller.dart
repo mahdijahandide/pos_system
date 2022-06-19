@@ -1,11 +1,10 @@
-import 'dart:html';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:get/get.dart';
 
-class DashboardController extends GetxController{
-  RxBool isShowKeyboard=false.obs;
+import 'package:get/get.dart';
+import 'package:universal_html/html.dart';
+
+class DashboardController extends GetxController {
+  RxBool isShowKeyboard = false.obs;
   // Holds the text that user typed.
   String text = '';
 
@@ -17,20 +16,20 @@ class DashboardController extends GetxController{
 
   TextEditingController searchController = TextEditingController();
 
-  RxInt searchId=1.obs;
+  RxInt searchId = 1.obs;
 
-  RxBool showProductDetails=false.obs;
+  RxBool showProductDetails = false.obs;
 
-  void changeSearchType({required id}){
-     searchId.value=id;
-     update();
+  void changeSearchType({required id}) {
+    searchId.value = id;
+    update();
   }
 
-  void fullScreen(){
+  void fullScreen() {
     document.documentElement!.requestFullscreen();
-    if(document.fullscreenEnabled==true){
+    if (document.fullscreenEnabled == true) {
       document.exitFullscreen();
-    }else{
+    } else {
       document.documentElement!.requestFullscreen();
     }
     update();
