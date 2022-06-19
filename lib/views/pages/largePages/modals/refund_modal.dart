@@ -243,6 +243,10 @@ class RefundModal extends GetView<CartController> {
   }
 
   void refundCalculation() {
+    print(controller.refundCartTotalPrice);
+    print(controller.totalAmount);
+    print(controller.discountAmount);
+    controller.refundCartTotalPrice=(controller.totalAmount - controller.discountAmount).toString();
     String total = isWholeCart == true
         ? controller.refundCartTotalPrice
         : (controller.totalAmount - controller.discountAmount).toString();

@@ -96,7 +96,7 @@ class ProductsModal extends StatelessWidget {
                                   price: currentItem.retailPrice.toString(),
                                   quantity: '1',
                                   title: currentItem.title,
-                                  titleAr: current.titleAr.toString(),
+                                  titleAr: currentItem.titleAr.toString(),
                                   tempUniqueId: Get.find<CartController>()
                                       .uniqueId
                                       .toString());

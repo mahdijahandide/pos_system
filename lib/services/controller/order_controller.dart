@@ -77,12 +77,12 @@ class OrderController extends GetxController {
               msg: 'can not refund this invoice',
               bgColor: Colors.red);
         }
-        if (double.parse(jsonObject['data']['subtotal'].toString()) <= 0) {
-          Snack().createSnack(
-              title: 'warning',
-              msg: 'can not refund this invoice',
-              bgColor: Colors.red);
-        }
+        // if (double.parse(jsonObject['data']['subtotal'].toString()) <= 0) {
+        //   Snack().createSnack(
+        //       title: 'warning',
+        //       msg: 'can not refund this invoice',
+        //       bgColor: Colors.red);
+        // }
         Get.back();
       }
       jsonObject['data']['orders'].forEach((element) {
@@ -148,19 +148,22 @@ class OrderController extends GetxController {
             'null') {
           orderRefundDeliveryAmount = double.parse(
               jsonObject['data']['details']['delivery_charges'].toString());
-        }
+        }else{orderRefundDeliveryAmount=0.0;}
 
         if (jsonObject['data']['details']['seller_discount'].toString() !=
             'null') {
           orderRefundSellerDiscount = double.parse(
               jsonObject['data']['details']['seller_discount'].toString());
 
-          discountNesbat = orderRefundSellerDiscount /
-              (orderRefundTotalAmount -
-                  orderRefundDeliveryAmount +
-                  orderRefundSellerDiscount);
+          Get.find<CartController>().discountAmount = orderRefundSellerDiscount;
+        }else{
+          orderRefundSellerDiscount=0.0;
           Get.find<CartController>().discountAmount = orderRefundSellerDiscount;
         }
+        discountNesbat = orderRefundSellerDiscount /
+            (orderRefundTotalAmount -
+                orderRefundDeliveryAmount +
+                orderRefundSellerDiscount);
 
         jsonObject['data']['orderItems'].forEach((element) {
           Get.find<CartController>().refundFactorItemList.value.add(
