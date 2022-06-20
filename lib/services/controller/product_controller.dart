@@ -210,8 +210,8 @@ class ProductController extends GetxController {
             break;
           default:
             Snack().createSnack(
-                title: 'warning',
-                msg: 'can not add this item to cart at this moment',
+                title: 'Warning',
+                msg: 'Can Not Add This Item To Cart At This Moment',
                 bgColor: Colors.red);
             break;
         }

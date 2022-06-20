@@ -41,8 +41,8 @@ class CashController extends GetxController {
       amountTextController.clear();
       descriptionTextController.clear();
       Snack().createSnack(
-          title: 'success',
-          msg: 'request recorded successfully',
+          title: 'Success',
+          msg: 'Request Recorded Successfully',
           bgColor: Colors.green,
           icon: const Icon(
             Icons.check,

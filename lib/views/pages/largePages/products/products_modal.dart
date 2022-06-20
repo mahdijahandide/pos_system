@@ -111,8 +111,8 @@ class ProductsModal extends StatelessWidget {
                               //     timeInSecForIosWeb: 2 // duration
                               //     );
                               Snack().createSnack(
-                                  title: 'warning',
-                                  msg: 'this item already exist in your cart',
+                                  title: 'Warning',
+                                  msg: 'This Item Already Exist In Your Cart',
                                   bgColor: Colors.green,
                                   msgColor: Colors.black,
                                   titleColor: Colors.black,
@@ -144,8 +144,8 @@ class ProductsModal extends StatelessWidget {
                               //     timeInSecForIosWeb: 2 // duration
                               //     );
                               Snack().createSnack(
-                                  title: 'warning',
-                                  msg: 'this item already exist in your cart',
+                                  title: 'Warning',
+                                  msg: 'This Item Already Exist In Your Cart',
                                   bgColor: Colors.green,
                                   msgColor: Colors.black,
                                   titleColor: Colors.black,

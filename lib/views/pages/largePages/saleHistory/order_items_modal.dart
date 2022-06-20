@@ -26,7 +26,7 @@ class OrderItemsModal {
                     //   final image = page.toImage(); // ...or page.toPng()
                     //   print(image);
                     // }
-
+                    // Get.toNamed('/print');
                     await Printing.layoutPdf(
                       onLayout: (_) => PrintingHistoryView().generatePdf(),
                     );

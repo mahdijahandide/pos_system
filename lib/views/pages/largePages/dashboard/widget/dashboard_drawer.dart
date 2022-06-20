@@ -31,15 +31,15 @@ class DashboardDrawer {
           // const Divider(),
           ListTile(
             leading: const Icon(Icons.history),
-            title: CustomText().createText(title: 'View Sales history'),
+            title: CustomText().createText(title: 'View Sales History'),
             onTap: () {
               //Get.find<OrderController>().getOrders();
               if (Get.find<CartController>().isRefund.isFalse) {
                 Get.toNamed('/saleHistory');
-              }else {
+              } else {
                 Snack().createSnack(
-                    title: 'warning',
-                    msg: 'can not using this option on refund mode',
+                    title: 'Warning',
+                    msg: 'Can Not Using This Option On Refund Mode',
                     bgColor: Colors.yellow,
                     msgColor: Colors.black,
                     titleColor: Colors.black);
@@ -81,8 +81,8 @@ class DashboardDrawer {
                 Get.toNamed('/allProduct');
               } else {
                 Snack().createSnack(
-                    title: 'warning',
-                    msg: 'can not using this option on refund mode',
+                    title: 'Warning',
+                    msg: 'Can Not Using This Option On Refund Mode',
                     bgColor: Colors.yellow,
                     msgColor: Colors.black,
                     titleColor: Colors.black);
@@ -122,7 +122,7 @@ class DashboardDrawer {
                 icon: const Icon(Icons.monitor),
                 onPressed: () {
                   html.WindowBase _popup = html.window.open(
-                      'https://possystem.gulfweb.ir/#/showFactor',
+                      'https://https://mrk-q8.com/#/showFactor/#/showFactor',
                       'Pos system',
                       'left=100,top=100,width=800,height=600');
                   if (_popup.closed!) {

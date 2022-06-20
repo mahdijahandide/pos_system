@@ -31,7 +31,7 @@ class EndOfDay extends GetView<ShiftController> {
         centerTitle: true,
         backgroundColor: Colors.grey.withOpacity(0.5),
         title: CustomText().createText(
-            title: 'Start/End shift', size: 18, fontWeight: FontWeight.bold),
+            title: 'Start/End Shift', size: 18, fontWeight: FontWeight.bold),
         actions: [
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 12),
@@ -165,7 +165,7 @@ class EndOfDay extends GetView<ShiftController> {
                                 child: Column(
                                   children: [
                                     CustomTextField().createTextField(
-                                        hint: 'cash starter value (optional)',
+                                        hint: 'Cash Starter Value (Optional)',
                                         height: 50,
                                         keyboardType: TextInputType.number,
                                         inputFormatters: <TextInputFormatter>[
@@ -482,7 +482,7 @@ class EndOfDay extends GetView<ShiftController> {
                               controller.totalCashFunds.value.toString()) >
                       0) {
                     ShiftWarningDialog.showCustomDialog(
-                        title: 'warning',
+                        title: 'Warning',
                         msg:
                             'Your account balance is ${double.parse(controller.cashCount.value.text.toString()) - double.parse(controller.totalCashFunds.value.toString())} more than your sales in cash count');
                   } else if (double.parse(
@@ -503,7 +503,7 @@ class EndOfDay extends GetView<ShiftController> {
                               controller.refundCard.value) >
                       0) {
                     ShiftWarningDialog.showCustomDialog(
-                        title: 'warning',
+                        title: 'Warning',
                         msg:
                             'Your account balance is ${double.parse(controller.cardCount.value.text.toString()) - (controller.sellCard.value - controller.refundCard.value)} more than your sales in card count');
                   } else if (double.parse(

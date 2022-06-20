@@ -71,8 +71,8 @@ class ProductOptionDialog1 {
                       Get.find<ProductController>().selectedSizeId.toString());
             } else {
               Snack().createSnack(
-                  title: 'warning',
-                  msg: 'No enough quantity',
+                  title: 'Warning',
+                  msg: 'No Enough Quantity',
                   bgColor: Colors.yellow,
                   msgColor: Colors.black,
                   titleColor: Colors.black);
@@ -87,7 +87,7 @@ class ProductOptionDialog1 {
           )),
       cancel: InkWell(
           onTap: () {
-            Get.back();
+            Get.back(closeOverlays: true, canPop: true);
           },
           child: Container(
               width: 90,

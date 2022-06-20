@@ -46,7 +46,7 @@ class RefundFactorNumDialog {
                           reqStatus: 'refund');
                     } else {
                       Snack().createSnack(
-                          title: 'warning',
+                          title: 'Warning',
                           msg: 'Enter Invoice Number',
                           bgColor: Colors.yellow,
                           msgColor: Colors.black,
@@ -80,7 +80,7 @@ class RefundFactorNumDialog {
                 reqStatus: 'refund');
           } else {
             Snack().createSnack(
-                title: 'warning',
+                title: 'Warning',
                 msg: 'Enter Invoice Number',
                 bgColor: Colors.yellow,
                 msgColor: Colors.black,

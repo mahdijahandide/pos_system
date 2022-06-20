@@ -20,6 +20,10 @@ class CustomerController extends GetxController {
   var selectedCustomer;
   RxBool hasCustomer = false.obs;
 
+  RxBool focusName = false.obs;
+  RxBool focusNumber = false.obs;
+  RxBool focusEmail = false.obs;
+
   TextEditingController customerNameController = TextEditingController();
   TextEditingController customerEmailController = TextEditingController();
   TextEditingController customerNumberController = TextEditingController();

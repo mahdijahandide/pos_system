@@ -93,14 +93,14 @@ class DashboardSidebar {
                         .toList()
                         .isEmpty) {
                       Snack().createSnack(
-                          title: 'please select an item first',
-                          msg: 'your shopping cart is empty',
+                          title: 'Please Select An Item First',
+                          msg: 'Your Shopping Cart is Empty',
                           bgColor: Colors.yellow,
                           msgColor: Colors.black,
                           titleColor: Colors.black);
                     } else {
                       EditQtyDialog.showCustomDialog(
-                          title: 'enter new quantity',
+                          title: 'Enter New Quantity',
                           productId: Get.find<CartController>()
                               .addToCartList
                               .value
@@ -338,8 +338,8 @@ class DashboardSidebar {
                           );
                         } else {
                           Snack().createSnack(
-                              title: 'warning',
-                              msg: 'can not using this option on refund mode',
+                              title: 'Warning',
+                              msg: 'Can Not Using This Option On Refund Mode',
                               bgColor: Colors.yellow,
                               msgColor: Colors.black,
                               titleColor: Colors.black);
@@ -380,8 +380,8 @@ class DashboardSidebar {
                           }
                         } else {
                           Snack().createSnack(
-                              title: 'warning',
-                              msg: 'can not using this option on refund mode',
+                              title: 'Warning',
+                              msg: 'Can Not Using This Option On Refund Mode',
                               bgColor: Colors.yellow,
                               msgColor: Colors.black,
                               titleColor: Colors.black);
@@ -510,8 +510,8 @@ class DashboardSidebar {
                           }
                         } else {
                           Snack().createSnack(
-                              title: 'warning',
-                              msg: 'can not using this option on refund mode',
+                              title: 'Warning',
+                              msg: 'Can Not Using This Option On Refund Mode',
                               bgColor: Colors.yellow,
                               msgColor: Colors.black,
                               titleColor: Colors.black);

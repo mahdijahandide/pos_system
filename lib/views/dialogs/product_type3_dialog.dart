@@ -124,8 +124,8 @@ class ProductOptionDialog3 {
                       Get.find<ProductController>().selectedColorId.toString());
             } else {
               Snack().createSnack(
-                  title: 'warning',
-                  msg: 'No enough quantity',
+                  title: 'Warning',
+                  msg: 'No Enough Quantity',
                   bgColor: Colors.yellow,
                   msgColor: Colors.black,
                   titleColor: Colors.black);
@@ -140,7 +140,7 @@ class ProductOptionDialog3 {
                   .createText(title: 'Submit', color: Colors.teal))),
       cancel: InkWell(
           onTap: () {
-            Get.back();
+            Get.back(closeOverlays: true, canPop: true);
           },
           child: Container(
               width: 90,

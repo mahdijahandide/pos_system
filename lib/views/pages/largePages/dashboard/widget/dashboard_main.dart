@@ -30,7 +30,7 @@ class DashboardMain {
                           ),
                           Expanded(
                               child: CustomTextField().createTextField(
-                                  hint: 'Search anything...',
+                                  hint: 'Search Anything...',
                                   onSubmitted: (_) async {
                                     LoadingDialog.showCustomDialog(
                                         msg: 'Loading ...');
@@ -105,7 +105,7 @@ class DashboardMain {
                       ),
                       Expanded(
                           child: CustomTextField().createTextField(
-                        hint: 'Search anything ...',
+                        hint: 'Search Anything ...',
                         onSubmitted: (_) async {
                           LoadingDialog.showCustomDialog(msg: 'Loading ...');
                           Get.find<ProductController>().getAllProducts(
@@ -214,16 +214,16 @@ class DashboardMain {
                                           .toString());
                                 } else {
                                   Snack().createSnack(
-                                      title: 'warning',
-                                      msg: 'No enough quantity',
+                                      title: 'Warning',
+                                      msg: 'No Enough Quantity',
                                       bgColor: Colors.yellow,
                                       msgColor: Colors.black,
                                       titleColor: Colors.black);
                                 }
                               } else {
                                 Snack().createSnack(
-                                    title: 'warning',
-                                    msg: 'this item already exist in your cart',
+                                    title: 'Warning',
+                                    msg: 'This Item Already Exist In Your Cart',
                                     bgColor: Colors.yellow,
                                     msgColor: Colors.black,
                                     icon: const Icon(
@@ -302,16 +302,16 @@ class DashboardMain {
                                                       .toString());
                                         } else {
                                           Snack().createSnack(
-                                              title: 'warning',
-                                              msg: 'item exist in cart',
+                                              title: 'Warning',
+                                              msg: 'Item Exist In Cart',
                                               bgColor: Colors.yellow,
                                               msgColor: Colors.black,
                                               titleColor: Colors.black);
                                         }
                                       } else {
                                         Snack().createSnack(
-                                            title: 'warning',
-                                            msg: 'No enough quantity',
+                                            title: 'Warning',
+                                            msg: 'No Enough Quantity',
                                             bgColor: Colors.yellow,
                                             msgColor: Colors.black,
                                             titleColor: Colors.black);
@@ -319,17 +319,17 @@ class DashboardMain {
                                     }
                                   } else {
                                     Snack().createSnack(
-                                        title: 'warning',
-                                        msg: 'No enough quantity',
+                                        title: 'Warning',
+                                        msg: 'No Enough Quantity',
                                         bgColor: Colors.yellow,
                                         msgColor: Colors.black,
                                         titleColor: Colors.black);
                                   }
                                 } else {
                                   Snack().createSnack(
-                                      title: 'warning',
+                                      title: 'Warning',
                                       msg:
-                                          'this item already exist in your cart',
+                                          'This Item Already Exist In Your Cart',
                                       bgColor: Colors.yellow,
                                       msgColor: Colors.black,
                                       icon: const Icon(
@@ -385,16 +385,16 @@ class DashboardMain {
                                                   title: currentItem.title);
                                         } else {
                                           Snack().createSnack(
-                                              title: 'warning',
-                                              msg: 'item exist in cart',
+                                              title: 'Warning',
+                                              msg: 'Item Exist In Cart',
                                               bgColor: Colors.yellow,
                                               msgColor: Colors.black,
                                               titleColor: Colors.black);
                                         }
                                       } else {
                                         Snack().createSnack(
-                                            title: 'warning',
-                                            msg: 'No enough quantity',
+                                            title: 'Warning',
+                                            msg: 'No Enough Quantity',
                                             bgColor: Colors.yellow,
                                             msgColor: Colors.black,
                                             titleColor: Colors.black);
@@ -402,8 +402,8 @@ class DashboardMain {
                                     }
                                   } else {
                                     Snack().createSnack(
-                                        title: 'warning',
-                                        msg: 'No enough quantity',
+                                        title: 'Warning',
+                                        msg: 'No Enough Quantity',
                                         bgColor: Colors.yellow,
                                         msgColor: Colors.black,
                                         titleColor: Colors.black);
@@ -418,9 +418,9 @@ class DashboardMain {
                                   //     timeInSecForIosWeb: 2 // duration
                                   //     );
                                   Snack().createSnack(
-                                      title: 'warning',
+                                      title: 'Warning',
                                       msg:
-                                          'this item already exist in your cart',
+                                          'This Item Already Exist In Your Cart',
                                       bgColor: Colors.yellow,
                                       msgColor: Colors.black,
                                       icon: const Icon(

@@ -84,8 +84,8 @@ class ProductTypeSelect {
                   otherId: otherId);
             } else {
               Snack().createSnack(
-                  title: 'warning',
-                  msg: 'No enough quantity',
+                  title: 'Warning',
+                  msg: 'No Enough Quantity',
                   bgColor: Colors.yellow,
                   msgColor: Colors.black,
                   titleColor: Colors.black);
@@ -100,7 +100,7 @@ class ProductTypeSelect {
           )),
       cancel: InkWell(
           onTap: () {
-            Get.back();
+            Get.back(closeOverlays: true, canPop: true);
           },
           child: Container(
               width: 90,

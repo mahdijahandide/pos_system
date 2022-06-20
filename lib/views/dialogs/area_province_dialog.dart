@@ -221,7 +221,7 @@ class AreaProvinceDialog {
             alignment: Alignment.center,
             color: Colors.red.withOpacity(0.2),
             child: CustomText()
-                .createText(title: 'Cancel delivery', color: Colors.red),
+                .createText(title: 'Cancel Delivery', color: Colors.red),
           )),
     );
   }

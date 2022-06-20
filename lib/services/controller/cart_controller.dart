@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:audioplayers/audioplayers.dart';
+import 'package:barcode/barcode.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'dart:convert' as convert;
@@ -41,6 +42,7 @@ class CartController extends GetxController {
   double deliveryAmountForPrint = 0.0;
 
   RxBool isRefund = false.obs;
+  RxBool hasModalVk = false.obs;
 
   RxString printedFactorId = ''.obs;
 
@@ -130,8 +132,8 @@ class CartController extends GetxController {
 
       Get.back(closeOverlays: true);
       Snack().createSnack(
-          title: 'done',
-          msg: 'item added to cart successfully',
+          title: 'Done',
+          msg: 'Item Added To Cart Successfully',
           bgColor: Colors.green,
           msgColor: Colors.black,
           titleColor: Colors.black,
@@ -420,10 +422,10 @@ class CartController extends GetxController {
 
       Get.back(closeOverlays: true);
       Snack().createSnack(
-          title: 'done',
+          title: 'Done',
           msg: isRefund.isFalse
-              ? 'cart paid successfully'
-              : 'cart refund successfully',
+              ? 'Cart Paid Successfully'
+              : 'Cart Refund Successfully',
           duration: 2,
           titleColor: Colors.black,
           bgColor: Colors.green,
@@ -492,8 +494,8 @@ class CartController extends GetxController {
 
       Get.back(closeOverlays: true);
       Snack().createSnack(
-          title: 'done',
-          msg: 'cart refund successfully',
+          title: 'Done',
+          msg: 'Cart Refund Successfully',
           bgColor: Colors.green,
           titleColor: Colors.black,
           msgColor: Colors.black,
@@ -548,8 +550,8 @@ class CartController extends GetxController {
       Get.find<OrderController>().hasList.value = false;
       Get.back(closeOverlays: true);
       Snack().createSnack(
-          title: 'done',
-          msg: 'cart item refund successfully',
+          title: 'Done',
+          msg: 'Cart Item Refund Successfully',
           bgColor: Colors.green,
           titleColor: Colors.black,
           msgColor: Colors.black,
@@ -679,58 +681,68 @@ class CartController extends GetxController {
     var coData = Get.find<AuthController>().coDetails;
     final pdf = pw.Document();
     final gf = await PdfGoogleFonts.iBMPlexSansArabicLight();
+
+    final barcode = Barcode.code128();
+    final svg = barcode.toSvg(printedFactorId.value.toString(),
+        width: 100, drawText: false, height: 50);
+
     pdf.addPage(
       pw.Page(
-        pageFormat: PdfPageFormat.a4,
+        pageFormat: PdfPageFormat.roll80,
         build: (context) {
           return pw.Column(
             children: [
               pw.Center(
                   child: pw.Text('INVOICE NO #${printedFactorId.value}',
                       style: pw.TextStyle(
-                          fontSize: 22, fontWeight: pw.FontWeight.bold))),
+                          fontSize: 15, fontWeight: pw.FontWeight.bold))),
               pw.Center(
-                  child: pw.Text(coData['name_en'],
-                      style: const pw.TextStyle(fontSize: 20))),
+                  child: pw.Text(
+                coData['name_en'],
+              )),
               pw.Center(
-                  child: pw.Text(coData['address_en'],
-                      style: const pw.TextStyle(fontSize: 20))),
+                  child: pw.Text(
+                coData['address_en'],
+              )),
               pw.Row(mainAxisAlignment: pw.MainAxisAlignment.center, children: [
                 pw.Center(
-                    child: pw.Text('Phone: ' + coData['phone'],
-                        style: const pw.TextStyle(fontSize: 20))),
-                pw.SizedBox(width: 50),
+                    child: pw.Text(
+                  'Phone: ' + coData['phone'],
+                )),
+                pw.SizedBox(width: 10),
                 pw.Center(
-                    child: pw.Text('Mobile: ' + coData['mobile'],
-                        style: const pw.TextStyle(fontSize: 20))),
+                    child: pw.Text(
+                  'Mobile: ' + coData['mobile'],
+                )),
               ]),
               pw.Center(
-                  child: pw.Text(Get.find<AuthController>().webSite,
-                      style: const pw.TextStyle(fontSize: 20))),
+                  child: pw.Text(
+                Get.find<AuthController>().webSite,
+              )),
               pw.SizedBox(height: 10),
               pw.Row(
                   mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
                   children: [
                     pw.Center(
                         child: pw.Text(
-                            'Cashier: ${Get.find<UserController>().name}',
-                            style: const pw.TextStyle(fontSize: 20))),
+                      'Cashier: ${Get.find<UserController>().name}',
+                    )),
                     pw.Column(children: [
                       pw.Center(
                         child: pw.Text(
-                            DateTime.now().year.toString() +
-                                '-' +
-                                DateTime.now().month.toString() +
-                                '-' +
-                                DateTime.now().day.toString(),
-                            style: const pw.TextStyle(fontSize: 20)),
+                          DateTime.now().year.toString() +
+                              '-' +
+                              DateTime.now().month.toString() +
+                              '-' +
+                              DateTime.now().day.toString(),
+                        ),
                       ),
                       pw.Center(
                         child: pw.Text(
-                            DateTime.now().hour.toString() +
-                                ':' +
-                                DateTime.now().minute.toString(),
-                            style: const pw.TextStyle(fontSize: 20)),
+                          DateTime.now().hour.toString() +
+                              ':' +
+                              DateTime.now().minute.toString(),
+                        ),
                       )
                     ])
                   ]),
@@ -739,23 +751,35 @@ class CartController extends GetxController {
                 pw.Expanded(
                     flex: 1,
                     child:
-                        pw.Text('#', style: const pw.TextStyle(fontSize: 18))),
+                        pw.Text('#', style: const pw.TextStyle(fontSize: 10))),
+                pw.SizedBox(
+                  width: 2,
+                ),
                 pw.Expanded(
                     flex: 3,
                     child: pw.Text('Item',
-                        style: const pw.TextStyle(fontSize: 18))),
+                        style: const pw.TextStyle(fontSize: 10))),
+                pw.SizedBox(
+                  width: 2,
+                ),
                 pw.Expanded(
                     flex: 1,
                     child: pw.Text('QTY',
-                        style: const pw.TextStyle(fontSize: 18))),
+                        style: const pw.TextStyle(fontSize: 10))),
+                pw.SizedBox(
+                  width: 2,
+                ),
                 pw.Expanded(
                     flex: 1,
                     child: pw.Text('Price',
-                        style: const pw.TextStyle(fontSize: 18))),
+                        style: const pw.TextStyle(fontSize: 10))),
+                pw.SizedBox(
+                  width: 2,
+                ),
                 pw.Expanded(
                     flex: 1,
                     child: pw.Text('Total',
-                        style: const pw.TextStyle(fontSize: 18))),
+                        style: const pw.TextStyle(fontSize: 10))),
               ]),
               pw.Divider(),
               pw.SizedBox(height: 10),
@@ -776,7 +800,10 @@ class CartController extends GetxController {
                             pw.Expanded(
                                 flex: 1,
                                 child: pw.Text(currentItem.productId.toString(),
-                                    style: const pw.TextStyle(fontSize: 20))),
+                                    style: const pw.TextStyle(fontSize: 10))),
+                            pw.SizedBox(
+                              width: 2,
+                            ),
                             pw.Expanded(
                                 flex: 3,
                                 child: pw.Column(
@@ -785,29 +812,44 @@ class CartController extends GetxController {
                                     children: [
                                       pw.Text(
                                         currentItem.title.toString(),
-                                        style: const pw.TextStyle(fontSize: 20),
+                                        maxLines: 1,
+                                        textAlign: pw.TextAlign.left,
+                                        textDirection: pw.TextDirection.ltr,
+                                        style: const pw.TextStyle(fontSize: 10),
                                         overflow: pw.TextOverflow.clip,
                                       ),
                                       pw.Text(currentItem.titleAr.toString(),
+                                          maxLines: 1,
+                                          textAlign: pw.TextAlign.right,
                                           textDirection: pw.TextDirection.rtl,
-                                          style: pw.TextStyle(font: gf)),
+                                          style: pw.TextStyle(
+                                              font: gf, fontSize: 10)),
                                     ])),
+                            pw.SizedBox(
+                              width: 2,
+                            ),
                             pw.Expanded(
                                 flex: 1,
                                 child: pw.Text(currentItem.quantity.toString(),
-                                    style: const pw.TextStyle(fontSize: 20))),
+                                    style: const pw.TextStyle(fontSize: 10))),
+                            pw.SizedBox(
+                              width: 2,
+                            ),
                             pw.Expanded(
                               flex: 1,
                               child: pw.Text(
                                   double.parse(
                                     currentItem.price.toString(),
                                   ).toStringAsFixed(3),
-                                  style: const pw.TextStyle(fontSize: 20)),
+                                  style: const pw.TextStyle(fontSize: 10)),
+                            ),
+                            pw.SizedBox(
+                              width: 2,
                             ),
                             pw.Expanded(
                                 flex: 1,
                                 child: pw.Text(itemPrice.toStringAsFixed(3),
-                                    style: const pw.TextStyle(fontSize: 20))),
+                                    style: const pw.TextStyle(fontSize: 10))),
                           ]);
                     },
                     separatorBuilder: (pw.Context context, int index) {
@@ -818,56 +860,63 @@ class CartController extends GetxController {
               pw.Row(
                   mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
                   children: [
-                    pw.Text('Subtotal: ',
-                        style: const pw.TextStyle(fontSize: 20)),
-                    pw.Text(totalAmountForPrint.toStringAsFixed(3),
-                        style: const pw.TextStyle(fontSize: 20)),
+                    pw.Text(
+                      'Subtotal: ',
+                    ),
+                    pw.Text(
+                      totalAmountForPrint.toStringAsFixed(3),
+                    ),
                   ]),
               pw.Divider(thickness: 2),
               pw.Row(
                   mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
                   children: [
-                    pw.Text('Qty: ${addToCartListForPrint.length}',
-                        style: const pw.TextStyle(fontSize: 20)),
                     pw.Text(
-                        'Delivery: ${deliveryAmountForPrint.toStringAsFixed(3)}',
-                        style: const pw.TextStyle(fontSize: 20)),
+                      'Qty: ${addToCartListForPrint.length}',
+                    ),
+                    pw.Text(
+                      'Delivery: ${deliveryAmountForPrint.toStringAsFixed(3)}',
+                    ),
                   ]),
               pw.Row(
                   mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
                   children: [
                     pw.SizedBox(),
                     pw.Text(
-                        'Discount: ${discountAmountForPrint.toStringAsFixed(3)}',
-                        style: const pw.TextStyle(fontSize: 20)),
+                      'Discount: ${discountAmountForPrint.toStringAsFixed(3)}',
+                    ),
                   ]),
               pw.Row(
                   mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
                   children: [
                     pw.SizedBox(),
                     pw.Text(
-                        'Total:  ${(totalAmountForPrint - discountAmountForPrint + deliveryAmountForPrint).toStringAsFixed(3)}',
-                        style: const pw.TextStyle(fontSize: 20)),
-                  ]),
-              pw.Row(
-                  mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
-                  children: [
-                    pw.SizedBox(),
-                    pw.Text('Paid: ${totalPaidForPrint.toStringAsFixed(3)}',
-                        style: const pw.TextStyle(fontSize: 20)),
+                      'Total:  ${(totalAmountForPrint - discountAmountForPrint + deliveryAmountForPrint).toStringAsFixed(3)}',
+                    ),
                   ]),
               pw.Row(
                   mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
                   children: [
                     pw.SizedBox(),
                     pw.Text(
-                        'Balance: ${(totalPaidForPrint - (totalAmountForPrint - discountAmountForPrint + deliveryAmountForPrint)).toStringAsFixed(3)}',
-                        style: const pw.TextStyle(fontSize: 20)),
+                      'Paid: ${totalPaidForPrint.toStringAsFixed(3)}',
+                    ),
+                  ]),
+              pw.Row(
+                  mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                  children: [
+                    pw.SizedBox(),
+                    pw.Text(
+                      'Balance: ${(totalPaidForPrint - (totalAmountForPrint - discountAmountForPrint + deliveryAmountForPrint)).toStringAsFixed(3)}',
+                    ),
                   ]),
               pw.SizedBox(height: 25),
+              pw.SvgImage(svg: svg),
+              pw.SizedBox(height: 25),
               pw.Center(
-                  child: pw.Text(coData['pos_note_en'],
-                      style: const pw.TextStyle(fontSize: 20)))
+                  child: pw.Text(
+                coData['pos_note_en'],
+              ))
             ],
           );
         },

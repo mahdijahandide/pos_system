@@ -25,7 +25,7 @@ class CashInOut extends GetView<CashController> {
           centerTitle: true,
           backgroundColor: Colors.grey.withOpacity(0.5),
           title: CustomText().createText(
-              title: 'Cash in/out'.tr, size: 18, fontWeight: FontWeight.bold),
+              title: 'Cash In/Out'.tr, size: 18, fontWeight: FontWeight.bold),
           actions: [
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 12),
@@ -153,8 +153,8 @@ class CashInOut extends GetView<CashController> {
                                 controller.addOrRemoveCashRequest();
                               } else {
                                 Snack().createSnack(
-                                    title: 'warning',
-                                    msg: 'please enter right value',
+                                    title: 'Warning',
+                                    msg: 'Please Enter Right Value',
                                     bgColor: Colors.yellow,
                                     msgColor: Colors.black,
                                     titleColor: Colors.black);

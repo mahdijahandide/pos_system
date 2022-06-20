@@ -58,9 +58,9 @@ class DesktopDashboard extends StatelessWidget {
                                   .getAllProducts(catId: '', keyword: '');
                             } else {
                               Snack().createSnack(
-                                  title: 'warning',
+                                  title: 'Warning',
                                   msg:
-                                      'can not using this option on refund mode',
+                                      'Can Not Using This Option On Refund Mode',
                                   bgColor: Colors.yellow,
                                   msgColor: Colors.black,
                                   titleColor: Colors.black);

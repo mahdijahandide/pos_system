@@ -16,21 +16,21 @@ class RemoteStatusHandler {
           if (!Get.isSnackbarOpen) {
             Snack().createSnack(
                 title: 'Authorization',
-                msg: 'Authorization Failed, You need to login',
+                msg: 'Authorization Failed, You Need To Login',
                 bgColor: Colors.red);
           }
           Get.toNamed('/login');
         } else {
           print(error);
           Snack().createSnack(
-              title: 'warning',
-              msg: 'You need to start cash first',
+              title: 'Warning',
+              msg: 'You Need To Start Cash First',
               bgColor: Colors.red);
         }
         break;
       case 500:
         Snack().createSnack(
-            title: 'Server Error', msg: 'Try again Later', bgColor: Colors.red);
+            title: 'Server Error', msg: 'Try Again Later', bgColor: Colors.red);
         break;
       default:
     }

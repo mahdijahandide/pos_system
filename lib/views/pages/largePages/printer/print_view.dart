@@ -6,7 +6,10 @@ import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
 
+import '../../../../services/controller/auth_controller.dart';
 import '../../../../services/controller/cart_controller.dart';
+import '../../../../services/controller/order_controller.dart';
+import '../../../../services/controller/user_controller.dart';
 import '../../../components/texts/customText.dart';
 
 class PrintView extends StatelessWidget {
@@ -21,128 +24,172 @@ class PrintView extends StatelessWidget {
             title: 'Print Preview', size: 18, fontWeight: FontWeight.bold),
       ),
       body: PdfPreview(
-        build: (format) => _generatePdf(format),
+        build: (format) => generatePdf(),
       ),
     );
   }
 
-  Future<Uint8List> _generatePdf(PdfPageFormat format) async {
-    final pdf = pw.Document(version: PdfVersion.pdf_1_5, compress: true);
-    final font = await PdfGoogleFonts.nunitoExtraLight();
+  Future<Uint8List> generatePdf() async {
+    OrderController controller = Get.put((OrderController()));
+    final gf = await PdfGoogleFonts.iBMPlexSansArabicLight();
+
+    final pdf = pw.Document();
+
+    var coData = Get.find<AuthController>().coDetails;
 
     pdf.addPage(
       pw.Page(
-        pageFormat: format,
+        pageFormat: PdfPageFormat.a4,
         build: (context) {
           return pw.Column(
             children: [
-              pw.Center(child: pw.Text('Pos system factor')),
+              pw.Center(
+                  child: pw.Text(
+                      'INVOICE NO #${Get.find<CartController>().printedFactorId.value}',
+                      style: pw.TextStyle(
+                          fontSize: 22, fontWeight: pw.FontWeight.bold))),
+              pw.Center(child: pw.Text(coData['name_en'])),
+              pw.Center(child: pw.Text(coData['address_en'])),
+              pw.Row(mainAxisAlignment: pw.MainAxisAlignment.center, children: [
+                pw.Center(child: pw.Text('Phone: ' + coData['phone'])),
+                pw.SizedBox(width: 50),
+                pw.Center(child: pw.Text('Mobile: ' + coData['mobile'])),
+              ]),
+              pw.Center(child: pw.Text(Get.find<AuthController>().webSite)),
+              pw.SizedBox(height: 10),
+              pw.Row(
+                  mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                  children: [
+                    pw.Center(
+                        child: pw.Text(
+                            'Cashier: ${Get.find<UserController>().name}')),
+                    pw.Column(children: [
+                      pw.Center(
+                        child: pw.Text(DateTime.now().year.toString() +
+                            '-' +
+                            DateTime.now().month.toString() +
+                            '-' +
+                            DateTime.now().day.toString()),
+                      ),
+                      pw.Center(
+                        child: pw.Text(DateTime.now().hour.toString() +
+                            ':' +
+                            DateTime.now().minute.toString()),
+                      )
+                    ])
+                  ]),
+              pw.Divider(),
+              pw.Row(mainAxisAlignment: pw.MainAxisAlignment.start, children: [
+                pw.Expanded(flex: 1, child: pw.Text('#')),
+                pw.Expanded(flex: 3, child: pw.Text('Item')),
+                pw.Expanded(flex: 1, child: pw.Text('QTY')),
+                pw.Expanded(flex: 1, child: pw.Text('Price')),
+                pw.Expanded(flex: 1, child: pw.Text('Total')),
+              ]),
+              pw.Divider(),
               pw.SizedBox(height: 10),
               pw.SizedBox(
                   width: double.infinity,
                   child: pw.ListView.separated(
-                      itemCount:
-                          Get.find<CartController>().addToCartList.value.length,
-                      itemBuilder: (pw.Context context, int index) {
-                        var currentItem = Get.find<CartController>()
-                            .addToCartList
-                            .value[index];
-                        double itemQty =
-                            double.parse(currentItem.quantity.toString());
-                        double itemPrc =
-                            double.parse(currentItem.price.toString());
-                        double itemPrice = itemQty * itemPrc;
-                        return pw.Row(
+                    itemCount: 3,
+                    itemBuilder: (pw.Context context, int index) {
+                      var currentItem = controller.orderItemsList[index];
+
+                      return pw.Row(
+                          mainAxisAlignment: pw.MainAxisAlignment.start,
                           children: [
-                            pw.Column(
-                              crossAxisAlignment: pw.CrossAxisAlignment.start,
-                              children: [
-                                pw.FittedBox(
-                                  child: pw.Text(
-                                    currentItem.title.toString(),
-                                  ),
-                                ),
-                                pw.SizedBox(
-                                  height: 8,
-                                ),
-                                pw.Row(
-                                  children: [
-                                    pw.SizedBox(
-                                      width: 5,
-                                    ),
-                                    pw.Text(
-                                      '#${index + 1}',
-                                    ),
-                                    pw.SizedBox(
-                                      width: 8,
-                                    ),
-                                    pw.Text(double.parse(
-                                            currentItem.price.toString())
-                                        .toStringAsFixed(3)),
-                                    pw.SizedBox(
-                                      width: 5,
-                                    ),
-                                    pw.Text(itemPrice.toStringAsFixed(3)),
-                                  ],
-                                )
-                              ],
-                            ),
-                            pw.SizedBox(
-                              width: 4,
-                            ),
-                            pw.FittedBox(
-                                fit: pw.BoxFit.scaleDown,
-                                child: pw.Text(currentItem.quantity.toString(),
-                                    style: const pw.TextStyle(fontSize: 14)))
-                          ],
-                        );
-                      },
-                      separatorBuilder: (pw.Context context, int index) {
-                        return pw.SizedBox(
-                            width: Get.width,
-                            child: pw.Divider(
-                              thickness: 1,
-                            ));
-                      })),
+                            pw.Expanded(
+                                flex: 1,
+                                child:
+                                    pw.Text(currentItem.productId.toString())),
+                            pw.Expanded(
+                                flex: 3,
+                                child: pw.Column(
+                                    crossAxisAlignment:
+                                        pw.CrossAxisAlignment.start,
+                                    children: [
+                                      pw.Text(
+                                        currentItem.title.toString(),
+                                        overflow: pw.TextOverflow.clip,
+                                      ),
+                                      pw.Text(
+                                        '${currentItem.titleAr}',
+                                        textDirection: pw.TextDirection.rtl,
+                                        style: pw.TextStyle(
+                                          font: gf,
+                                        ),
+                                      ),
+                                    ])),
+                            pw.Expanded(
+                                flex: 1,
+                                child:
+                                    pw.Text(currentItem.quantity.toString())),
+                            pw.Expanded(
+                                flex: 1,
+                                child: pw.Text(
+                                    currentItem.unitPrice!.toStringAsFixed(3))),
+                            pw.Expanded(
+                                flex: 1,
+                                child: pw.Text(
+                                    currentItem.subtotal!.toStringAsFixed(3))),
+                          ]);
+                    },
+                    separatorBuilder: (pw.Context context, int index) {
+                      return pw.SizedBox(height: 9);
+                    },
+                  )),
               pw.SizedBox(height: 12),
               pw.Row(
                   mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
                   children: [
-                    pw.Text('Total: '),
-                    pw.Text(
-                      Get.find<CartController>().totalAmount.toStringAsFixed(3),
-                    ),
+                    pw.Text('Subtotal: '),
+                    pw.Text(Get.find<CartController>()
+                        .subTotalAmountForPrint
+                        .toString()),
                   ]),
               pw.Divider(thickness: 2),
               pw.Row(
                   mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
                   children: [
-                    pw.Text('Discount: '),
+                    pw.Text('Qty: ${controller.orderItemsList.length}'),
                     pw.Text(
-                      '- ${Get.find<CartController>().discountAmount.toStringAsFixed(3)}',
+                      'Delivery: ${Get.find<CartController>().deliveryAmountForPrint.toStringAsFixed(3)}',
                     ),
                   ]),
-              pw.Divider(thickness: 2),
               pw.Row(
                   mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
                   children: [
-                    pw.Text('Delivery: '),
+                    pw.SizedBox(),
                     pw.Text(
-                      '+ ${Get.find<CartController>().deliveryAmount.toStringAsFixed(3)}',
+                      'Discount: ${Get.find<CartController>().discountAmountForPrint.toStringAsFixed(3)}',
                     ),
                   ]),
-              pw.Divider(thickness: 2),
               pw.Row(
                   mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
                   children: [
-                    pw.Text('Total: '),
+                    pw.SizedBox(),
                     pw.Text(
-                      (Get.find<CartController>().totalAmount +
-                              Get.find<CartController>().deliveryAmount -
-                              Get.find<CartController>().discountAmount)
-                          .toStringAsFixed(3),
+                      'Total:  ${Get.find<CartController>().totalAmountForPrint.toStringAsFixed(3)}',
                     ),
                   ]),
+              pw.Row(
+                  mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                  children: [
+                    pw.SizedBox(),
+                    pw.Text(
+                      'Paid: ${Get.find<CartController>().totalPaidForPrint.toStringAsFixed(3)}',
+                    ),
+                  ]),
+              pw.Row(
+                  mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                  children: [
+                    pw.SizedBox(),
+                    pw.Text(
+                      'Balance: ${(Get.find<CartController>().totalPaidForPrint - Get.find<CartController>().totalAmountForPrint).toStringAsFixed(3)}',
+                    ),
+                  ]),
+              pw.SizedBox(height: 25),
+              pw.Center(child: pw.Text(coData['pos_note_en']))
             ],
           );
         },

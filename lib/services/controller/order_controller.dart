@@ -73,13 +73,13 @@ class OrderController extends GetxController {
         } else {
           Get.back();
           Snack().createSnack(
-              title: 'warning',
-              msg: 'can not refund this invoice',
+              title: 'Warning',
+              msg: 'Can Not Refund This Invoice',
               bgColor: Colors.red);
         }
         // if (double.parse(jsonObject['data']['subtotal'].toString()) <= 0) {
         //   Snack().createSnack(
-        //       title: 'warning',
+        //       title: 'Warning',
         //       msg: 'can not refund this invoice',
         //       bgColor: Colors.red);
         // }

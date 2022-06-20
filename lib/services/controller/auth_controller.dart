@@ -117,7 +117,7 @@ class AuthController extends GetxController {
           .getAreas(doInBackground: true, hasLoading: false);
 
       html.WindowBase _popup = html.window.open(
-          'https://possystem.gulfweb.ir/#/showFactor',
+          'https://mrk-q8.com/#/showFactor',
           'Pos system',
           'left=100,top=100,width=800,height=600');
       if (_popup.closed!) {

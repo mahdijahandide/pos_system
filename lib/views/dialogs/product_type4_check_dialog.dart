@@ -83,7 +83,7 @@ class ProductTypeCheck {
           )),
       cancel: InkWell(
           onTap: () {
-            Get.back();
+            Get.back(closeOverlays: true, canPop: true);
           },
           child: Container(
               width: 90,

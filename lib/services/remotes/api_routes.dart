@@ -5,8 +5,9 @@
 // const String BASE_URL = 'https://kash5astore.gulfweb.ir/api/posv1/';
 // ignore_for_file: constant_identifier_names
 
-const String BASE_URL = 'https://kash5a2.gulfweb.ir/api/posv1/';
-const String BASE_URL_IMAGES = 'https://kash5astore.com/uploads/logo/';
+// const String BASE_URL = 'https://kash5a2.gulfweb.ir/api/posv1/';
+const String BASE_URL = 'https://mrk-q8.com/api/posv1/';
+const String BASE_URL_IMAGES = 'https://mrk-q8.com/uploads/logo/';
 
 //routes
 const String GET_SETTING_DETAILS_ROUTE = BASE_URL + 'getSetting';

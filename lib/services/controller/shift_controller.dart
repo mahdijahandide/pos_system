@@ -142,14 +142,12 @@ class ShiftController extends GetxController {
   }
 
   Future<Uint8List> generatePdf({required data}) async {
-    // final ttf = await fontFromAssetBundle('assets/fonts/pelak.ttf');
     var coData = Get.find<AuthController>().coDetails;
     final pdf = pw.Document(version: PdfVersion.pdf_1_5, compress: true);
-    final font = await PdfGoogleFonts.nunitoExtraLight();
 
     pdf.addPage(
       pw.Page(
-        pageFormat: PdfPageFormat.a4,
+        pageFormat: PdfPageFormat.roll80,
         build: (context) {
           return pw.Column(
             children: [
@@ -158,12 +156,12 @@ class ShiftController extends GetxController {
               pw.Center(child: pw.Text(coData['address_en'])),
               pw.Row(mainAxisAlignment: pw.MainAxisAlignment.center, children: [
                 pw.Center(child: pw.Text('Phone: ' + coData['phone'])),
-                pw.SizedBox(width: 50),
+                pw.SizedBox(width: 10),
                 pw.Center(child: pw.Text('Mobile: ' + coData['mobile'])),
               ]),
               pw.Center(child: pw.Text(Get.find<AuthController>().webSite)),
               pw.SizedBox(height: 10),
-              pw.Row(
+              pw.Column(
                   mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
                   children: [
                     pw.Center(
@@ -280,12 +278,13 @@ class ShiftController extends GetxController {
                                     crossAxisAlignment:
                                         pw.CrossAxisAlignment.start,
                                     children: [
-                                      pw.Text(
-                                        currentItem.type.toString(),
-                                        overflow: pw.TextOverflow.clip,
-                                      ),
+                                      pw.Text(currentItem.type.toString(),
+                                          overflow: pw.TextOverflow.clip,
+                                          maxLines: 1),
                                       pw.Text(
                                         currentItem.description.toString(),
+                                        maxLines: 2,
+                                        overflow: pw.TextOverflow.clip,
                                       ),
                                     ])),
                             pw.Expanded(
