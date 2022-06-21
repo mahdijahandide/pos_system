@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pos_system/services/controller/cart_controller.dart';
 import 'package:pos_system/services/controller/customer_controller.dart';
-import 'package:pos_system/services/controller/order_controller.dart';
 import 'package:pos_system/views/components/snackbar/snackbar.dart';
 import 'package:pos_system/views/components/texts/customText.dart';
 import 'package:pos_system/views/dialogs/discount_dialog.dart';
@@ -355,7 +354,16 @@ class DashboardSidebar {
                       padding: const EdgeInsets.all(6),
                       icon: Icons.money,
                       title: 'cash_drawer'.tr,
-                      onTap: () {}),
+                      onTap: () {
+                        // Printer.connect('192.168.0.123', port: 9100)
+                        //     .then((printer) async {
+                        //   await printer.printQRCode('nhancv.com');
+                        //   printer.println('');
+                        //   printer.cut();
+                        //   printer.openCashDrawer();
+                        //   printer.disconnect();
+                        // });
+                      }),
                 ),
                 const SizedBox(
                   width: 6,

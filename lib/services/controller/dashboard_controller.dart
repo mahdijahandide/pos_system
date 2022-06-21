@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
+import 'package:read_barcode/read_barcode.dart';
 import 'package:universal_html/html.dart';
 
 class DashboardController extends GetxController {
@@ -19,6 +20,17 @@ class DashboardController extends GetxController {
   RxInt searchId = 1.obs;
 
   RxBool showProductDetails = false.obs;
+
+  final barcodeReader = BarcodeReader();
+  RxBool enterPressed = false.obs;
+
+  void listener() {
+    print(barcodeReader.keycode);
+    barcodeReader.keycode.last == 'Enter'
+        ? enterPressed.value = true
+        : searchController.text = barcodeReader.keycode.join();
+    update();
+  }
 
   void changeSearchType({required id}) {
     searchId.value = id;

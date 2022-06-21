@@ -14,6 +14,7 @@ import 'package:pos_system/services/remotes/remote_status_handler.dart';
 import 'package:pos_system/views/dialogs/loading_dialogs.dart';
 import 'package:xid/xid.dart';
 
+import '../../views/components/snackbar/snackbar.dart';
 import 'category_controller.dart';
 import 'dashboard_controller.dart';
 import 'package:universal_html/html.dart' as html;
@@ -32,10 +33,9 @@ class AuthController extends GetxController {
   // is true will show the numeric keyboard.
   bool isNumericMode = false;
 
-  final TextEditingController loginControllerUserText =
-      TextEditingController(text: 'admin');
+  final TextEditingController loginControllerUserText = TextEditingController();
   final TextEditingController loginControllerPasswordText =
-      TextEditingController(text: 'kash5admin');
+      TextEditingController();
 
   RxBool userFocus = false.obs;
   RxBool passFocus = false.obs;
@@ -116,17 +116,22 @@ class AuthController extends GetxController {
       Get.find<CartController>()
           .getAreas(doInBackground: true, hasLoading: false);
 
-      html.WindowBase _popup = html.window.open(
-          'https://mrk-q8.com/#/showFactor',
-          'Pos system',
-          'left=100,top=100,width=800,height=600');
+      html.WindowBase _popup = html.window.open('$DOMAIN/#/showFactor',
+          'Pos system', 'left=100,top=100,width=800,height=600');
       if (_popup.closed!) {
         throw ("Popups blocked");
       }
     } else {
       Get.back();
-      RemoteStatusHandler()
-          .errorHandler(code: response.statusCode, error: response.body);
+      if (response.statusCode == 401) {
+        Snack().createSnack(
+            title: 'Authentication Faild',
+            bgColor: Colors.red,
+            msg: 'Incorrect Username Or Password');
+      } else {
+        RemoteStatusHandler()
+            .errorHandler(code: response.statusCode, error: response.body);
+      }
     }
   }
 

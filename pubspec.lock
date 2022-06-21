@@ -436,6 +436,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.1.0"
+  read_barcode:
+    dependency: "direct main"
+    description:
+      name: read_barcode
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.1"
   responsive_builder:
     dependency: "direct main"
     description:

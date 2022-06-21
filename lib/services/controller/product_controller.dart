@@ -53,14 +53,15 @@ class ProductController extends GetxController {
       dynamic openModal,
       dynamic openModalTap,
       dynamic title}) async {
-    if(openModal!=true){
+    if (openModal != true) {
       productList.value.clear();
       update();
     }
-    if(Get.find<DashboardController>().isShowKeyboard.isTrue){Get.find<DashboardController>().isShowKeyboard.value=false;
-    Get.find<DashboardController>().update();
+    if (Get.find<DashboardController>().isShowKeyboard.isTrue) {
+      Get.find<DashboardController>().isShowKeyboard.value = false;
+      Get.find<DashboardController>().update();
     }
-    Get.find<DashboardController>().searchController.text='';
+    Get.find<DashboardController>().searchController.text = '';
 
     var url = PRODUCTS_BY_CATEGORIES_ROUTE;
     final http.Response response = await http.post(Uri.parse(url),

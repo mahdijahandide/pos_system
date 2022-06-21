@@ -56,7 +56,6 @@ class DesktopLogin extends GetView<AuthController> {
               SizedBox(
                   width: 600,
                   child: CustomTextField().createTextField(
-                      autoFocus: true,
                       node: controller.userFocusNode,
                       hint: '',
                       height: 45.0,

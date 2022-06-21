@@ -15,11 +15,13 @@ import 'package:vk/vk.dart';
 import 'package:printing/printing.dart';
 import 'package:xid/xid.dart';
 
-class DesktopDashboard extends StatelessWidget {
+class DesktopDashboard extends GetView<DashboardController> {
   DesktopDashboard({Key? key}) : super(key: key);
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+
   @override
   Widget build(BuildContext context) {
+    controller.barcodeReader.addListener(controller.listener);
     return Scaffold(
         key: scaffoldKey,
         endDrawer: Drawer(

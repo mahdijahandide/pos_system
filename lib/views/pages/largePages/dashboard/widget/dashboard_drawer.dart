@@ -7,6 +7,7 @@ import 'package:pos_system/services/controller/dashboard_controller.dart';
 import 'package:pos_system/views/components/texts/customText.dart';
 import 'package:universal_html/html.dart' as html;
 
+import '../../../../../services/remotes/api_routes.dart';
 import '../../../../components/snackbar/snackbar.dart';
 
 class DashboardDrawer {
@@ -122,7 +123,7 @@ class DashboardDrawer {
                 icon: const Icon(Icons.monitor),
                 onPressed: () {
                   html.WindowBase _popup = html.window.open(
-                      'https://https://mrk-q8.com/#/showFactor/#/showFactor',
+                      '$DOMAIN/#/showFactor',
                       'Pos system',
                       'left=100,top=100,width=800,height=600');
                   if (_popup.closed!) {

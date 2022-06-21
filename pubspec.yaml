@@ -55,6 +55,7 @@ dependencies:
   input_calculator: ^2.0.0
   barcode: ^2.2.1
   flutter_svg: ^1.0.3
+  read_barcode: ^1.0.1
 
 dev_dependencies:
   flutter_test:

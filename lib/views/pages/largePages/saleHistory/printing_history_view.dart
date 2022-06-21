@@ -231,7 +231,9 @@ class PrintingHistoryView {
               pw.SizedBox(height: 25),
               pw.SvgImage(svg: svg),
               pw.SizedBox(height: 25),
-              pw.Center(child: pw.Text(coData['pos_note_en']))
+              pw.Center(
+                  child: pw.Text(
+                      coData['pos_note_en'] ?? 'Thanks For Your Purchase'))
             ],
           );
         },

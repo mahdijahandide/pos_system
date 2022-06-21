@@ -915,7 +915,7 @@ class CartController extends GetxController {
               pw.SizedBox(height: 25),
               pw.Center(
                   child: pw.Text(
-                coData['pos_note_en'],
+                coData['pos_note_en'] ?? 'Thanks For Your Purchase',
               ))
             ],
           );
