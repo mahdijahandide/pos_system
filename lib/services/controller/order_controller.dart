@@ -52,14 +52,17 @@ class OrderController extends GetxController {
         }));
     if (response.statusCode == 200) {
       var jsonObject = convert.jsonDecode(response.body);
-
+      hasList.value = true;
       if (reqStatus == 'refund') {
         if (jsonObject['data']['orders'][0]['order_status'].toString() ==
             'completed') {
-          double delivery=jsonObject['data']['orders'][0]['delivery_charges']??0.0;
-          Get.find<CartController>().refundCartTotalPrice =
-          (double.parse(jsonObject['data']['orders'][0]['total_amount'].toString())-
-              delivery).toString();
+          double delivery =
+              jsonObject['data']['orders'][0]['delivery_charges'] ?? 0.0;
+          Get.find<CartController>().refundCartTotalPrice = (double.parse(
+                      jsonObject['data']['orders'][0]['total_amount']
+                          .toString()) -
+                  delivery)
+              .toString();
           // Get.find<CartController>().discountAmount=jsonObject
           Get.find<CartController>().isRefund.value =
               !Get.find<CartController>().isRefund.value;
@@ -89,7 +92,6 @@ class OrderController extends GetxController {
         orderList.value.add(OrderModel(data: element));
       });
       orderFilteredList.value = orderList.value;
-      hasList.value = true;
     } else {
       Get.back();
       RemoteStatusHandler().errorHandler(
@@ -148,7 +150,9 @@ class OrderController extends GetxController {
             'null') {
           orderRefundDeliveryAmount = double.parse(
               jsonObject['data']['details']['delivery_charges'].toString());
-        }else{orderRefundDeliveryAmount=0.0;}
+        } else {
+          orderRefundDeliveryAmount = 0.0;
+        }
 
         if (jsonObject['data']['details']['seller_discount'].toString() !=
             'null') {
@@ -156,8 +160,8 @@ class OrderController extends GetxController {
               jsonObject['data']['details']['seller_discount'].toString());
 
           Get.find<CartController>().discountAmount = orderRefundSellerDiscount;
-        }else{
-          orderRefundSellerDiscount=0.0;
+        } else {
+          orderRefundSellerDiscount = 0.0;
           Get.find<CartController>().discountAmount = orderRefundSellerDiscount;
         }
         discountNesbat = orderRefundSellerDiscount /
@@ -210,8 +214,9 @@ class OrderController extends GetxController {
           }
         });
         Get.find<CartController>().deliveryAmount = orderRefundDeliveryAmount;
-        Get.find<CartController>().totalAmount =
-            orderRefundTotalAmount + orderRefundSellerDiscount-orderRefundDeliveryAmount;
+        Get.find<CartController>().totalAmount = orderRefundTotalAmount +
+            orderRefundSellerDiscount -
+            orderRefundDeliveryAmount;
       }
     } else {
       Get.back();
