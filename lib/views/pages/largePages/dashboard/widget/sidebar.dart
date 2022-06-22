@@ -154,123 +154,113 @@ class DashboardSidebar {
               ],
             ),
             const Divider(),
-            Expanded(
-              child: GetBuilder(builder: (CartController controller) {
-                return GetBuilder(builder: (CartController controller) {
-                  return ListView(
-                    children: [
-                      ListView.separated(
-                        itemCount: Get.find<CartController>()
-                            .addToCartList
-                            .value
-                            .length,
-                        shrinkWrap: true,
-                        physics: const AlwaysScrollableScrollPhysics(),
-                        itemBuilder: (BuildContext context, int index) {
-                          var currentItem = Get.find<CartController>()
-                              .addToCartList
-                              .value[index];
-                          double itemQty =
-                              double.parse(currentItem.quantity.toString());
-                          double itemPrc =
-                              double.parse(currentItem.price.toString());
-                          double itemPrice = itemQty * itemPrc;
-                          return GestureDetector(
-                            onTap: () {
-                              if (currentItem.isSelected == true) {
-                                currentItem.isSelected = false;
-                                controller.update();
-                              } else {
-                                if (controller.addToCartList.value
-                                    .where(
-                                        (element) => element.isSelected == true)
-                                    .toList()
-                                    .isNotEmpty) {
-                                  controller.addToCartList.value
-                                      .where((element) =>
-                                          element.isSelected == true)
-                                      .first
-                                      .isSelected = false;
-                                }
-                                currentItem.isSelected = true;
-                                controller.update();
-                              }
-                            },
-                            child: Container(
-                              color: currentItem.isSelected == false
-                                  ? Colors.grey.withOpacity(0.1)
-                                  : Colors.green.withOpacity(0.3),
-                              child: Row(
-                                children: [
-                                  Expanded(
-                                    flex: 1,
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        FittedBox(
-                                          child: CustomText().createText(
-                                              title: currentItem.title,
-                                              fontWeight: FontWeight.bold,
-                                              size: 18),
-                                        ),
-                                        const SizedBox(
-                                          height: 8,
-                                        ),
-                                        Row(
-                                          children: [
-                                            CustomText().createText(
-                                                title: '#${index + 1}'),
-                                            const SizedBox(
-                                              width: 5,
-                                            ),
-                                            CustomText().createText(title: ''),
-                                            const SizedBox(
-                                              width: 8,
-                                            ),
-                                            CustomText().createText(
-                                                title: double.parse(currentItem
-                                                        .price
-                                                        .toString())
-                                                    .toStringAsFixed(3),
-                                                fontWeight: FontWeight.bold),
-                                            const SizedBox(
-                                              width: 5,
-                                            ),
-                                            CustomText().createText(
-                                                title: itemPrice
-                                                    .toStringAsFixed(3),
-                                                fontWeight: FontWeight.bold),
-                                          ],
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                  const SizedBox(
-                                    width: 4,
-                                  ),
-                                  FittedBox(
-                                      fit: BoxFit.scaleDown,
-                                      alignment: AlignmentDirectional.centerEnd,
+            Expanded(child: GetBuilder(builder: (CartController controller) {
+              return ListView(
+                children: [
+                  ListView.separated(
+                    itemCount:
+                        Get.find<CartController>().addToCartList.value.length,
+                    shrinkWrap: true,
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    itemBuilder: (BuildContext context, int index) {
+                      var currentItem =
+                          Get.find<CartController>().addToCartList.value[index];
+                      double itemQty =
+                          double.parse(currentItem.quantity.toString());
+                      double itemPrc =
+                          double.parse(currentItem.price.toString());
+                      double itemPrice = itemQty * itemPrc;
+                      return GestureDetector(
+                        onTap: () {
+                          if (currentItem.isSelected == true) {
+                            currentItem.isSelected = false;
+                            controller.update();
+                          } else {
+                            if (controller.addToCartList.value
+                                .where((element) => element.isSelected == true)
+                                .toList()
+                                .isNotEmpty) {
+                              controller.addToCartList.value
+                                  .where(
+                                      (element) => element.isSelected == true)
+                                  .first
+                                  .isSelected = false;
+                            }
+                            currentItem.isSelected = true;
+                            controller.update();
+                          }
+                        },
+                        child: Container(
+                          color: currentItem.isSelected == false
+                              ? Colors.grey.withOpacity(0.1)
+                              : Colors.green.withOpacity(0.3),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                flex: 1,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    FittedBox(
                                       child: CustomText().createText(
-                                          title: currentItem.quantity,
-                                          size: 16,
+                                          title: currentItem.title,
                                           fontWeight: FontWeight.bold,
-                                          align: TextAlign.end))
-                                ],
+                                          size: 18),
+                                    ),
+                                    const SizedBox(
+                                      height: 8,
+                                    ),
+                                    Row(
+                                      children: [
+                                        CustomText()
+                                            .createText(title: '#${index + 1}'),
+                                        const SizedBox(
+                                          width: 5,
+                                        ),
+                                        CustomText().createText(title: ''),
+                                        const SizedBox(
+                                          width: 8,
+                                        ),
+                                        CustomText().createText(
+                                            title: double.parse(currentItem
+                                                    .price
+                                                    .toString())
+                                                .toStringAsFixed(3),
+                                            fontWeight: FontWeight.bold),
+                                        const SizedBox(
+                                          width: 5,
+                                        ),
+                                        CustomText().createText(
+                                            title: itemPrice.toStringAsFixed(3),
+                                            fontWeight: FontWeight.bold),
+                                      ],
+                                    )
+                                  ],
+                                ),
                               ),
-                            ),
-                          );
-                        },
-                        separatorBuilder: (BuildContext context, int index) {
-                          return const Divider();
-                        },
-                      ),
-                    ],
-                  );
-                });
-              }),
-            ),
+                              const SizedBox(
+                                width: 4,
+                              ),
+                              FittedBox(
+                                  fit: BoxFit.scaleDown,
+                                  alignment: AlignmentDirectional.centerEnd,
+                                  child: CustomText().createText(
+                                      title: currentItem.quantity,
+                                      size: 16,
+                                      fontWeight: FontWeight.bold,
+                                      align: TextAlign.end))
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                    separatorBuilder: (BuildContext context, int index) {
+                      return const Divider();
+                    },
+                  ),
+                ],
+              );
+            })),
             const Divider(),
             keyValText(
                 title: 'Subtotal',

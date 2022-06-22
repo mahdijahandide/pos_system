@@ -1,5 +1,7 @@
 import 'dart:convert';
+import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'dart:convert' as convert;
@@ -116,10 +118,12 @@ class AuthController extends GetxController {
       Get.find<CartController>()
           .getAreas(doInBackground: true, hasLoading: false);
 
-      html.WindowBase _popup = html.window.open('$DOMAIN/#/showFactor',
-          'Pos system', 'left=100,top=100,width=800,height=600');
-      if (_popup.closed!) {
-        throw ("Popups blocked");
+      if (!Platform.isAndroid) {
+        html.WindowBase _popup = html.window.open('$DOMAIN/#/showFactor',
+            'Pos system', 'left=100,top=100,width=800,height=600');
+        if (_popup.closed!) {
+          throw ("Popups blocked");
+        }
       }
     } else {
       Get.back();

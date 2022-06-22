@@ -24,11 +24,14 @@ class DashboardController extends GetxController {
   final barcodeReader = BarcodeReader();
   RxBool enterPressed = false.obs;
 
+  RxString barcodeResult = ''.obs;
+
   void listener() {
     print(barcodeReader.keycode);
     barcodeReader.keycode.last == 'Enter'
         ? enterPressed.value = true
-        : searchController.text = barcodeReader.keycode.join();
+        : barcodeResult.value = barcodeReader.keycode.join();
+    barcodeReader.keycode.clear();
     update();
   }
 

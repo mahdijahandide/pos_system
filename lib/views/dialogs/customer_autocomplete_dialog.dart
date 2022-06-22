@@ -31,17 +31,17 @@ class CustomerAutoCompleteDialog {
                 initialList: list,
                 label: 'Customer Name',
                 controller: customerController),
-            Container(
-              width: 900,
-              margin: const EdgeInsets.only(top: 120),
-              color: const Color(0xffeeeeee),
-              child: VirtualKeyboard(
-                focusNode: focusNode,
-                textColor: Colors.black,
-                type: VirtualKeyboardType.Alphanumeric,
-                textController: customerController,
-              ),
-            ),
+            // Container(
+            //   width: 900,
+            //   margin: const EdgeInsets.only(top: 120),
+            //   color: const Color(0xffeeeeee),
+            //   child: VirtualKeyboard(
+            //     focusNode: focusNode,
+            //     textColor: Colors.black,
+            //     type: VirtualKeyboardType.Alphanumeric,
+            //     textController: customerController,
+            //   ),
+            // ),
           ],
         );
       }),

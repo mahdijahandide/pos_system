@@ -80,7 +80,7 @@ class ProductController extends GetxController {
         productArray.forEach((element) {
           searchedProductList.add((ProductModel(data: element)));
         });
-        Get.back();
+        Get.back(closeOverlays: true, canPop: true);
         Get.bottomSheet(
           ProductsModal(
             ontap: openModalTap,
@@ -105,6 +105,7 @@ class ProductController extends GetxController {
           productList.value.add((ProductModel(data: element)));
         });
       }
+
       update();
     } else {
       Get.back();

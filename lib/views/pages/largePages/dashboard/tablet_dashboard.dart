@@ -13,6 +13,9 @@ import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
 
+import '../../../../services/controller/order_controller.dart';
+import '../../../dialogs/refund_factor_num_dialog.dart';
+
 class TabletDashboard extends StatelessWidget {
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -55,7 +58,30 @@ class TabletDashboard extends StatelessWidget {
                         height: 120.0,
                         icon: Icons.redo_sharp,
                         title: 'refund'.tr,
-                        onTap: () {}),
+                        onTap: () {
+                          if (controller.isRefund.isTrue) {
+                            controller.newSale();
+                            controller.isRefund.value = false;
+                            Get.find<ProductController>()
+                                .productList
+                                .value
+                                .clear();
+                            Get.find<ProductController>()
+                                .getAllProducts(catId: '', keyword: '');
+
+                            Get.find<OrderController>().orderList.value.clear();
+                            Get.find<OrderController>()
+                                .orderFilteredList
+                                .value
+                                .clear();
+                            Get.find<OrderController>().orderItemsList.clear();
+                            Get.find<OrderController>().hasList.value = false;
+                            controller.update();
+                          } else {
+                            RefundFactorNumDialog.showCustomDialog(
+                                title: 'Refund');
+                          }
+                        }),
                     const SizedBox(
                       width: 12,
                     ),
@@ -65,9 +91,9 @@ class TabletDashboard extends StatelessWidget {
                         icon: Icons.print,
                         title: 'Print'.tr,
                         onTap: () async {
-                          await Printing.layoutPdf(onLayout: (_) => _generatePdf());
-                        }
-                        ),
+                          await Printing.layoutPdf(
+                              onLayout: (_) => _generatePdf());
+                        }),
                   ],
                 );
               }),
@@ -100,6 +126,7 @@ class TabletDashboard extends StatelessWidget {
                   : DashboardMain().createMain(gridCnt: 3, key: scaffoldKey))),
     );
   }
+
   Future<Uint8List> _generatePdf() async {
     final pdf = pw.Document(version: PdfVersion.pdf_1_5, compress: true);
     final font = await PdfGoogleFonts.nunitoExtraLight();
@@ -115,95 +142,106 @@ class TabletDashboard extends StatelessWidget {
               pw.SizedBox(
                   width: double.infinity,
                   child: pw.ListView.separated(
-                      itemCount: Get.find<CartController>().addToCartListForPrint.length, itemBuilder: (pw.Context context, int index) {
-                    var currentItem =
-                    Get.find<CartController>().addToCartListForPrint[index];
-                    double itemQty =
-                    double.parse(currentItem.quantity.toString());
-                    double itemPrc =
-                    double.parse(currentItem.price.toString());
-                    double itemPrice = itemQty * itemPrc;
-                    return pw.Row(
-                      children: [
-                        pw.Column(
-                          crossAxisAlignment:
-                          pw.CrossAxisAlignment.start,
+                      itemCount: Get.find<CartController>()
+                          .addToCartListForPrint
+                          .length,
+                      itemBuilder: (pw.Context context, int index) {
+                        var currentItem = Get.find<CartController>()
+                            .addToCartListForPrint[index];
+                        double itemQty =
+                            double.parse(currentItem.quantity.toString());
+                        double itemPrc =
+                            double.parse(currentItem.price.toString());
+                        double itemPrice = itemQty * itemPrc;
+                        return pw.Row(
                           children: [
-                            pw.FittedBox(
-                              child: pw.Text(currentItem.title.toString(),),
+                            pw.Column(
+                              crossAxisAlignment: pw.CrossAxisAlignment.start,
+                              children: [
+                                pw.FittedBox(
+                                  child: pw.Text(
+                                    currentItem.title.toString(),
+                                  ),
+                                ),
+                                pw.SizedBox(
+                                  height: 8,
+                                ),
+                                pw.Row(
+                                  children: [
+                                    pw.SizedBox(
+                                      width: 5,
+                                    ),
+                                    pw.Text(
+                                      '#${index + 1}',
+                                    ),
+                                    pw.SizedBox(
+                                      width: 8,
+                                    ),
+                                    pw.Text('${currentItem.price}'),
+                                    pw.SizedBox(
+                                      width: 5,
+                                    ),
+                                    pw.Text(itemPrice.toString()),
+                                  ],
+                                )
+                              ],
                             ),
                             pw.SizedBox(
-                              height: 8,
+                              width: 4,
                             ),
-                            pw.Row(
-                              children: [
-
-                                pw.SizedBox(
-                                  width: 5,
-                                ),
-                                pw.Text('#${index + 1}',),
-                                pw.SizedBox(
-                                  width: 8,
-                                ),
-                                pw.Text('${currentItem.price}'),
-                                pw.SizedBox(
-                                  width: 5,
-                                ),
-                                pw.Text(itemPrice.toString()),
-                              ],
-                            )
+                            pw.FittedBox(
+                                fit: pw.BoxFit.scaleDown,
+                                child: pw.Text(currentItem.quantity.toString(),
+                                    style: const pw.TextStyle(fontSize: 14)))
                           ],
-                        ),
-
-                        pw.SizedBox(
-                          width: 4,
-                        ),
-                        pw.FittedBox(
-                            fit: pw.BoxFit.scaleDown,
-                            child:pw.Text(currentItem.quantity.toString(),style: const pw.TextStyle(fontSize: 14))
-                        )
-                      ],
-                    );
-                  }, separatorBuilder: (pw.Context context, int index) {
-                    return
-                      pw.SizedBox(
-                          width: Get.width,
-                          child:pw.Divider(thickness: 1,)
-                      );
-
-                  }
-                  )
-              ),
+                        );
+                      },
+                      separatorBuilder: (pw.Context context, int index) {
+                        return pw.SizedBox(
+                            width: Get.width,
+                            child: pw.Divider(
+                              thickness: 1,
+                            ));
+                      })),
               pw.SizedBox(height: 12),
               pw.Row(
                   mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
                   children: [
                     pw.Text('Subtotal: '),
-                    pw.Text(Get.find<CartController>().totalAmountForPrint.toString(),),
+                    pw.Text(
+                      Get.find<CartController>().totalAmountForPrint.toString(),
+                    ),
                   ]),
               pw.Divider(thickness: 2),
               pw.Row(
                   mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
                   children: [
                     pw.Text('Discount: '),
-                    pw.Text('- ${Get.find<CartController>().discountAmountForPrint.toString()}',),
+                    pw.Text(
+                      '- ${Get.find<CartController>().discountAmountForPrint.toString()}',
+                    ),
                   ]),
               pw.Divider(thickness: 2),
               pw.Row(
                   mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
                   children: [
                     pw.Text('Delivery: '),
-                    pw.Text('+ ${Get.find<CartController>().deliveryAmountForPrint.toString()}',),
+                    pw.Text(
+                      '+ ${Get.find<CartController>().deliveryAmountForPrint.toString()}',
+                    ),
                   ]),
               pw.Divider(thickness: 2),
               pw.Row(
                   mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
                   children: [
                     pw.Text('Total: '),
-                    pw.Text((Get.find<CartController>().totalAmountForPrint +
-                        Get.find<CartController>().deliveryAmountForPrint -
-                        Get.find<CartController>().discountAmountForPrint)
-                        .toString(),),
+                    pw.Text(
+                      (Get.find<CartController>().totalAmountForPrint +
+                              Get.find<CartController>()
+                                  .deliveryAmountForPrint -
+                              Get.find<CartController>().discountAmountForPrint)
+                          .toString(),
+                    ),
                   ]),
             ],
           );

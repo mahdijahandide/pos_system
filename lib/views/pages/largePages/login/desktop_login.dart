@@ -4,7 +4,8 @@ import 'package:pos_system/services/controller/auth_controller.dart';
 import 'package:pos_system/services/remotes/local_storage.dart';
 import 'package:pos_system/views/components/textfields/textfield.dart';
 import 'package:pos_system/views/components/texts/customText.dart';
-import 'package:vk/vk.dart';
+import 'package:virtual_keyboard_2/virtual_keyboard_2.dart';
+// import 'package:vk/vk.dart';
 
 class DesktopLogin extends GetView<AuthController> {
   @override
@@ -56,20 +57,21 @@ class DesktopLogin extends GetView<AuthController> {
               SizedBox(
                   width: 600,
                   child: CustomTextField().createTextField(
-                      node: controller.userFocusNode,
                       hint: '',
                       height: 45.0,
                       controller:
                           Get.find<AuthController>().loginControllerUserText,
                       borderColor: Colors.blue,
                       align: TextAlign.start,
+                      node: controller.userFocusNode,
                       hasSuffixIcon: false,
                       hasPrefixIcon: true,
-                      onTap: () {
-                        controller.passFocus.value = false;
-                        controller.userFocus.value = true;
-                        controller.update();
-                      },
+                      // onTap: () {
+                      //   controller.userFocusNode.requestFocus();
+                      //   controller.passFocus.value = false;
+                      //   controller.userFocus.value = true;
+                      //   controller.update();
+                      // },
                       prefixIcon: Icons.person)),
               const SizedBox(
                 height: 8,
@@ -78,13 +80,13 @@ class DesktopLogin extends GetView<AuthController> {
                 width: 600,
                 child: CustomTextField().createTextField(
                     hint: '',
-                    node: controller.passFocusNode,
                     height: 45.0,
-                    onTap: () {
-                      controller.userFocus.value = false;
-                      controller.passFocus.value = true;
-                      controller.update();
-                    },
+                    // onTap: () {
+                    //   controller.passFocusNode.requestFocus();
+                    //   controller.userFocus.value = false;
+                    //   controller.passFocus.value = true;
+                    //   controller.update();
+                    // },
                     onSubmitted: (_) async {
                       controller.loginRequest();
                     },
@@ -110,8 +112,9 @@ class DesktopLogin extends GetView<AuthController> {
               //     size: 16,
               //     color: Colors.blue),
               const Expanded(child: SizedBox()),
-              createUserKeyboard(),
-              createPassKeyboard(),
+
+              // createUserKeyboard(),
+              // createPassKeyboard(),
             ],
           ),
         );
@@ -122,12 +125,19 @@ class DesktopLogin extends GetView<AuthController> {
   Widget createUserKeyboard() {
     if (controller.userFocus.isTrue) {
       return Container(
-        color: const Color(0xffeeeeee),
+        // Keyboard is transparent
+        color: Colors.deepPurple,
         child: VirtualKeyboard(
-          textColor: Colors.black,
+          // Default height is 300
+          height: 350,
+          // Default is black
+          textColor: Colors.white,
+          // Default 14
+          fontSize: 20,
+          // [A-Z, 0-9]
           type: VirtualKeyboardType.Alphanumeric,
+          // Callback for key press event
           textController: controller.loginControllerUserText,
-          focusNode: controller.userFocusNode,
         ),
       );
     } else {
@@ -138,12 +148,19 @@ class DesktopLogin extends GetView<AuthController> {
   Widget createPassKeyboard() {
     if (controller.passFocus.isTrue) {
       return Container(
-        color: const Color(0xffeeeeee),
+        // Keyboard is transparent
+        color: Colors.deepPurple,
         child: VirtualKeyboard(
-          textColor: Colors.black,
+          // Default height is 300
+          height: 350,
+          // Default is black
+          textColor: Colors.white,
+          // Default 14
+          fontSize: 20,
+          // [A-Z, 0-9]
           type: VirtualKeyboardType.Alphanumeric,
+          // Callback for key press event
           textController: controller.loginControllerPasswordText,
-          focusNode: controller.passFocusNode,
         ),
       );
     } else {

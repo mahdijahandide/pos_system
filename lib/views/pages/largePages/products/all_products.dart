@@ -42,21 +42,21 @@ class AllProduct extends StatelessWidget {
               watch: Container(color: Colors.white),
             )),
       ),
-        bottomNavigationBar: Obx(
-              () => Get.find<DashboardController>().isShowKeyboard.isTrue
-              ? Container(
-            color: const Color(0xffeeeeee),
-            child: VirtualKeyboard(
-                focusNode: FocusNode(),
-                textColor: Colors.black,
-                type: Get.find<DashboardController>().isNumericMode
-                    ? VirtualKeyboardType.Numeric
-                    : VirtualKeyboardType.Alphanumeric,
-                textController:
-                Get.find<DashboardController>().searchController),
-          )
-              : const SizedBox(),
-        )
+      // bottomNavigationBar: Obx(
+      //   () => Get.find<DashboardController>().isShowKeyboard.isTrue
+      //       ? Container(
+      //           color: const Color(0xffeeeeee),
+      //           child: VirtualKeyboard(
+      //               focusNode: FocusNode(),
+      //               textColor: Colors.black,
+      //               type: Get.find<DashboardController>().isNumericMode
+      //                   ? VirtualKeyboardType.Numeric
+      //                   : VirtualKeyboardType.Alphanumeric,
+      //               textController:
+      //                   Get.find<DashboardController>().searchController),
+      //         )
+      //       : const SizedBox(),
+      // )
     );
   }
 

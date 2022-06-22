@@ -66,20 +66,20 @@ class DashboardMain {
                                             catId: '');
                                   },
                                   hasSuffixIcon: true)),
-                          const SizedBox(
-                            width: 6,
-                          ),
-                          InkWell(
-                              onTap: () {
-                                controller.isShowKeyboard.value =
-                                    !controller.isShowKeyboard.value;
-                                controller.update();
-                              },
-                              child: Icon(Icons.keyboard,
-                                  size: 45,
-                                  color: controller.isShowKeyboard.isTrue
-                                      ? Colors.blue
-                                      : Colors.black)),
+                          // const SizedBox(
+                          //   width: 6,
+                          // ),
+                          // InkWell(
+                          //     onTap: () {
+                          //       controller.isShowKeyboard.value =
+                          //           !controller.isShowKeyboard.value;
+                          //       controller.update();
+                          //     },
+                          //     child: Icon(Icons.keyboard,
+                          //         size: 45,
+                          //         color: controller.isShowKeyboard.isTrue
+                          //             ? Colors.blue
+                          //             : Colors.black)),
                           const SizedBox(
                             width: 6,
                           ),
@@ -107,6 +107,7 @@ class DashboardMain {
                           child: CustomTextField().createTextField(
                         hint: 'Search Anything ...',
                         onSubmitted: (_) async {
+                          controller.barcodeResult.value = '';
                           LoadingDialog.showCustomDialog(msg: 'Loading ...');
                           Get.find<ProductController>().getAllProducts(
                               openModal: true,
@@ -139,17 +140,17 @@ class DashboardMain {
                       const SizedBox(
                         width: 6,
                       ),
-                      InkWell(
-                          onTap: () {
-                            controller.isShowKeyboard.value =
-                            !controller.isShowKeyboard.value;
-                            controller.update();
-                          },
-                          child: Icon(Icons.keyboard,
-                              size: 45,
-                              color: controller.isShowKeyboard.isTrue
-                                  ? Colors.blue
-                                  : Colors.black)),
+                      // InkWell(
+                      //     onTap: () {
+                      //       controller.isShowKeyboard.value =
+                      //           !controller.isShowKeyboard.value;
+                      //       controller.update();
+                      //     },
+                      //     child: Icon(Icons.keyboard,
+                      //         size: 45,
+                      //         color: controller.isShowKeyboard.isTrue
+                      //             ? Colors.blue
+                      //             : Colors.black)),
                     ],
                   ),
           ),
