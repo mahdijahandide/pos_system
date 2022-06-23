@@ -54,8 +54,9 @@ class OrderController extends GetxController {
       var jsonObject = convert.jsonDecode(response.body);
       hasList.value = true;
       if (reqStatus == 'refund') {
-        if (jsonObject['data']['orders'][0]['order_status'].toString() ==
-            'completed') {
+        if (jsonObject['data'].toString() != '[]' &&
+            jsonObject['data']['orders'][0]['order_status'].toString() ==
+                'completed') {
           double delivery =
               jsonObject['data']['orders'][0]['delivery_charges'] ?? 0.0;
           Get.find<CartController>().refundCartTotalPrice = (double.parse(
@@ -80,18 +81,18 @@ class OrderController extends GetxController {
               msg: 'Can Not Refund This Invoice',
               bgColor: Colors.red);
         }
-        // if (double.parse(jsonObject['data']['subtotal'].toString()) <= 0) {
-        //   Snack().createSnack(
-        //       title: 'Warning',
-        //       msg: 'can not refund this invoice',
-        //       bgColor: Colors.red);
-        // }
+        Snack().createSnack(
+            title: 'Warning',
+            msg: 'Can Not Refund This Invoice',
+            bgColor: Colors.red);
         Get.back();
       }
-      jsonObject['data']['orders'].forEach((element) {
-        orderList.value.add(OrderModel(data: element));
-      });
-      orderFilteredList.value = orderList.value;
+      if (jsonObject['data'].toString() != '[]') {
+        jsonObject['data']['orders'].forEach((element) {
+          orderList.value.add(OrderModel(data: element));
+        });
+        orderFilteredList.value = orderList.value;
+      }
     } else {
       Get.back();
       RemoteStatusHandler().errorHandler(

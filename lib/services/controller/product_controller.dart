@@ -1,8 +1,10 @@
 import 'dart:convert';
 
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pos_system/services/controller/auth_controller.dart';
+import 'package:pos_system/services/controller/cart_controller.dart';
 import 'package:pos_system/services/controller/dashboard_controller.dart';
 import 'package:pos_system/services/model/product_color_model.dart';
 import 'package:pos_system/services/model/product_model.dart';
@@ -20,6 +22,7 @@ import 'package:pos_system/views/dialogs/product_type3_dialog.dart';
 import 'package:pos_system/views/dialogs/product_type4_select_dialog.dart';
 import 'package:pos_system/views/pages/largePages/products/products_modal.dart';
 
+import '../model/cart_product_model.dart';
 import '../remotes/remote_status_handler.dart';
 
 class ProductController extends GetxController {
@@ -68,9 +71,12 @@ class ProductController extends GetxController {
         headers: <String, String>{
           'Content-Type': 'application/json',
           'Authorization': 'Bearer ${Get.find<AuthController>().token}',
-          // 'Access-Control-Allow-Origin':'*'
         },
-        body: jsonEncode(<String, String>{'catid': catId, 'keyword': keyword}));
+        body: jsonEncode(<String, String>{
+          'catid': catId,
+          'keyword': keyword,
+          'temp_uniqueid': Get.find<CartController>().uniqueId.toString()
+        }));
     if (response.statusCode == 200) {
       hasProduct.value = true;
       var jsonObject = convert.jsonDecode(response.body);
@@ -100,6 +106,66 @@ class ProductController extends GetxController {
             borderRadius: BorderRadius.circular(35),
           ),
         );
+
+        if (jsonObject['data']['cart']['added'].toString() == 'true') {
+          var cart = jsonObject['data']['cart']['information'];
+          var details = jsonObject['data']['productLists'][0];
+          AudioPlayer audioPlayer = AudioPlayer();
+          const alarmAudioPath = "assets/sounds/beep.mp3";
+          audioPlayer.play(alarmAudioPath);
+
+          bool contain = Get.find<CartController>()
+                  .addToCartList
+                  .value
+                  .where((element) =>
+                      element.id.toString() == cart['id'].toString())
+                  .isEmpty
+              ? false
+              : true;
+
+          if (contain) {
+            Get.find<CartController>()
+                .addToCartList
+                .value
+                .where(
+                    (element) => element.id.toString() == cart['id'].toString())
+                .first
+                .quantity = (int.parse(Get.find<CartController>()
+                        .addToCartList
+                        .value
+                        .where((element) =>
+                            element.id.toString() == cart['id'].toString())
+                        .first
+                        .quantity
+                        .toString()) +
+                    1)
+                .toString();
+          } else {
+            Get.find<CartController>().addToCartList.value.add(CartProductModel(
+                mId: jsonObject['data']['cart_item_id'],
+                mPrice: details['retail_price'].toString(),
+                mQuantity: '1',
+                mTitle: details['translate']['en'],
+                mTempUniqueId: Get.find<CartController>().uniqueId.toString(),
+                pId: int.parse(details['id'].toString()),
+                mTitleAr: details['translate']['ar']));
+          }
+          Get.find<CartController>().totalAmount =
+              double.parse(cart['total_amount'].toString());
+          Get.find<CartController>().saveCartForSecondMonitor();
+          Snack().createSnack(
+              title: 'Done',
+              msg: 'Item Added To Cart Successfully',
+              bgColor: Colors.green,
+              msgColor: Colors.black,
+              titleColor: Colors.black,
+              icon: const Icon(
+                Icons.check,
+                color: Colors.white,
+              ));
+          Get.back(closeOverlays: true);
+          Get.find<CartController>().update();
+        }
       } else {
         productArray.forEach((element) {
           productList.value.add((ProductModel(data: element)));

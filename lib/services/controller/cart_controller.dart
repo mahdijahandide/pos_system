@@ -229,12 +229,22 @@ class CartController extends GetxController {
           deliveryAmount = 0.0;
         }
       } else {
-        for (int i = 0; i < addToCartList.value.length; i++) {
-          var current = addToCartList.value[i];
-          totalAmount = double.parse(current.price.toString());
-        }
+        if (addToCartList.value.isEmpty) {
+          print(Get.find<OrderController>().orderRefundTotalAmount);
+          totalAmount = Get.find<OrderController>().orderRefundTotalAmount +
+              Get.find<OrderController>().orderRefundSellerDiscount -
+              Get.find<OrderController>().orderRefundDeliveryAmount;
+          ;
+          discountAmount = double.parse(
+              Get.find<OrderController>().orderRefundSellerDiscount.toString());
+        } else {
+          for (int i = 0; i < addToCartList.value.length; i++) {
+            var current = addToCartList.value[i];
+            totalAmount = double.parse(current.price.toString());
+          }
 
-        discountAmount = calculateRefundDiscount();
+          discountAmount = calculateRefundDiscount();
+        }
 
         deliveryAmount = Get.find<OrderController>().orderRefundDeliveryAmount;
       }

@@ -9,6 +9,7 @@ import 'package:pos_system/services/remotes/local_storage.dart';
 import '../../../../services/controller/cart_controller.dart';
 import '../../../../services/model/cart_product_model.dart';
 import '../../../components/texts/customText.dart';
+import 'package:universal_html/html.dart' as html;
 
 class ShowFactor extends StatelessWidget {
   Timer? timer;
@@ -24,6 +25,15 @@ class ShowFactor extends StatelessWidget {
           padding: const EdgeInsets.all(12.0),
           child: ListView(
             children: [
+              IconButton(
+                onPressed: () {
+                  html.window.location.reload();
+                },
+                icon: const Icon(
+                  Icons.refresh,
+                  color: Colors.black,
+                ),
+              ),
               ListView.separated(
                 itemCount:
                     Get.find<CartController>().addToCartList.value.length,

@@ -66,12 +66,12 @@ class DesktopLogin extends GetView<AuthController> {
                       node: controller.userFocusNode,
                       hasSuffixIcon: false,
                       hasPrefixIcon: true,
-                      // onTap: () {
-                      //   controller.userFocusNode.requestFocus();
-                      //   controller.passFocus.value = false;
-                      //   controller.userFocus.value = true;
-                      //   controller.update();
-                      // },
+                      onTap: () {
+                        controller.userFocusNode.requestFocus();
+                        controller.passFocus.value = false;
+                        controller.userFocus.value = true;
+                        controller.update();
+                      },
                       prefixIcon: Icons.person)),
               const SizedBox(
                 height: 8,
@@ -81,12 +81,12 @@ class DesktopLogin extends GetView<AuthController> {
                 child: CustomTextField().createTextField(
                     hint: '',
                     height: 45.0,
-                    // onTap: () {
-                    //   controller.passFocusNode.requestFocus();
-                    //   controller.userFocus.value = false;
-                    //   controller.passFocus.value = true;
-                    //   controller.update();
-                    // },
+                    onTap: () {
+                      controller.passFocusNode.requestFocus();
+                      controller.userFocus.value = false;
+                      controller.passFocus.value = true;
+                      controller.update();
+                    },
                     onSubmitted: (_) async {
                       controller.loginRequest();
                     },
@@ -113,8 +113,8 @@ class DesktopLogin extends GetView<AuthController> {
               //     color: Colors.blue),
               const Expanded(child: SizedBox()),
 
-              // createUserKeyboard(),
-              // createPassKeyboard(),
+              createUserKeyboard(),
+              createPassKeyboard(),
             ],
           ),
         );
@@ -125,18 +125,12 @@ class DesktopLogin extends GetView<AuthController> {
   Widget createUserKeyboard() {
     if (controller.userFocus.isTrue) {
       return Container(
-        // Keyboard is transparent
-        color: Colors.deepPurple,
+        color: Colors.grey.withOpacity(0.5),
         child: VirtualKeyboard(
-          // Default height is 300
           height: 350,
-          // Default is black
-          textColor: Colors.white,
-          // Default 14
+          textColor: Colors.black,
           fontSize: 20,
-          // [A-Z, 0-9]
           type: VirtualKeyboardType.Alphanumeric,
-          // Callback for key press event
           textController: controller.loginControllerUserText,
         ),
       );
@@ -148,18 +142,12 @@ class DesktopLogin extends GetView<AuthController> {
   Widget createPassKeyboard() {
     if (controller.passFocus.isTrue) {
       return Container(
-        // Keyboard is transparent
-        color: Colors.deepPurple,
+        color: Colors.grey.withOpacity(0.5),
         child: VirtualKeyboard(
-          // Default height is 300
           height: 350,
-          // Default is black
-          textColor: Colors.white,
-          // Default 14
+          textColor: Colors.black,
           fontSize: 20,
-          // [A-Z, 0-9]
           type: VirtualKeyboardType.Alphanumeric,
-          // Callback for key press event
           textController: controller.loginControllerPasswordText,
         ),
       );
