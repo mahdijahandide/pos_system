@@ -494,6 +494,7 @@ class CartController extends GetxController {
       Get.find<OrderController>().orderRefundSellerDiscount = 0.0;
       uniqueId = 'pos${Xid()}';
       isRefund.value = false;
+      saveCartForSecondMonitor();
       Get.find<ProductController>().productList.value.clear();
       Get.find<ProductController>().getAllProducts(catId: '', keyword: '');
 
@@ -551,6 +552,7 @@ class CartController extends GetxController {
       Get.find<OrderController>().orderRefundSellerDiscount = 0.0;
       uniqueId = 'pos${Xid()}';
       isRefund.value = false;
+      saveCartForSecondMonitor();
       Get.find<ProductController>().productList.value.clear();
       Get.find<ProductController>().getAllProducts(catId: '', keyword: '');
 
@@ -615,11 +617,12 @@ class CartController extends GetxController {
             pId: element['product_id'],
             mTitleAr: element['title']));
       });
+
       if (index != null) openCartsUDID.removeAt(index);
       Get.back(closeOverlays: true);
 
       totalAmount = double.parse(jsonObject['data']['total'].toString());
-
+      saveCartForSecondMonitor();
       update();
     } else {
       Get.back();
@@ -667,10 +670,12 @@ class CartController extends GetxController {
   }
 
   void saveCartForSecondMonitor() {
+
     addToCartJson = {
       'subTotal': totalAmount.toString(),
       'discount': discountAmount.toString(),
       'delivery': deliveryAmount.toString(),
+      'isRefund': isRefund.value,
       'data': [
         for (int i = 0; i < addToCartList.value.length; i++)
           {
@@ -685,6 +690,9 @@ class CartController extends GetxController {
     };
     LocalStorageHelper.saveValue(
         'cartData', jsonEncode(addToCartJson).toString());
+    if(addToCartList.value.isEmpty&&isRefund.isFalse){
+      LocalStorageHelper.removeValue('cartData');
+    }
   }
 
   Future<Uint8List> generatePdf() async {

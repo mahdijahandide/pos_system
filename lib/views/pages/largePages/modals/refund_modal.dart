@@ -129,7 +129,6 @@ class RefundModal extends GetView<CartController> {
                                 Get.width > 600 ? Get.width / 3 : Get.width / 2,
                             color: const Color(0xffeeeeee),
                             child: VirtualKeyboard(
-                              focusNode: FocusNode(),
                               textColor: Colors.black,
                               type: VirtualKeyboardType.Numeric,
                               textController: controller.calController,

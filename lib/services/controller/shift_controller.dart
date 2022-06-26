@@ -16,6 +16,7 @@ import '../../views/dialogs/loading_dialogs.dart';
 
 import '../model/cash_history_model.dart';
 
+import '../remotes/local_storage.dart';
 import '../remotes/remote_status_handler.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
@@ -106,6 +107,7 @@ class ShiftController extends GetxController {
         body: jsonEncode(<String, String>{'startCash': '$starterValue'}));
     if (response.statusCode == 200) {
       var jsonObject = convert.jsonDecode(response.body);
+      LocalStorageHelper.removeValue('cartData');
       Get.back();
       shiftDetailsRequest();
     } else {
@@ -132,6 +134,7 @@ class ShiftController extends GetxController {
 
       selectStartShift.value = true;
       Get.back();
+      LocalStorageHelper.removeValue('cartData');
       await Printing.layoutPdf(
           onLayout: (_) => generatePdf(data: jsonObject['data']));
     } else {

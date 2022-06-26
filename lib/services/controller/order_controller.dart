@@ -67,6 +67,7 @@ class OrderController extends GetxController {
           // Get.find<CartController>().discountAmount=jsonObject
           Get.find<CartController>().isRefund.value =
               !Get.find<CartController>().isRefund.value;
+          Get.find<CartController>().saveCartForSecondMonitor();
           Get.find<CartController>().refundFactorItemList.value.clear();
           Get.find<ProductController>().productList.value.clear();
           Get.find<ProductController>().update();
@@ -170,6 +171,7 @@ class OrderController extends GetxController {
                 orderRefundDeliveryAmount +
                 orderRefundSellerDiscount);
 
+
         jsonObject['data']['orderItems'].forEach((element) {
           Get.find<CartController>().refundFactorItemList.value.add(
               CartProductModel(
@@ -218,6 +220,7 @@ class OrderController extends GetxController {
         Get.find<CartController>().totalAmount = orderRefundTotalAmount +
             orderRefundSellerDiscount -
             orderRefundDeliveryAmount;
+        Get.find<CartController>().saveCartForSecondMonitor();
       }
     } else {
       Get.back();

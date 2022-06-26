@@ -55,6 +55,7 @@ class TempOrderModal extends StatelessWidget {
                       cartController.newSale();
                       if (Get.find<CartController>().isRefund.isTrue) {
                         Get.find<CartController>().isRefund.value = false;
+                        Get.find<CartController>().saveCartForSecondMonitor();
                         Get.find<ProductController>().productList.value.clear();
                         Get.find<ProductController>()
                             .getAllProducts(catId: '', keyword: '');

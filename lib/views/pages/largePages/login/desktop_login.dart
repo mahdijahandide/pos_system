@@ -127,9 +127,9 @@ class DesktopLogin extends GetView<AuthController> {
       return Container(
         color: Colors.grey.withOpacity(0.5),
         child: VirtualKeyboard(
-          height: 350,
+          height: 320,
           textColor: Colors.black,
-          fontSize: 20,
+          fontSize: 40,
           type: VirtualKeyboardType.Alphanumeric,
           textController: controller.loginControllerUserText,
         ),
@@ -144,9 +144,9 @@ class DesktopLogin extends GetView<AuthController> {
       return Container(
         color: Colors.grey.withOpacity(0.5),
         child: VirtualKeyboard(
-          height: 350,
+          height: 320,
           textColor: Colors.black,
-          fontSize: 20,
+          fontSize: 40,
           type: VirtualKeyboardType.Alphanumeric,
           textController: controller.loginControllerPasswordText,
         ),

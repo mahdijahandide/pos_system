@@ -62,6 +62,7 @@ class TabletDashboard extends StatelessWidget {
                           if (controller.isRefund.isTrue) {
                             controller.newSale();
                             controller.isRefund.value = false;
+                            Get.find<CartController>().saveCartForSecondMonitor();
                             Get.find<ProductController>()
                                 .productList
                                 .value

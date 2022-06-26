@@ -12,6 +12,7 @@ import 'package:pos_system/views/pages/largePages/dashboard/widget/dashboard_dra
 import 'package:pos_system/views/pages/largePages/dashboard/widget/dashboard_main.dart';
 import 'package:pos_system/views/pages/largePages/dashboard/widget/iconTextBox.dart';
 import 'package:pos_system/views/pages/largePages/dashboard/widget/sidebar.dart';
+import 'package:universal_html/html.dart';
 import 'package:vk/vk.dart';
 import 'package:printing/printing.dart';
 import 'package:new_keyboard_shortcuts/keyboard_shortcuts.dart';
@@ -89,6 +90,7 @@ class DesktopDashboard extends GetView<DashboardController> {
                           if (controller.isRefund.isTrue) {
                             controller.newSale();
                             controller.isRefund.value = false;
+                            Get.find<CartController>().saveCartForSecondMonitor();
                             Get.find<ProductController>()
                                 .productList
                                 .value
@@ -138,65 +140,75 @@ class DesktopDashboard extends GetView<DashboardController> {
       ),
       body: Obx(
         () => KeyBoardShortcuts(
-          keysToPress: {LogicalKeyboardKey.enter},
+          keysToPress: {LogicalKeyboardKey.escape},
           onKeysPressed: () {
-            if (controller.barcodeResult.isNotEmpty) {
-              LoadingDialog.showCustomDialog(msg: 'Loading ...');
-              Get.find<ProductController>().getAllProducts(
-                  openModal: true,
-                  //openModalTap: ontap,
-                  title: controller.barcodeResult.value.toString(),
-                  keyword: controller.barcodeResult.value,
-                  catId: '');
-              print(controller.barcodeResult.value);
+            if (document.fullscreenEnabled == true) {
+              document.exitFullscreen();
+               Get.find<ProductController>().hasProduct.value=true;
+              Get.find<ProductController>().update();
             }
           },
-          helpLabel: "Go to Second Page",
-          child: ListView(
-            physics: const NeverScrollableScrollPhysics(),
-            children: [
-              SizedBox(
-                height: Get.height - 90,
-                child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 6, horizontal: 12),
-                  child: Row(
-                    children: [
-                      Expanded(
-                          flex: 2,
-                          child: Container(
-                              alignment: Alignment.topLeft,
-                              padding: const EdgeInsets.all(8.0),
-                              height: Get.height,
-                              decoration: BoxDecoration(
-                                  border: Border.all(color: Colors.black)),
-                              child: DashboardSidebar().createSidebar())),
-                      const SizedBox(
-                        width: 12,
-                      ),
-                      Expanded(
-                          flex: 8,
-                          child: Container(
-                              padding: const EdgeInsets.all(8.0),
-                              height: Get.height,
-                              decoration: BoxDecoration(
-                                  border: Border.all(color: Colors.black)),
-                              child: Get.find<ProductController>()
-                                          .productList
-                                          .value
-                                          .isEmpty ||
-                                      Get.find<ProductController>()
-                                          .hasProduct
-                                          .isFalse
-                                  ? ProductShimmer().createProductShimmer(
-                                      gridCnt: 5, isLarge: true)
-                                  : DashboardMain()
-                                      .createMain(gridCnt: 5, isLarge: true))),
-                    ],
+          child: KeyBoardShortcuts(
+            keysToPress: {LogicalKeyboardKey.enter},
+            onKeysPressed: () {
+              if (controller.barcodeResult.isNotEmpty) {
+                LoadingDialog.showCustomDialog(msg: 'Loading ...');
+                Get.find<ProductController>().getAllProducts(
+                    openModal: true,
+                    //openModalTap: ontap,
+                    title: controller.barcodeResult.value.toString(),
+                    keyword: controller.barcodeResult.value,
+                    catId: '');
+                print(controller.barcodeResult.value);
+              }
+            },
+            helpLabel: "Go to Second Page",
+            child: ListView(
+              physics: const NeverScrollableScrollPhysics(),
+              children: [
+                SizedBox(
+                  height: controller.isFullScreen.isFalse? Get.height - 90:Get.height,
+                  child: Padding(
+                    padding:
+                        const EdgeInsets.symmetric(vertical: 6, horizontal: 12),
+                    child: Row(
+                      children: [
+                        Expanded(
+                            flex: 2,
+                            child: Container(
+                                alignment: Alignment.topLeft,
+                                padding: const EdgeInsets.all(8.0),
+                                height: Get.height,
+                                decoration: BoxDecoration(
+                                    border: Border.all(color: Colors.black)),
+                                child: DashboardSidebar().createSidebar())),
+                        const SizedBox(
+                          width: 12,
+                        ),
+                        Expanded(
+                            flex: 8,
+                            child: Container(
+                                padding: const EdgeInsets.all(8.0),
+                                height: Get.height,
+                                decoration: BoxDecoration(
+                                    border: Border.all(color: Colors.black)),
+                                child: Get.find<ProductController>()
+                                            .productList
+                                            .value
+                                            .isEmpty ||
+                                        Get.find<ProductController>()
+                                            .hasProduct
+                                            .isFalse
+                                    ? ProductShimmer().createProductShimmer(
+                                        gridCnt: 5, isLarge: true)
+                                    : DashboardMain()
+                                        .createMain(gridCnt: 5, isLarge: true))),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

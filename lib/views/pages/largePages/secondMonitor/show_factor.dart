@@ -11,7 +11,7 @@ import '../../../../services/model/cart_product_model.dart';
 import '../../../components/texts/customText.dart';
 import 'package:universal_html/html.dart' as html;
 
-class ShowFactor extends StatelessWidget {
+class ShowFactor extends GetView<CartController> {
   Timer? timer;
 
   @override
@@ -27,7 +27,9 @@ class ShowFactor extends StatelessWidget {
             children: [
               IconButton(
                 onPressed: () {
+                  LocalStorageHelper.removeValue('cartData');
                   html.window.location.reload();
+                  controller.update();
                 },
                 icon: const Icon(
                   Icons.refresh,
@@ -149,9 +151,13 @@ class ShowFactor extends StatelessWidget {
               ),
               keyValText(
                   title: 'total'.tr,
-                  value: (Get.find<CartController>().totalAmount +
-                          Get.find<CartController>().deliveryAmount -
-                          Get.find<CartController>().discountAmount)
+                  value: controller.isRefund.isFalse
+                      ? (Get.find<CartController>().totalAmount -
+                      Get.find<CartController>().discountAmount +
+                      controller.deliveryAmount)
+                      .toStringAsFixed(3)
+                      : (Get.find<CartController>().totalAmount -
+                      Get.find<CartController>().discountAmount)
                       .toStringAsFixed(3),
                   keyWeight: FontWeight.bold,
                   valWeight: FontWeight.bold,
@@ -196,6 +202,14 @@ class ShowFactor extends StatelessWidget {
 
   void _refresh() {
     var data = jsonDecode(LocalStorageHelper.getValue('cartData'));
+    if(data==null){
+      LocalStorageHelper.removeValue('cartData');
+      Get.find<CartController>().addToCartList.value.clear();
+      Get.find<CartController>().totalAmount =0.0;
+      Get.find<CartController>().discountAmount =0.0;
+      Get.find<CartController>().deliveryAmount =0.0;
+      controller.update();
+    }
     Get.find<CartController>().addToCartList.value.clear();
     data['data'].forEach((element) {
       Get.find<CartController>().addToCartList.value.add(CartProductModel(
@@ -213,6 +227,7 @@ class ShowFactor extends StatelessWidget {
         double.parse(data['discount'].toString());
     Get.find<CartController>().deliveryAmount =
         double.parse(data['delivery'].toString());
+    Get.find<CartController>().isRefund.value=data['isRefund'];
     Get.find<CartController>().update();
   }
 }

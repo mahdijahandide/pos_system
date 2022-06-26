@@ -4,6 +4,7 @@ import 'package:pos_system/services/controller/auth_controller.dart';
 import 'package:pos_system/services/controller/cart_controller.dart';
 import 'package:pos_system/services/controller/customer_controller.dart';
 import 'package:pos_system/services/controller/dashboard_controller.dart';
+import 'package:pos_system/services/controller/product_controller.dart';
 import 'package:pos_system/views/components/texts/customText.dart';
 import 'package:universal_html/html.dart' as html;
 
@@ -133,8 +134,9 @@ class DashboardDrawer {
               ),
               IconButton(
                 onPressed: () {
-                  //document.documentElement.requestFullscreen();
+                  Get.find<ProductController>().hasProduct.value=false;
                   Get.find<DashboardController>().fullScreen();
+                  Get.back(closeOverlays: true,canPop: true);
                 },
                 icon: const Icon(Icons.fullscreen),
               ),
