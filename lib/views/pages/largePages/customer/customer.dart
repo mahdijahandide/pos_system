@@ -29,7 +29,12 @@ class Customer extends GetView<CustomerController> {
           actions: [
             IconButton(
                 onPressed: () {
-                  Get.bottomSheet(AddCustomerModal().createModal());
+                  Get.bottomSheet(
+                      AddCustomerModal().createModal(),
+                      isScrollControlled: true,
+                    ignoreSafeArea: false
+
+                  );
                 },
                 icon: const Icon(Icons.add))
           ],

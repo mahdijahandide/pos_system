@@ -17,6 +17,11 @@ class ProductDetails extends StatelessWidget {
       backgroundColor: Colors.grey.shade200,
       appBar: AppBar(
         centerTitle: true,
+        leading: IconButton(
+            onPressed: () {
+              Get.toNamed('/allProduct');
+            },
+            icon: const Icon(Icons.arrow_back_ios)),
         backgroundColor: Colors.grey.withOpacity(0.5),
         title: CustomText().createText(
             title: Get.arguments['title'],

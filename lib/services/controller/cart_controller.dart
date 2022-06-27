@@ -102,6 +102,7 @@ class CartController extends GetxController {
           if (otherAttribute != null) 'option': {"$otherId": otherValue}
         }));
     if (response.statusCode == 200) {
+      Get.back(closeOverlays: true);
       AudioPlayer audioPlayer = AudioPlayer();
       const alarmAudioPath = "assets/sounds/beep.mp3";
       audioPlayer.play(alarmAudioPath);
@@ -173,17 +174,16 @@ class CartController extends GetxController {
 
       if (addToCartList.value[index].quantity == '0') {
         addToCartList.value.removeAt(index);
-        saveCartForSecondMonitor();
+
       } else {
         addToCartList.value[index].quantity = quantity.toString();
-        saveCartForSecondMonitor();
       }
       totalAmount = double.parse(jsonObject['data']['total_amount'].toString());
 
       if (isRefund.isTrue) {
         discountAmount = calculateRefundDiscount();
       }
-
+      saveCartForSecondMonitor();
       Get.back(closeOverlays: true);
       update();
     } else {

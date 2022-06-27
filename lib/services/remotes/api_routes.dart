@@ -1,5 +1,5 @@
 //BASE URL
-// const String DOMAIN = 'http://localhost:56764';
+// const String DOMAIN = 'http://localhost:59085';
 // const String DOMAIN = 'https://possystem.gulfweb.ir';
 // const String BASE_URL = 'https://kash5a2.gulfweb.ir/api/posv1/';
 // const String BASE_URL_IMAGES = 'https://kash5a2.gulfweb.ir/uploads/logo/';

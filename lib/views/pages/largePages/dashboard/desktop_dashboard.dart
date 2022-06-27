@@ -13,9 +13,9 @@ import 'package:pos_system/views/pages/largePages/dashboard/widget/dashboard_mai
 import 'package:pos_system/views/pages/largePages/dashboard/widget/iconTextBox.dart';
 import 'package:pos_system/views/pages/largePages/dashboard/widget/sidebar.dart';
 import 'package:universal_html/html.dart';
-import 'package:vk/vk.dart';
 import 'package:printing/printing.dart';
 import 'package:new_keyboard_shortcuts/keyboard_shortcuts.dart';
+import 'package:virtual_keyboard_2/virtual_keyboard_2.dart';
 
 import '../../../dialogs/loading_dialogs.dart';
 
@@ -212,21 +212,19 @@ class DesktopDashboard extends GetView<DashboardController> {
           ),
         ),
       ),
-      // bottomNavigationBar: Obx(
-      //   () => Get.find<DashboardController>().isShowKeyboard.isTrue
-      //       ? Container(
-      //           color: const Color(0xffeeeeee),
-      //           child: VirtualKeyboard(
-      //               focusNode: FocusNode(),
-      //               textColor: Colors.black,
-      //               type: Get.find<DashboardController>().isNumericMode
-      //                   ? VirtualKeyboardType.Numeric
-      //                   : VirtualKeyboardType.Alphanumeric,
-      //               textController:
-      //                   Get.find<DashboardController>().searchController),
-      //         )
-      //       : const SizedBox(),
-      // )
+      bottomNavigationBar: Obx(
+        () => Get.find<DashboardController>().isShowKeyboard.isTrue
+            ? Container(
+          height: 350,
+                color: const Color(0xffeeeeee),
+                child: VirtualKeyboard(
+                    textColor: Colors.black,
+                    type:VirtualKeyboardType.Alphanumeric,
+                    textController:
+                        Get.find<DashboardController>().searchController),
+              )
+            : const SizedBox(),
+      )
     );
   }
 }

@@ -4,7 +4,6 @@ import 'package:pos_system/services/controller/customer_controller.dart';
 import 'package:pos_system/services/controller/product_controller.dart';
 import 'package:pos_system/services/model/string_with_string.dart';
 import 'package:pos_system/views/components/texts/customText.dart';
-import 'package:vk/vk.dart';
 
 import '../../helper/autocomplete_helper.dart';
 

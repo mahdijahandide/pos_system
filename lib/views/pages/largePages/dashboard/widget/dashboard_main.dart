@@ -66,20 +66,20 @@ class DashboardMain {
                                             catId: '');
                                   },
                                   hasSuffixIcon: true)),
-                          // const SizedBox(
-                          //   width: 6,
-                          // ),
-                          // InkWell(
-                          //     onTap: () {
-                          //       controller.isShowKeyboard.value =
-                          //           !controller.isShowKeyboard.value;
-                          //       controller.update();
-                          //     },
-                          //     child: Icon(Icons.keyboard,
-                          //         size: 45,
-                          //         color: controller.isShowKeyboard.isTrue
-                          //             ? Colors.blue
-                          //             : Colors.black)),
+                          const SizedBox(
+                            width: 6,
+                          ),
+                          InkWell(
+                              onTap: () {
+                                controller.isShowKeyboard.value =
+                                    !controller.isShowKeyboard.value;
+                                controller.update();
+                              },
+                              child: Icon(Icons.keyboard,
+                                  size: 45,
+                                  color: controller.isShowKeyboard.isTrue
+                                      ? Colors.blue
+                                      : Colors.black)),
                           const SizedBox(
                             width: 6,
                           ),
