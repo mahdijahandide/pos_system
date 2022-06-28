@@ -6,8 +6,7 @@ import 'package:pos_system/services/controller/customer_controller.dart';
 import 'package:pos_system/views/components/buttons/custom_text_button.dart';
 import 'package:pos_system/views/components/textfields/textfield.dart';
 import 'package:pos_system/views/components/texts/customText.dart';
-import 'package:vk/vk.dart';
-// import 'package:vk/vk.dart';
+import 'package:virtual_keyboard_2/virtual_keyboard_2.dart';
 
 import '../../../../helper/autocomplete_helper.dart';
 import '../customer/add_customer_modal.dart';
@@ -26,7 +25,6 @@ class CheckoutModal extends GetView<CartController> {
       Get.find<CustomerController>()
           .getCustomers(doInBackground: true, hasLoading: false);
     }
-    TextEditingController searchController = TextEditingController();
     if (Get.find<CustomerController>().selectedCustomer != null) {
       Get.find<CustomerController>().customerNameController.text =
           Get.find<CustomerController>().selectedCustomer.name ?? '';
@@ -36,10 +34,10 @@ class CheckoutModal extends GetView<CartController> {
           Get.find<CustomerController>().selectedCustomer.email ?? '';
       Get.find<CustomerController>().customerNumberController.text =
           Get.find<CustomerController>().selectedCustomer.mobile ?? '';
-      searchController.text =
+      Get.find<CustomerController>().searchController.text =
           Get.find<CustomerController>().selectedCustomer.name ?? '';
     } else {
-      searchController.text = '';
+      Get.find<CustomerController>().searchController.text = '';
       Get.find<CustomerController>().customerNameController.text = '';
       Get.find<CustomerController>().customerEmailController.text = '';
       Get.find<CustomerController>().customerNumberController.text = '';
@@ -142,7 +140,8 @@ class CheckoutModal extends GetView<CartController> {
                                 initialList:
                                     Get.find<CustomerController>().customerName,
                                 label: 'Customer Name/No',
-                                controller: searchController,
+                                controller: Get.find<CustomerController>()
+                                    .searchController,
                                 getSelectedValue: (selected) {
                                   Get.find<CustomerController>()
                                           .selectedCustomer =
@@ -190,15 +189,15 @@ class CheckoutModal extends GetView<CartController> {
                             const SizedBox(
                               width: 12,
                             ),
-                            // IconButton(
-                            //     onPressed: () {
-                            //       controller.hasModalVk.value =
-                            //           !controller.hasModalVk.value;
-                            //     },
-                            //     icon: const Icon(
-                            //       Icons.keyboard,
-                            //       color: Colors.black,
-                            //     )),
+                            IconButton(
+                                onPressed: () {
+                                  controller.hasModalVk.value =
+                                      !controller.hasModalVk.value;
+                                },
+                                icon: const Icon(
+                                  Icons.keyboard,
+                                  color: Colors.black,
+                                )),
                             SizedBox(
                               width: 120,
                               height: 60,
@@ -212,7 +211,9 @@ class CheckoutModal extends GetView<CartController> {
                                   textColor: Colors.white,
                                   onPress: () {
                                     Get.bottomSheet(
-                                        AddCustomerModal().createModal());
+                                        AddCustomerModal()
+                                            .createModal(shouldSelect: true),
+                                        isScrollControlled: true);
                                   }),
                             )
                           ],
@@ -355,6 +356,7 @@ class CheckoutModal extends GetView<CartController> {
                             textColor: Colors.black,
                             type: VirtualKeyboardType.Numeric,
                             textController: controller.calController,
+                            focusNode: FocusNode(),
                           ),
                         ),
                         SizedBox(
@@ -462,21 +464,23 @@ class CheckoutModal extends GetView<CartController> {
               ],
             ),
           ),
-          // Spacer(),
-          // controller.hasModalVk.isTrue
-          //     ? Align(
-          //         alignment: Alignment.bottomCenter,
-          //         child: Container(
-          //           color: const Color(0xffeeeeee),
-          //           child: VirtualKeyboard(
-          //             textColor: Colors.black,
-          //             type: VirtualKeyboardType.Alphanumeric,
-          //             textController: searchController,
-          //             focusNode: focusNode,
-          //           ),
-          //         ),
-          //       )
-          //     : const SizedBox()
+          const Spacer(),
+          Obx(() => controller.hasModalVk.isTrue
+              ? Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Container(
+                    height: 350,
+                    color: const Color(0xffeeeeee),
+                    child: VirtualKeyboard(
+                      textColor: Colors.black,
+                      type: VirtualKeyboardType.Alphanumeric,
+                      textController:
+                          Get.find<CustomerController>().searchController,
+                      focusNode: focusNode,
+                    ),
+                  ),
+                )
+              : const SizedBox())
         ],
       ),
     );

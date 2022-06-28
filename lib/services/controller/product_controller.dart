@@ -41,7 +41,6 @@ class ProductController extends GetxController {
   late String selectedSizeId;
   RxInt overlaysCounter = 0.obs;
 
-
   int gridCtn() {
     update();
     return Get.width <= 600
@@ -57,6 +56,7 @@ class ProductController extends GetxController {
       dynamic openModal,
       dynamic openModalTap,
       dynamic title}) async {
+    print('get products');
     if (openModal != true) {
       productList.value.clear();
       update();

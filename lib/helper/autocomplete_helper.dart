@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:vk/vk.dart';
 import 'dart:async';
 
 import '../services/model/string_with_string.dart';

@@ -6,7 +6,7 @@ import 'package:pos_system/services/controller/product_controller.dart';
 import 'package:pos_system/views/components/snackbar/snackbar.dart';
 import 'package:pos_system/views/components/textfields/textfield.dart';
 import 'package:pos_system/views/components/texts/customText.dart';
-import 'package:vk/vk.dart';
+import 'package:virtual_keyboard_2/virtual_keyboard_2.dart';
 
 class EditQtyDialog {
   static final EditQtyDialog _instance = EditQtyDialog.internal();
@@ -53,9 +53,9 @@ class EditQtyDialog {
                           .quantity
                           .toString())) {
                     Snack().createSnack(
-                        title:
-                            'Warning',
-                        msg: 'Selected Quantity Is Bigger Than Existed Item Quantity',
+                        title: 'Warning',
+                        msg:
+                            'Selected Quantity Is Bigger Than Existed Item Quantity',
                         bgColor: Colors.yellow,
                         msgColor: Colors.black,
                         titleColor: Colors.black);
@@ -78,6 +78,7 @@ class EditQtyDialog {
                   textColor: Colors.black,
                   type: VirtualKeyboardType.Numeric,
                   textController: qtyController,
+                  focusNode: FocusNode(),
                 ),
               ),
             ],

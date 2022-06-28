@@ -20,6 +20,11 @@ class CashController extends GetxController {
   Rx<List<CashHistoryModel>> cashHistoryList = Rx<List<CashHistoryModel>>([]);
   RxBool hasHistoryList = false.obs;
 
+  FocusNode amountNode = FocusNode();
+  FocusNode descriptionNode = FocusNode();
+  RxBool amountActive = false.obs;
+  RxBool descriptionActive = false.obs;
+
   Future<void> addOrRemoveCashRequest() async {
     LoadingDialog.showCustomDialog(msg: 'loading'.tr);
     var url = CASH_IN_OUT;

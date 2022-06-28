@@ -53,6 +53,7 @@ class CustomTextField {
               hintStyle: hintStyle,
               suffixIcon: hasSuffixIcon == true
                   ? IconButton(
+                      alignment: Alignment(1.0, -1.0),
                       onPressed: suffixPress,
                       icon: Icon(
                         suffixIcon ?? Icons.search,

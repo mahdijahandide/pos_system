@@ -4,6 +4,7 @@ import 'package:pos_system/services/controller/customer_controller.dart';
 import 'package:pos_system/services/controller/product_controller.dart';
 import 'package:pos_system/services/model/string_with_string.dart';
 import 'package:pos_system/views/components/texts/customText.dart';
+import 'package:virtual_keyboard_2/virtual_keyboard_2.dart';
 
 import '../../helper/autocomplete_helper.dart';
 
@@ -18,6 +19,11 @@ class CustomerAutoCompleteDialog {
   static void showCustomDialog(
       {required title, required List<StringWithString> list}) {
     TextEditingController customerController = TextEditingController();
+    if (Get.find<CustomerController>().selectedCustomer.toString() != 'null') {
+      customerController.text =
+          Get.find<CustomerController>().selectedCustomer.mobile ?? '';
+    }
+
     final FocusNode focusNode = FocusNode();
     Get.defaultDialog(
       title: title,
@@ -30,17 +36,18 @@ class CustomerAutoCompleteDialog {
                 initialList: list,
                 label: 'Customer Name',
                 controller: customerController),
-            // Container(
-            //   width: 900,
-            //   margin: const EdgeInsets.only(top: 120),
-            //   color: const Color(0xffeeeeee),
-            //   child: VirtualKeyboard(
-            //     focusNode: focusNode,
-            //     textColor: Colors.black,
-            //     type: VirtualKeyboardType.Alphanumeric,
-            //     textController: customerController,
-            //   ),
-            // ),
+            Container(
+              width: 900,
+              height: 350,
+              margin: const EdgeInsets.only(top: 120),
+              color: const Color(0xffeeeeee),
+              child: VirtualKeyboard(
+                focusNode: focusNode,
+                textColor: Colors.black,
+                type: VirtualKeyboardType.Alphanumeric,
+                textController: customerController,
+              ),
+            ),
           ],
         );
       }),

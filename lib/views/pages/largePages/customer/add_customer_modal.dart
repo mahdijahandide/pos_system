@@ -13,9 +13,9 @@ class AddCustomerModal {
   FocusNode number = FocusNode();
   FocusNode email = FocusNode();
 
-  Widget createModal() {
+  Widget createModal({dynamic shouldSelect}) {
     return Container(
-        color: Colors.white,
+        color: const Color(0xfffcfcfc),
         //padding: const EdgeInsets.all(8.0),
         child: Obx(() {
           return Stack(
@@ -53,24 +53,14 @@ class AddCustomerModal {
                         node: name,
                         hint: 'Name',
                         onTap: () {
-                          Get
-                              .find<CustomerController>()
-                              .focusName
-                              .value = true;
-                          Get
-                              .find<CustomerController>()
-                              .focusNumber
-                              .value =
-                          false;
-                          Get
-                              .find<CustomerController>()
-                              .focusEmail
-                              .value =
-                          false;
+                          Get.find<CustomerController>().focusName.value = true;
+                          Get.find<CustomerController>().focusNumber.value =
+                              false;
+                          Get.find<CustomerController>().focusEmail.value =
+                              false;
                         },
                         height: 50,
-                        controller: Get
-                            .find<CustomerController>()
+                        controller: Get.find<CustomerController>()
                             .addCustomerNameController),
                     const SizedBox(
                       height: 8.0,
@@ -79,25 +69,15 @@ class AddCustomerModal {
                         hint: 'Mobile',
                         node: number,
                         onTap: () {
-                          Get
-                              .find<CustomerController>()
-                              .focusNumber
-                              .value =
-                          true;
-                          Get
-                              .find<CustomerController>()
-                              .focusName
-                              .value =
-                          false;
-                          Get
-                              .find<CustomerController>()
-                              .focusEmail
-                              .value =
-                          false;
+                          Get.find<CustomerController>().focusNumber.value =
+                              true;
+                          Get.find<CustomerController>().focusName.value =
+                              false;
+                          Get.find<CustomerController>().focusEmail.value =
+                              false;
                         },
                         height: 50,
-                        controller: Get
-                            .find<CustomerController>()
+                        controller: Get.find<CustomerController>()
                             .addCustomerNumberController),
                     const SizedBox(
                       height: 8.0,
@@ -106,25 +86,15 @@ class AddCustomerModal {
                         hint: 'Email',
                         node: email,
                         onTap: () {
-                          Get
-                              .find<CustomerController>()
-                              .focusEmail
-                              .value =
-                          true;
-                          Get
-                              .find<CustomerController>()
-                              .focusNumber
-                              .value =
-                          false;
-                          Get
-                              .find<CustomerController>()
-                              .focusName
-                              .value =
-                          false;
+                          Get.find<CustomerController>().focusEmail.value =
+                              true;
+                          Get.find<CustomerController>().focusNumber.value =
+                              false;
+                          Get.find<CustomerController>().focusName.value =
+                              false;
                         },
                         height: 50,
-                        controller: Get
-                            .find<CustomerController>()
+                        controller: Get.find<CustomerController>()
                             .addCustomerEmailController),
                     const Expanded(child: SizedBox()),
                     SizedBox(
@@ -132,18 +102,13 @@ class AddCustomerModal {
                         height: 60,
                         child: CustomTextButton().createTextButton(
                             onPress: () {
-                              if (Get
-                                  .find<CustomerController>()
-                                  .addCustomerNameController
+                              if (Get.find<CustomerController>()
+                                  .addCustomerNumberController
                                   .text
-                                  .isNotEmpty &&
-                                  Get
-                                      .find<CustomerController>()
-                                      .addCustomerNumberController
-                                      .text
-                                      .isNotEmpty) {
+                                  .isNotEmpty) {
                                 Get.find<CustomerController>()
-                                    .addCustomerRequest();
+                                    .addCustomerRequest(
+                                        shouldSelect: shouldSelect);
                               } else {
                                 Snack().createSnack(
                                     title: 'Warning',
@@ -176,20 +141,16 @@ class AddCustomerModal {
   }
 
   Widget createNameKeyboard() {
-    if (Get
-        .find<CustomerController>()
-        .focusName
-        .isTrue) {
+    if (Get.find<CustomerController>().focusName.isTrue) {
       return Container(
         height: 350,
         color: const Color(0xffeeeeee),
         child: VirtualKeyboard(
+          focusNode: FocusNode(),
           textColor: Colors.black,
           type: VirtualKeyboardType.Alphanumeric,
           textController:
-          Get
-              .find<CustomerController>()
-              .addCustomerNameController,
+              Get.find<CustomerController>().addCustomerNameController,
           // focusNode: name,
         ),
       );
@@ -199,20 +160,15 @@ class AddCustomerModal {
   }
 
   Widget createNumberKeyboard() {
-    if (Get
-        .find<CustomerController>()
-        .focusNumber
-        .isTrue) {
+    if (Get.find<CustomerController>().focusNumber.isTrue) {
       return Container(
         height: 350,
         color: const Color(0xffeeeeee),
         child: VirtualKeyboard(
-          textColor: Colors.black,
+          textColor: Colors.black, focusNode: FocusNode(),
           type: VirtualKeyboardType.Alphanumeric,
           textController:
-          Get
-              .find<CustomerController>()
-              .addCustomerNumberController,
+              Get.find<CustomerController>().addCustomerNumberController,
           // focusNode: number,
         ),
       );
@@ -222,19 +178,16 @@ class AddCustomerModal {
   }
 
   Widget createEmailKeyboard() {
-    if (Get
-        .find<CustomerController>()
-        .focusEmail
-        .isTrue) {
-      return Container(height: 350,
+    if (Get.find<CustomerController>().focusEmail.isTrue) {
+      return Container(
+        height: 350,
         color: const Color(0xffeeeeee),
         child: VirtualKeyboard(
+          focusNode: FocusNode(),
           textColor: Colors.black,
           type: VirtualKeyboardType.Alphanumeric,
           textController:
-          Get
-              .find<CustomerController>()
-              .addCustomerEmailController,
+              Get.find<CustomerController>().addCustomerEmailController,
           // focusNode: email,
         ),
       );
@@ -242,5 +195,4 @@ class AddCustomerModal {
       return const SizedBox();
     }
   }
-
 }

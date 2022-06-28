@@ -23,12 +23,12 @@ class DesktopLogin extends GetView<AuthController> {
                       children: [
                         SizedBox(
                           width: Get.width < 1010.0 ? 75.0 : 200.0,
-                          height: Get.height < 1010.0 ? 75.0 : 200.0,
+                          height: Get.height < 1010.0 ? 75.0 : 150.0,
                         ),
                         const CircularProgressIndicator(),
                         SizedBox(
                           width: Get.width < 1010.0 ? 75.0 : 200.0,
-                          height: Get.height < 1010.0 ? 75.0 : 200.0,
+                          height: Get.height < 1010.0 ? 75.0 : 150.0,
                         ),
                       ],
                     )
@@ -127,7 +127,8 @@ class DesktopLogin extends GetView<AuthController> {
       return Container(
         color: Colors.grey.withOpacity(0.5),
         child: VirtualKeyboard(
-          height: 320,
+          focusNode: FocusNode(),
+          height: 350,
           textColor: Colors.black,
           fontSize: 40,
           type: VirtualKeyboardType.Alphanumeric,
@@ -144,7 +145,8 @@ class DesktopLogin extends GetView<AuthController> {
       return Container(
         color: Colors.grey.withOpacity(0.5),
         child: VirtualKeyboard(
-          height: 320,
+          focusNode: FocusNode(),
+          height: 350,
           textColor: Colors.black,
           fontSize: 40,
           type: VirtualKeyboardType.Alphanumeric,

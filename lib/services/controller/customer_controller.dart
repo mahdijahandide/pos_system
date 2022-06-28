@@ -23,6 +23,7 @@ class CustomerController extends GetxController {
   RxBool focusName = false.obs;
   RxBool focusNumber = false.obs;
   RxBool focusEmail = false.obs;
+  RxBool isShowKeyboard = false.obs;
 
   TextEditingController customerNameController = TextEditingController();
   TextEditingController customerEmailController = TextEditingController();
@@ -114,7 +115,7 @@ class CustomerController extends GetxController {
     }
   }
 
-  Future<void> addCustomerRequest() async {
+  Future<void> addCustomerRequest({dynamic shouldSelect}) async {
     LoadingDialog.showCustomDialog(msg: 'loading'.tr);
     var url = ADD_NEW_CUSTOMER;
     final http.Response response = await http.post(
@@ -139,9 +140,27 @@ class CustomerController extends GetxController {
           mName: jsonObject['data']['name'],
           mNum: jsonObject['data']['mobile']));
 
+      if (shouldSelect == true) {
+        selectedCustomer = customerList
+            .where(
+                (element) => element.mobile == addCustomerNumberController.text)
+            .first;
+        if (selectedCustomer != null) {
+          customerNameController.text = selectedCustomer.name ?? '';
+          customerEmailController.text = selectedCustomer.email ?? '';
+          customerNumberController.text = selectedCustomer.mobile ?? '';
+          searchController.text = selectedCustomer.mobile ?? '';
+        } else {
+          Get.find<CustomerController>().customerNameController.text = '';
+          Get.find<CustomerController>().customerEmailController.text = '';
+          Get.find<CustomerController>().customerNumberController.text = '';
+        }
+      }
+
       addCustomerNameController.text = '';
       addCustomerEmailController.text = '';
       addCustomerNumberController.text = '';
+
       update();
     } else {
       Get.back();

@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 import 'package:input_calculator/input_calculator.dart';
 import 'package:pos_system/services/controller/shift_controller.dart';
 import 'package:pos_system/views/dialogs/shift_warning_dialog.dart';
-import 'package:vk/vk.dart';
+import 'package:virtual_keyboard_2/virtual_keyboard_2.dart';
 
 import '../../../../services/controller/cash_controller.dart';
 import '../../../components/buttons/custom_text_button.dart';
@@ -87,7 +87,7 @@ class EndOfDay extends GetView<ShiftController> {
                           children: [
                             Expanded(
                               child: SizedBox(
-                                height: 150,
+                                height: 120,
                                 child: CustomTextButton().createTextButton(
                                   buttonText: 'End Shift',
                                   buttonColor:
@@ -122,7 +122,7 @@ class EndOfDay extends GetView<ShiftController> {
                             ),
                             Expanded(
                               child: SizedBox(
-                                height: 150,
+                                height: 120,
                                 child: CustomTextButton().createTextButton(
                                   buttonText: 'Start Shift',
                                   buttonColor:
@@ -155,7 +155,7 @@ class EndOfDay extends GetView<ShiftController> {
                           ],
                         ),
                         const SizedBox(
-                          height: 20,
+                          height: 15,
                         ),
                         controller.selectStartShift.isTrue
                             ? Container(
@@ -185,10 +185,11 @@ class EndOfDay extends GetView<ShiftController> {
                                         type: VirtualKeyboardType.Numeric,
                                         textController:
                                             controller.valController,
+                                        focusNode: FocusNode(),
                                       ),
                                     ),
                                     const SizedBox(
-                                      height: 15,
+                                      height: 10,
                                     ),
                                     saveButton()
                                   ],
