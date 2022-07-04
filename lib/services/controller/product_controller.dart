@@ -206,7 +206,11 @@ class ProductController extends GetxController {
       var productDetails = jsonObject['data']['productDetails'];
       var optionsArray = jsonObject['data']['productDetails']['options'];
       if (showDetails != null) {
-        Get.toNamed('/productDetails', arguments: productDetails);
+        Get.back();
+        Get.toNamed(
+          '/productDetails',
+          arguments: productDetails,
+        );
       } else {
         switch (optionsArray['section_id']) {
           case 1:

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_switch/flutter_switch.dart';
 import 'package:get/get.dart';
 import 'package:pos_system/services/controller/cart_controller.dart';
 import 'package:pos_system/services/controller/dashboard_controller.dart';
@@ -25,6 +26,29 @@ class DashboardMain {
                     ? const SizedBox()
                     : Row(
                         children: [
+                          const SizedBox(
+                            width: 6,
+                          ),
+                          FlutterSwitch(
+                            activeText: "Show Details",
+                            inactiveText: "Add to Cart",
+                            value: Get.find<DashboardController>()
+                                .showProductDetails
+                                .value,
+                            valueFontSize: 10.0,
+                            width: 110,
+                            borderRadius: 30.0,
+                            showOnOff: true,
+                            onToggle: (val) {
+                              Get.find<DashboardController>()
+                                      .showProductDetails
+                                      .value =
+                                  !Get.find<DashboardController>()
+                                      .showProductDetails
+                                      .value;
+                              Get.find<DashboardController>().update();
+                            },
+                          ),
                           const SizedBox(
                             width: 6,
                           ),
@@ -182,7 +206,10 @@ class DashboardMain {
                 var currentItem =
                     Get.find<ProductController>().productList.value[index];
                 return GestureDetector(
-                  onTap: ontap == true
+                  onTap: ontap == true ||
+                          Get.find<DashboardController>()
+                              .showProductDetails
+                              .isTrue
                       ? () {
                           Get.find<ProductController>().getProductDetails(
                               productId: currentItem.id, showDetails: true);

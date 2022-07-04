@@ -58,6 +58,7 @@ dependencies:
   read_barcode: ^1.0.1
   virtual_keyboard_2: ^0.0.2
   new_keyboard_shortcuts: ^0.1.4
+  flutter_switch: ^0.3.2
 
 dev_dependencies:
   flutter_test:

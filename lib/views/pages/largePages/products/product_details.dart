@@ -1,6 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:pos_system/services/controller/dashboard_controller.dart';
 import 'package:pos_system/services/controller/product_controller.dart';
 
 import '../../../../services/model/product_color_model.dart';
@@ -19,7 +20,9 @@ class ProductDetails extends StatelessWidget {
         centerTitle: true,
         leading: IconButton(
             onPressed: () {
-              Get.toNamed('/allProduct');
+              // Get.toNamed('/allProduct');
+              Get.back();
+              // Get.find<DashboardController>().update();
             },
             icon: const Icon(Icons.arrow_back_ios)),
         backgroundColor: Colors.grey.withOpacity(0.5),

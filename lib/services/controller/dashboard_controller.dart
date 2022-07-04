@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
-import 'package:pos_system/services/controller/cart_controller.dart';
 import 'package:pos_system/services/controller/product_controller.dart';
 import 'package:read_barcode/read_barcode.dart';
 import 'package:universal_html/html.dart';
@@ -30,7 +29,7 @@ class DashboardController extends GetxController {
 
   RxString barcodeResult = ''.obs;
 
-  RxBool isFullScreen=false.obs;
+  RxBool isFullScreen = false.obs;
 
   void listener() {
     print(barcodeReader.keycode);
@@ -53,9 +52,8 @@ class DashboardController extends GetxController {
     } else {
       document.documentElement!.requestFullscreen();
     }
-    Timer.periodic(const Duration(seconds: 1), (Timer t) => Get.find<ProductController>().hasProduct.value=true);
+    Timer.periodic(const Duration(seconds: 1),
+        (Timer t) => Get.find<ProductController>().hasProduct.value = true);
     Get.find<ProductController>().update();
-
   }
-
 }
