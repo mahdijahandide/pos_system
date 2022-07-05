@@ -67,20 +67,26 @@ class ProductsModal extends StatelessWidget {
                     mainAxisSpacing: 5.0,
                   ),
                   itemCount: listCount,
-
-                  // Get.find<CategoryController>().categoryProductList.length,
                   itemBuilder: (context, index) {
                     var currentItem = current[index];
-                    // Get.find<CategoryController>().categoryProductList[index];
                     return GestureDetector(
                       onTap: () {
                         if (isProduct == true) {
                           if (ontap == true ||
                               Get.find<DashboardController>()
                                   .showProductDetails
+                                  .isTrue ||
+                              Get.find<DashboardController>()
+                                  .allProductViewDetails
                                   .isTrue) {
                             Get.find<ProductController>().getProductDetails(
-                                productId: currentItem.id, showDetails: true);
+                                productId: currentItem.id,
+                                showDetails: true,
+                                popRoute: Get.find<DashboardController>()
+                                        .allProductViewDetails
+                                        .isTrue
+                                    ? '/allProduct'
+                                    : '/dashboard');
                           } else if (currentItem.isAttribute == 0) {
                             bool contain = Get.find<CartController>()
                                 .addToCartList
@@ -102,14 +108,6 @@ class ProductsModal extends StatelessWidget {
                                       .toString());
                             } else {
                               Get.back(closeOverlays: true);
-                              // Fluttertoast.showToast(
-                              //     msg:
-                              //         "this item already exist in your cart", // message
-                              //     toastLength: Toast.LENGTH_SHORT, // length
-                              //     gravity: ToastGravity.CENTER, // location
-                              //     webPosition: 'center',
-                              //     timeInSecForIosWeb: 2 // duration
-                              //     );
                               Snack().createSnack(
                                   title: 'Warning',
                                   msg: 'This Item Already Exist In Your Cart',
@@ -135,14 +133,6 @@ class ProductsModal extends StatelessWidget {
                                   title: currentItem.title);
                             } else {
                               Get.back(closeOverlays: true);
-                              // Fluttertoast.showToast(
-                              //     msg:
-                              //         "this item already exist in your cart", // message
-                              //     toastLength: Toast.LENGTH_SHORT, // length
-                              //     gravity: ToastGravity.CENTER, // location
-                              //     webPosition: 'center',
-                              //     timeInSecForIosWeb: 2 // duration
-                              //     );
                               Snack().createSnack(
                                   title: 'Warning',
                                   msg: 'This Item Already Exist In Your Cart',

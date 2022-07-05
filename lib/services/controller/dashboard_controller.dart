@@ -23,6 +23,7 @@ class DashboardController extends GetxController {
   RxInt searchId = 1.obs;
 
   RxBool showProductDetails = false.obs;
+  RxBool allProductViewDetails = false.obs;
 
   final barcodeReader = BarcodeReader();
   RxBool enterPressed = false.obs;

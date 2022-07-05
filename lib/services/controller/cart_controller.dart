@@ -103,9 +103,9 @@ class CartController extends GetxController {
         }));
     if (response.statusCode == 200) {
       Get.back(closeOverlays: true);
-      AudioPlayer audioPlayer = AudioPlayer();
-      const alarmAudioPath = "assets/sounds/beep.mp3";
-      audioPlayer.play(alarmAudioPath);
+      // AudioPlayer audioPlayer = AudioPlayer();
+      // const alarmAudioPath = "assets/sounds/beep.mp3";
+      // audioPlayer.play(alarmAudioPath);
 
       var jsonObject = convert.jsonDecode(response.body);
 
@@ -174,7 +174,6 @@ class CartController extends GetxController {
 
       if (addToCartList.value[index].quantity == '0') {
         addToCartList.value.removeAt(index);
-
       } else {
         addToCartList.value[index].quantity = quantity.toString();
       }
@@ -670,7 +669,6 @@ class CartController extends GetxController {
   }
 
   void saveCartForSecondMonitor() {
-
     addToCartJson = {
       'subTotal': totalAmount.toString(),
       'discount': discountAmount.toString(),
@@ -690,7 +688,7 @@ class CartController extends GetxController {
     };
     LocalStorageHelper.saveValue(
         'cartData', jsonEncode(addToCartJson).toString());
-    if(addToCartList.value.isEmpty&&isRefund.isFalse){
+    if (addToCartList.value.isEmpty && isRefund.isFalse) {
       LocalStorageHelper.removeValue('cartData');
     }
   }
@@ -940,6 +938,12 @@ class CartController extends GetxController {
         },
       ),
     );
+
+    return pdf.save();
+  }
+
+  Future<Uint8List> openDrawer() async {
+    final pdf = pw.Document();
 
     return pdf.save();
   }

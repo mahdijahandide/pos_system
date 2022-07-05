@@ -10,7 +10,9 @@ import 'package:pos_system/views/dialogs/edit_qty_dialog.dart';
 import 'package:pos_system/views/pages/largePages/dashboard/widget/iconTextBox.dart';
 import 'package:pos_system/views/pages/largePages/modals/checkout_modal.dart';
 import 'package:pos_system/views/pages/largePages/modals/temp_orders_modal.dart';
+import 'package:printing/printing.dart';
 
+import '../../../../../services/controller/auth_controller.dart';
 import '../../../../dialogs/area_province_dialog.dart';
 import '../../../../dialogs/customer_autocomplete_dialog.dart';
 import '../../modals/refund_modal.dart';
@@ -241,14 +243,28 @@ class DashboardSidebar {
                               const SizedBox(
                                 width: 4,
                               ),
-                              FittedBox(
-                                  fit: BoxFit.scaleDown,
-                                  alignment: AlignmentDirectional.centerEnd,
-                                  child: CustomText().createText(
-                                      title: currentItem.quantity,
-                                      size: 16,
-                                      fontWeight: FontWeight.bold,
-                                      align: TextAlign.end))
+                              Column(
+                                children: [
+                                  FittedBox(
+                                      fit: BoxFit.scaleDown,
+                                      alignment: AlignmentDirectional.centerEnd,
+                                      child: CustomText().createText(
+                                          title: currentItem.quantity,
+                                          size: 16,
+                                          fontWeight: FontWeight.bold,
+                                          align: TextAlign.end)),
+                                  FittedBox(
+                                      fit: BoxFit.scaleDown,
+                                      alignment: AlignmentDirectional.centerEnd,
+                                      child: CustomText().createText(
+                                          title: Get.find<AuthController>()
+                                                  .coDetails['prefix'] +
+                                              currentItem.productId.toString(),
+                                          size: 16,
+                                          fontWeight: FontWeight.bold,
+                                          align: TextAlign.end)),
+                                ],
+                              )
                             ],
                           ),
                         ),
@@ -344,15 +360,9 @@ class DashboardSidebar {
                       padding: const EdgeInsets.all(6),
                       icon: Icons.money,
                       title: 'cash_drawer'.tr,
-                      onTap: () {
-                        // Printer.connect('192.168.0.123', port: 9100)
-                        //     .then((printer) async {
-                        //   await printer.printQRCode('nhancv.com');
-                        //   printer.println('');
-                        //   printer.cut();
-                        //   printer.openCashDrawer();
-                        //   printer.disconnect();
-                        // });
+                      onTap: () async {
+                        await Printing.layoutPdf(
+                            onLayout: (_) => controller.openDrawer());
                       }),
                 ),
                 const SizedBox(

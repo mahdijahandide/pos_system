@@ -186,6 +186,7 @@ class ProductController extends GetxController {
       {required productId,
       dynamic openModal,
       dynamic title,
+      dynamic popRoute,
       dynamic showDetails}) async {
     LoadingDialog.showCustomDialog(msg: 'please wait ...');
     var url = PRODUCT_DETAILS_ROUTE;
@@ -207,10 +208,9 @@ class ProductController extends GetxController {
       var optionsArray = jsonObject['data']['productDetails']['options'];
       if (showDetails != null) {
         Get.back();
-        Get.toNamed(
-          '/productDetails',
-          arguments: productDetails,
-        );
+        Get.toNamed('/productDetails',
+            arguments: productDetails,
+            parameters: <String, String>{'popRoute': popRoute.toString()});
       } else {
         switch (optionsArray['section_id']) {
           case 1:

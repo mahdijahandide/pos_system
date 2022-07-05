@@ -17,7 +17,7 @@ class AllProduct extends StatelessWidget {
           leading: IconButton(
               onPressed: () {
                 Get.offAndToNamed('/dashboard');
-                Get.find<DashboardController>().showProductDetails.value =
+                Get.find<DashboardController>().allProductViewDetails.value =
                     false;
               },
               icon: const Icon(Icons.arrow_back_ios)),

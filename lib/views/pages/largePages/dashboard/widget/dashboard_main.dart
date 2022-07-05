@@ -10,6 +10,8 @@ import 'package:pos_system/views/components/texts/customText.dart';
 import 'package:pos_system/views/dialogs/loading_dialogs.dart';
 import 'package:pos_system/views/pages/largePages/dashboard/widget/category_widget.dart';
 
+import '../../../../../services/controller/auth_controller.dart';
+
 class DashboardMain {
   Widget createMain(
       {required gridCnt,
@@ -212,7 +214,13 @@ class DashboardMain {
                               .isTrue
                       ? () {
                           Get.find<ProductController>().getProductDetails(
-                              productId: currentItem.id, showDetails: true);
+                              productId: currentItem.id,
+                              showDetails: true,
+                              popRoute: Get.find<DashboardController>()
+                                      .allProductViewDetails
+                                      .isTrue
+                                  ? '/allProduct'
+                                  : '/dashboard');
                         }
                       : Get.find<CartController>().isRefund.isTrue
                           ? () {
@@ -482,13 +490,33 @@ class DashboardMain {
                         const SizedBox(
                           height: 10,
                         ),
-                        CustomText().createText(
-                            title: Get.find<CartController>().isRefund.isTrue
-                                ? currentItem.unitPrice!.toStringAsFixed(3)
-                                : currentItem.retailPrice!.toStringAsFixed(3) +
-                                    ' KD',
-                            fontWeight: FontWeight.bold,
-                            size: 14),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              CustomText().createText(
+                                  title:
+                                      Get.find<CartController>().isRefund.isTrue
+                                          ? currentItem.unitPrice!
+                                              .toStringAsFixed(3)
+                                          : currentItem.retailPrice!
+                                                  .toStringAsFixed(3) +
+                                              ' KD',
+                                  fontWeight: FontWeight.bold,
+                                  size: 14),
+                              CustomText().createText(
+                                  title:
+                                      Get.find<CartController>().isRefund.isTrue
+                                          ? Get.find<AuthController>()
+                                                  .coDetails['prefix'] +
+                                              currentItem.productId.toString()
+                                          : currentItem.itemCode.toString(),
+                                  fontWeight: FontWeight.bold,
+                                  size: 14),
+                            ],
+                          ),
+                        ),
                         const SizedBox(
                           height: 10,
                         ),

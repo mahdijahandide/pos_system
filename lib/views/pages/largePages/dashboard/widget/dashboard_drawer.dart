@@ -79,7 +79,10 @@ class DashboardDrawer {
             title: CustomText().createText(title: 'View All Products'),
             onTap: () {
               if (Get.find<CartController>().isRefund.isFalse) {
-                Get.find<DashboardController>().showProductDetails.value = true;
+                Get.find<DashboardController>().showProductDetails.value =
+                    false;
+                Get.find<DashboardController>().allProductViewDetails.value =
+                    true;
                 Get.toNamed('/allProduct');
               } else {
                 Snack().createSnack(
@@ -134,9 +137,9 @@ class DashboardDrawer {
               ),
               IconButton(
                 onPressed: () {
-                  Get.find<ProductController>().hasProduct.value=false;
+                  Get.find<ProductController>().hasProduct.value = false;
                   Get.find<DashboardController>().fullScreen();
-                  Get.back(closeOverlays: true,canPop: true);
+                  Get.back(closeOverlays: true, canPop: true);
                 },
                 icon: const Icon(Icons.fullscreen),
               ),
