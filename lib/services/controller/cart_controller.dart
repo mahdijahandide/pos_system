@@ -18,6 +18,8 @@ import 'package:pos_system/services/remotes/remote_status_handler.dart';
 import 'package:pos_system/views/components/snackbar/snackbar.dart';
 import 'package:pos_system/views/dialogs/area_province_dialog.dart';
 import 'package:pos_system/views/dialogs/loading_dialogs.dart';
+import 'package:pos_system/views/dialogs/password_dialog.dart';
+import 'package:pos_system/views/dialogs/refund_factor_num_dialog.dart';
 import 'package:pos_system/views/pages/largePages/modals/success_modal.dart';
 import 'package:printing/printing.dart';
 import 'package:xid/xid.dart';
@@ -66,6 +68,7 @@ class CartController extends GetxController {
 
   TextEditingController calController = TextEditingController();
   TextEditingController refundFactorNumController = TextEditingController();
+  TextEditingController passwordTxtController = TextEditingController();
 
   Future<void> addToCart(
       {required productId,
@@ -103,9 +106,9 @@ class CartController extends GetxController {
         }));
     if (response.statusCode == 200) {
       Get.back(closeOverlays: true);
-      // AudioPlayer audioPlayer = AudioPlayer();
-      // const alarmAudioPath = "assets/sounds/beep.mp3";
-      // audioPlayer.play(alarmAudioPath);
+      AudioPlayer audioPlayer = AudioPlayer();
+      const alarmAudioPath = "assets/sounds/beep.mp3";
+      audioPlayer.play(alarmAudioPath);
 
       var jsonObject = convert.jsonDecode(response.body);
 
@@ -327,8 +330,40 @@ class CartController extends GetxController {
       Get.find<CartController>().update();
     } else {
       Get.back();
-      RemoteStatusHandler().errorHandler(
-          code: response.statusCode, error: convert.jsonDecode(response.body));
+      print(response.statusCode);
+      // RemoteStatusHandler().errorHandler(
+      //     code: response.statusCode, error: convert.jsonDecode(response.body));
+    }
+  }
+
+  Future<void> checkAdminPassword({required pass}) async {
+    LoadingDialog.showCustomDialog(msg: 'Please wait ...');
+    var url = CHECK_ADMIN_PASSWORD_ROUTE;
+    final http.Response response = await http.post(Uri.parse(url),
+        headers: <String, String>{
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ${Get.find<AuthController>().token}'
+        },
+        body:
+            convert.jsonEncode(<String, String>{'password': pass.toString()}));
+    if (response.statusCode == 200) {
+      Get.back(closeOverlays: true);
+      RefundFactorNumDialog.showCustomDialog(title: 'Refund');
+    } else {
+      Get.back();
+      print(response.statusCode);
+      if (response.statusCode == 401) {
+        Snack().createSnack(
+            title: 'Warning',
+            msg: 'You Enter Wrong Password',
+            bgColor: Colors.yellow,
+            msgColor: Colors.black,
+            titleColor: Colors.black);
+      } else {
+        RemoteStatusHandler().errorHandler(
+            code: response.statusCode,
+            error: convert.jsonDecode(response.body));
+      }
     }
   }
 

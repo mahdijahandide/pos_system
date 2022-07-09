@@ -1,11 +1,11 @@
 //BASE URL
 // const String DOMAIN = 'http://localhost:59085';
-const String DOMAIN = 'https://possystem.gulfweb.ir';
-const String BASE_URL = 'https://kash5a2.gulfweb.ir/api/posv1/';
-const String BASE_URL_IMAGES = 'https://kash5a2.gulfweb.ir/uploads/logo/';
-// const String DOMAIN = 'https://pos.mrk-q8.com';
-// const String BASE_URL = 'https://mrk-q8.com/api/posv1/';
-// const String BASE_URL_IMAGES = 'https://mrk-q8.com/uploads/logo/';
+// const String DOMAIN = 'https://possystem.gulfweb.ir';
+// const String BASE_URL = 'https://kash5a2.gulfweb.ir/api/posv1/';
+// const String BASE_URL_IMAGES = 'https://kash5a2.gulfweb.ir/uploads/logo/';
+const String DOMAIN = 'https://pos.mrk-q8.com';
+const String BASE_URL = 'https://mrk-q8.com/api/posv1/';
+const String BASE_URL_IMAGES = 'https://mrk-q8.com/uploads/logo/';
 
 //routes
 const String GET_SETTING_DETAILS_ROUTE = BASE_URL + 'getSetting';
@@ -31,6 +31,7 @@ const String CASH_HISTORY = BASE_URL + 'cash/history';
 const String SHIFT_DETAILS = BASE_URL + 'shift/details';
 const String SHIFT_START = BASE_URL + 'shift/start';
 const String SHIFT_END = BASE_URL + 'shift/end';
+const String CHECK_ADMIN_PASSWORD_ROUTE = BASE_URL + 'supervisor_password';
 
 String getRefundCartRoute(String id) {
   return BASE_URL + 'order/$id/refund';

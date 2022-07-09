@@ -7,6 +7,7 @@ import 'package:pos_system/services/controller/order_controller.dart';
 import 'package:pos_system/services/controller/product_controller.dart';
 import 'package:pos_system/views/components/shimmer/product_shimmer.dart';
 import 'package:pos_system/views/components/snackbar/snackbar.dart';
+import 'package:pos_system/views/dialogs/password_dialog.dart';
 import 'package:pos_system/views/dialogs/refund_factor_num_dialog.dart';
 import 'package:pos_system/views/pages/largePages/dashboard/widget/dashboard_drawer.dart';
 import 'package:pos_system/views/pages/largePages/dashboard/widget/dashboard_main.dart';
@@ -115,8 +116,8 @@ class DesktopDashboard extends GetView<DashboardController> {
                               Get.find<OrderController>().hasList.value = false;
                               controller.update();
                             } else {
-                              RefundFactorNumDialog.showCustomDialog(
-                                  title: 'Refund');
+                              PasswordDialog.showCustomDialog(
+                                  title: 'Password');
                             }
                           }),
                       const SizedBox(

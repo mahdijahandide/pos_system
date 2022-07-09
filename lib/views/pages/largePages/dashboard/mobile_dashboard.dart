@@ -14,6 +14,7 @@ import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
 
 import '../../../../services/controller/order_controller.dart';
+import '../../../dialogs/password_dialog.dart';
 import '../../../dialogs/refund_factor_num_dialog.dart';
 
 class MobileDashboard extends StatelessWidget {
@@ -74,7 +75,8 @@ class MobileDashboard extends StatelessWidget {
                                     if (controller.isRefund.isTrue) {
                                       controller.newSale();
                                       controller.isRefund.value = false;
-                                      Get.find<CartController>().saveCartForSecondMonitor();
+                                      Get.find<CartController>()
+                                          .saveCartForSecondMonitor();
                                       Get.find<ProductController>()
                                           .productList
                                           .value
@@ -99,8 +101,8 @@ class MobileDashboard extends StatelessWidget {
                                           .value = false;
                                       controller.update();
                                     } else {
-                                      RefundFactorNumDialog.showCustomDialog(
-                                          title: 'Refund');
+                                      PasswordDialog.showCustomDialog(
+                                          title: 'Password');
                                     }
                                   },
                                   leading: const Icon(
