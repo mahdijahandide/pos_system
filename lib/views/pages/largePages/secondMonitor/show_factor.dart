@@ -23,7 +23,7 @@ class ShowFactor extends GetView<CartController> {
       body: GetBuilder(builder: (CartController controller) {
         return Padding(
           padding: const EdgeInsets.all(12.0),
-          child: ListView(
+          child: Column(
             children: [
               IconButton(
                 onPressed: () {
@@ -36,81 +36,81 @@ class ShowFactor extends GetView<CartController> {
                   color: Colors.black,
                 ),
               ),
-              ListView.separated(
-                itemCount:
-                    Get.find<CartController>().addToCartList.value.length,
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemBuilder: (BuildContext context, int index) {
-                  var currentItem =
-                      Get.find<CartController>().addToCartList.value[index];
-                  double itemQty =
-                      double.parse(currentItem.quantity.toString());
-                  double itemPrc = double.parse(currentItem.price.toString());
-                  double itemPrice = itemQty * itemPrc;
-                  return Container(
-                    color: Colors.grey.withOpacity(0.1),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          flex: 1,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              FittedBox(
-                                child: CustomText().createText(
-                                    title: currentItem.title,
-                                    fontWeight: FontWeight.bold,
-                                    size: 18),
-                              ),
-                              const SizedBox(
-                                height: 8,
-                              ),
-                              Row(
-                                children: [
-                                  CustomText()
-                                      .createText(title: '#${index + 1}'),
-                                  const SizedBox(
-                                    width: 5,
-                                  ),
-                                  CustomText().createText(title: ''),
-                                  const SizedBox(
-                                    width: 8,
-                                  ),
-                                  CustomText().createText(
-                                      title: double.parse(
-                                              currentItem.price.toString())
-                                          .toStringAsFixed(3),
-                                      fontWeight: FontWeight.bold),
-                                  const SizedBox(
-                                    width: 5,
-                                  ),
-                                  CustomText().createText(
-                                      title: itemPrice.toStringAsFixed(3),
-                                      fontWeight: FontWeight.bold),
-                                ],
-                              )
-                            ],
+              Expanded(
+                child: ListView.separated(
+                  itemCount:
+                      Get.find<CartController>().addToCartList.value.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    var currentItem =
+                        Get.find<CartController>().addToCartList.value[index];
+                    double itemQty =
+                        double.parse(currentItem.quantity.toString());
+                    double itemPrc = double.parse(currentItem.price.toString());
+                    double itemPrice = itemQty * itemPrc;
+                    return Container(
+                      color: Colors.grey.withOpacity(0.1),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            flex: 1,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                FittedBox(
+                                  child: CustomText().createText(
+                                      title: currentItem.title,
+                                      fontWeight: FontWeight.bold,
+                                      size: 18),
+                                ),
+                                const SizedBox(
+                                  height: 8,
+                                ),
+                                Row(
+                                  children: [
+                                    CustomText()
+                                        .createText(title: '#${index + 1}'),
+                                    const SizedBox(
+                                      width: 5,
+                                    ),
+                                    CustomText().createText(title: ''),
+                                    const SizedBox(
+                                      width: 8,
+                                    ),
+                                    CustomText().createText(
+                                        title: double.parse(
+                                                currentItem.price.toString())
+                                            .toStringAsFixed(3),
+                                        fontWeight: FontWeight.bold),
+                                    const SizedBox(
+                                      width: 5,
+                                    ),
+                                    CustomText().createText(
+                                        title: itemPrice.toStringAsFixed(3),
+                                        fontWeight: FontWeight.bold),
+                                  ],
+                                )
+                              ],
+                            ),
                           ),
-                        ),
-                        const SizedBox(
-                          width: 4,
-                        ),
-                        FittedBox(
-                            fit: BoxFit.scaleDown,
-                            alignment: AlignmentDirectional.centerEnd,
-                            child: CustomText().createText(
-                                title: currentItem.quantity,
-                                size: 16,
-                                fontWeight: FontWeight.bold,
-                                align: TextAlign.end))
-                      ],
-                    ),
-                  );
-                },
-                separatorBuilder: (BuildContext context, int index) {
-                  return const Divider();
-                },
+                          const SizedBox(
+                            width: 4,
+                          ),
+                          FittedBox(
+                              fit: BoxFit.scaleDown,
+                              alignment: AlignmentDirectional.centerEnd,
+                              child: CustomText().createText(
+                                  title: currentItem.quantity,
+                                  size: 16,
+                                  fontWeight: FontWeight.bold,
+                                  align: TextAlign.end))
+                        ],
+                      ),
+                    );
+                  },
+                  separatorBuilder: (BuildContext context, int index) {
+                    return const Divider();
+                  },
+                ),
               ),
               const Divider(),
               keyValText(
@@ -153,12 +153,12 @@ class ShowFactor extends GetView<CartController> {
                   title: 'total'.tr,
                   value: controller.isRefund.isFalse
                       ? (Get.find<CartController>().totalAmount -
-                      Get.find<CartController>().discountAmount +
-                      controller.deliveryAmount)
-                      .toStringAsFixed(3)
+                              Get.find<CartController>().discountAmount +
+                              controller.deliveryAmount)
+                          .toStringAsFixed(3)
                       : (Get.find<CartController>().totalAmount -
-                      Get.find<CartController>().discountAmount)
-                      .toStringAsFixed(3),
+                              Get.find<CartController>().discountAmount)
+                          .toStringAsFixed(3),
                   keyWeight: FontWeight.bold,
                   valWeight: FontWeight.bold,
                   keySize: 22,
@@ -202,12 +202,12 @@ class ShowFactor extends GetView<CartController> {
 
   void _refresh() {
     var data = jsonDecode(LocalStorageHelper.getValue('cartData'));
-    if(data==null){
+    if (data == null) {
       LocalStorageHelper.removeValue('cartData');
       Get.find<CartController>().addToCartList.value.clear();
-      Get.find<CartController>().totalAmount =0.0;
-      Get.find<CartController>().discountAmount =0.0;
-      Get.find<CartController>().deliveryAmount =0.0;
+      Get.find<CartController>().totalAmount = 0.0;
+      Get.find<CartController>().discountAmount = 0.0;
+      Get.find<CartController>().deliveryAmount = 0.0;
       controller.update();
     }
     Get.find<CartController>().addToCartList.value.clear();
@@ -227,7 +227,7 @@ class ShowFactor extends GetView<CartController> {
         double.parse(data['discount'].toString());
     Get.find<CartController>().deliveryAmount =
         double.parse(data['delivery'].toString());
-    Get.find<CartController>().isRefund.value=data['isRefund'];
+    Get.find<CartController>().isRefund.value = data['isRefund'];
     Get.find<CartController>().update();
   }
 }
