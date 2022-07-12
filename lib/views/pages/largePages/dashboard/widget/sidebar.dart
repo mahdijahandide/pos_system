@@ -257,9 +257,8 @@ class DashboardSidebar {
                                       fit: BoxFit.scaleDown,
                                       alignment: AlignmentDirectional.centerEnd,
                                       child: CustomText().createText(
-                                          title: Get.find<AuthController>()
-                                                  .coDetails['prefix'] +
-                                              currentItem.productId.toString(),
+                                          title:
+                                              currentItem.itemCode.toString(),
                                           size: 16,
                                           fontWeight: FontWeight.bold,
                                           align: TextAlign.end)),

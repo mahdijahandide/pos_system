@@ -96,16 +96,27 @@ class ProductsModal extends StatelessWidget {
                                     currentItem.id.toString())
                                 .isEmpty;
                             if (contain) {
-                              Get.find<CartController>().addToCart(
-                                  optionSc: '0',
-                                  productId: currentItem.id.toString(),
-                                  price: currentItem.retailPrice.toString(),
-                                  quantity: '1',
-                                  title: currentItem.title,
-                                  titleAr: currentItem.titleAr.toString(),
-                                  tempUniqueId: Get.find<CartController>()
-                                      .uniqueId
-                                      .toString());
+                              if (int.parse(currentItem.quantity.toString()) >
+                                  0) {
+                                Get.find<CartController>().addToCart(
+                                    optionSc: '0',
+                                    iCode: currentItem.itemCode,
+                                    productId: currentItem.id.toString(),
+                                    price: currentItem.retailPrice.toString(),
+                                    quantity: '1',
+                                    title: currentItem.title,
+                                    titleAr: currentItem.titleAr.toString(),
+                                    tempUniqueId: Get.find<CartController>()
+                                        .uniqueId
+                                        .toString());
+                              } else {
+                                Snack().createSnack(
+                                    title: 'Warning',
+                                    msg: 'No Enough Quantity',
+                                    bgColor: Colors.yellow,
+                                    msgColor: Colors.black,
+                                    titleColor: Colors.black);
+                              }
                             } else {
                               Get.back(closeOverlays: true);
                               Snack().createSnack(

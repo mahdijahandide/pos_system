@@ -1,11 +1,11 @@
 //BASE URL
-const String DOMAIN = 'http://localhost:51275';
+// const String DOMAIN = 'http://localhost:51275';
 // const String DOMAIN = 'https://possystem.gulfweb.ir';
-const String BASE_URL = 'https://kash5a2.gulfweb.ir/api/posv1/';
-const String BASE_URL_IMAGES = 'https://kash5a2.gulfweb.ir/uploads/logo/';
-// const String DOMAIN = 'https://pos.mrk-q8.com';
-// const String BASE_URL = 'https://mrk-q8.com/api/posv1/';
-// const String BASE_URL_IMAGES = 'https://mrk-q8.com/uploads/logo/';
+// const String BASE_URL = 'https://kash5a2.gulfweb.ir/api/posv1/';
+// const String BASE_URL_IMAGES = 'https://kash5a2.gulfweb.ir/uploads/logo/';
+const String DOMAIN = 'https://pos.mrk-q8.com';
+const String BASE_URL = 'https://mrk-q8.com/api/posv1/';
+const String BASE_URL_IMAGES = 'https://mrk-q8.com/uploads/logo/';
 
 //routes
 const String GET_SETTING_DETAILS_ROUTE = BASE_URL + 'getSetting';

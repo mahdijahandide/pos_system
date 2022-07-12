@@ -59,6 +59,7 @@ class ProductOptionDialog2 {
                 .toList()[0];
             if (int.parse(current.quantity.toString()) > 0) {
               Get.find<CartController>().addToCart(
+                  iCode: current.itemCode.toString(),
                   title: current.title,
                   titleAr: current.titleAr.toString(),
                   openDialog: true,

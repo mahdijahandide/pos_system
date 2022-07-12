@@ -144,6 +144,7 @@ class ProductController extends GetxController {
           } else {
             Get.find<CartController>().addToCartList.value.add(CartProductModel(
                 mId: jsonObject['data']['cart_item_id'],
+                iCode: jsonObject['item_code'].toString(),
                 mPrice: details['retail_price'].toString(),
                 mQuantity: '1',
                 mTitle: details['translate']['en'],

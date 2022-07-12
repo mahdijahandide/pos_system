@@ -238,6 +238,7 @@ class DashboardMain {
                                 if (int.parse(currentItem.quantity.toString()) >
                                     0) {
                                   Get.find<CartController>().addToCart(
+                                      iCode: currentItem.itemCode,
                                       optionSc: '0',
                                       productId:
                                           currentItem.productId.toString(),
@@ -290,6 +291,8 @@ class DashboardMain {
                                         .isFalse) {
                                       Get.find<CartController>().addToCart(
                                           optionSc: '0',
+                                          iCode:
+                                              currentItem.itemCode.toString(),
                                           productId: currentItem.id.toString(),
                                           price: currentItem.retailPrice
                                               .toString(),
@@ -324,6 +327,8 @@ class DashboardMain {
                                         if (index < 0) {
                                           Get.find<CartController>().addToCart(
                                               optionSc: '0',
+                                              iCode: currentItem.itemCode
+                                                  .toString(),
                                               productId:
                                                   currentItem.id.toString(),
                                               price: currentItem.retailPrice
@@ -506,12 +511,7 @@ class DashboardMain {
                                   fontWeight: FontWeight.bold,
                                   size: 14),
                               CustomText().createText(
-                                  title:
-                                      Get.find<CartController>().isRefund.isTrue
-                                          ? Get.find<AuthController>()
-                                                  .coDetails['prefix'] +
-                                              currentItem.productId.toString()
-                                          : currentItem.itemCode.toString(),
+                                  title: currentItem.itemCode.toString(),
                                   fontWeight: FontWeight.bold,
                                   size: 14),
                             ],

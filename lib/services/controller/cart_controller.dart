@@ -18,7 +18,6 @@ import 'package:pos_system/services/remotes/remote_status_handler.dart';
 import 'package:pos_system/views/components/snackbar/snackbar.dart';
 import 'package:pos_system/views/dialogs/area_province_dialog.dart';
 import 'package:pos_system/views/dialogs/loading_dialogs.dart';
-import 'package:pos_system/views/dialogs/password_dialog.dart';
 import 'package:pos_system/views/dialogs/refund_factor_num_dialog.dart';
 import 'package:pos_system/views/pages/largePages/modals/success_modal.dart';
 import 'package:printing/printing.dart';
@@ -74,6 +73,7 @@ class CartController extends GetxController {
       {required productId,
       required price,
       required quantity,
+      required iCode,
       required optionSc,
       required tempUniqueId,
       dynamic openModal,
@@ -124,6 +124,7 @@ class CartController extends GetxController {
 
       addToCartList.value.add(CartProductModel(
           mId: jsonObject['data']['cart_item_id'],
+          iCode: iCode,
           mPrice: price,
           mQuantity: quantity,
           mTitle: title,
@@ -189,7 +190,7 @@ class CartController extends GetxController {
       Get.back(closeOverlays: true);
       update();
     } else {
-      Get.back();
+      Get.back(closeOverlays: true);
       RemoteStatusHandler().errorHandler(
           code: response.statusCode, error: convert.jsonDecode(response.body));
     }
@@ -447,6 +448,7 @@ class CartController extends GetxController {
       for (int i = 0; i < addToCartList.value.length; i++) {
         addToCartListForPrint.add(CartProductModel(
             mId: addToCartList.value[i].id,
+            iCode: addToCartList.value[i].itemCode,
             pId: addToCartList.value[i].productId,
             mPrice: addToCartList.value[i].price,
             mQuantity: addToCartList.value[i].quantity,
@@ -644,6 +646,7 @@ class CartController extends GetxController {
       temps.forEach((element) {
         addToCartList.value.add(CartProductModel(
             mId: element['id'],
+            iCode: element['item_code'],
             mPrice: element['unitprice'].toString(),
             mQuantity: element['quantity'].toString(),
             mTitle: element['title'],

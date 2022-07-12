@@ -60,6 +60,7 @@ class ProductOptionDialog1 {
             if (int.parse(current.quantity.toString()) > 0) {
               Get.find<CartController>().addToCart(
                   title: current.title,
+                  iCode: current.itemCode.toString(),
                   titleAr: current.titleAr.toString(),
                   openDialog: true,
                   productId: current.id.toString(),

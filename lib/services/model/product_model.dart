@@ -82,6 +82,7 @@ class ProductModel {
       title = data['translate']['en'] ?? '';
       titleAr = data['translate']['ar'] ?? '';
       image = data['imageUrl'] ?? '';
+      itemCode = data['item_code'];
       productAttributes = data['productAttributes'] ?? [];
       unitPrice = data['unitprice'] != null
           ? double.parse(data['unitprice'].toString())

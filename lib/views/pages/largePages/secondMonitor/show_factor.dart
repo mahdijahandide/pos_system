@@ -214,6 +214,7 @@ class ShowFactor extends GetView<CartController> {
     data['data'].forEach((element) {
       Get.find<CartController>().addToCartList.value.add(CartProductModel(
           mId: element['id'],
+          iCode: element['item_code'],
           pId: element['productId'],
           mPrice: element['price'],
           mQuantity: element['quantity'],

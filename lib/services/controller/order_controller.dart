@@ -171,11 +171,11 @@ class OrderController extends GetxController {
                 orderRefundDeliveryAmount +
                 orderRefundSellerDiscount);
 
-
         jsonObject['data']['orderItems'].forEach((element) {
           Get.find<CartController>().refundFactorItemList.value.add(
               CartProductModel(
                   mId: int.parse(element['id'].toString()),
+                  iCode: element['item_code'].toString(),
                   pId: element['product_id'].toString(),
                   mPrice: element['unitprice'].toString(),
                   mQuantity: element['quantity'].toString(),
