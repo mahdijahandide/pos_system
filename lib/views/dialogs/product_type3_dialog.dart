@@ -31,6 +31,7 @@ class ProductOptionDialog3 {
                     Get.find<ProductController>().selectedSizeName.toString()),
                 onChanged: (val) {
                   Get.find<ProductController>().selectedSizeId = val.toString();
+                  print(Get.find<ProductController>().selectedSizeId);
                   Get.find<ProductController>().selectedSizeName.value =
                       Get.find<ProductController>()
                           .productSizeColorList
@@ -61,6 +62,7 @@ class ProductOptionDialog3 {
                       onChanged: (val) {
                         Get.find<ProductController>().selectedColorId =
                             val.toString();
+                        print(Get.find<ProductController>().selectedColorId);
                         Get.find<ProductController>().selectedColorName.value =
                             Get.find<ProductController>()
                                 .productSizeColorList

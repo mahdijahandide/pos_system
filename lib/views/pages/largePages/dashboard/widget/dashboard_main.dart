@@ -379,96 +379,86 @@ class DashboardMain {
                                       ));
                                 }
                               } else {
-                                bool contain = Get.find<CartController>()
-                                    .addToCartList
-                                    .value
-                                    .where((element) =>
-                                        element.productId.toString() ==
-                                        currentItem.id.toString())
-                                    .isEmpty;
-                                if (contain) {
-                                  if (int.parse(
-                                          currentItem.quantity.toString()) >
-                                      0) {
-                                    if (Get.find<CartController>()
-                                        .isRefund
-                                        .isFalse) {
-                                      Get.find<ProductController>()
-                                          .getProductDetails(
-                                              productId:
-                                                  currentItem.id.toString(),
-                                              title: currentItem.title);
-                                    } else {
-                                      var product = Get.find<CartController>()
-                                          .refundFactorItemList
-                                          .value
-                                          .where((product) =>
-                                              product.productId.toString() ==
-                                              currentItem.id.toString())
-                                          .first
-                                          .productId
-                                          .toString();
+                                // bool contain = Get.find<CartController>()
+                                //     .addToCartList
+                                //     .value
+                                //     .where((element) =>
+                                //         element.productId.toString() ==
+                                //         currentItem.id.toString())
+                                //     .isEmpty;
+                                // if (contain) {
+                                if (int.parse(currentItem.quantity.toString()) >
+                                    0) {
+                                  if (Get.find<CartController>()
+                                      .isRefund
+                                      .isFalse) {
+                                    Get.find<ProductController>()
+                                        .getProductDetails(
+                                            productId:
+                                                currentItem.id.toString(),
+                                            title: currentItem.title);
+                                  } else {
+                                    var product = Get.find<CartController>()
+                                        .refundFactorItemList
+                                        .value
+                                        .where((product) =>
+                                            product.productId.toString() ==
+                                            currentItem.id.toString())
+                                        .first
+                                        .productId
+                                        .toString();
 
-                                      final index = Get.find<CartController>()
-                                          .addToCartList
-                                          .value
-                                          .indexWhere((element) =>
-                                              element.productId.toString() ==
-                                              product);
+                                    final index = Get.find<CartController>()
+                                        .addToCartList
+                                        .value
+                                        .indexWhere((element) =>
+                                            element.productId.toString() ==
+                                            product);
 
-                                      if (product ==
-                                          currentItem.id.toString()) {
-                                        if (index < 0) {
-                                          Get.find<ProductController>()
-                                              .getProductDetails(
-                                                  productId:
-                                                      currentItem.id.toString(),
-                                                  title: currentItem.title);
-                                        } else {
-                                          Snack().createSnack(
-                                              title: 'Warning',
-                                              msg: 'Item Exist In Cart',
-                                              bgColor: Colors.yellow,
-                                              msgColor: Colors.black,
-                                              titleColor: Colors.black);
-                                        }
+                                    if (product == currentItem.id.toString()) {
+                                      if (index < 0) {
+                                        Get.find<ProductController>()
+                                            .getProductDetails(
+                                                productId:
+                                                    currentItem.id.toString(),
+                                                title: currentItem.title);
                                       } else {
                                         Snack().createSnack(
                                             title: 'Warning',
-                                            msg: 'No Enough Quantity',
+                                            msg: 'Item Exist In Cart',
                                             bgColor: Colors.yellow,
                                             msgColor: Colors.black,
                                             titleColor: Colors.black);
                                       }
+                                    } else {
+                                      Snack().createSnack(
+                                          title: 'Warning',
+                                          msg: 'No Enough Quantity',
+                                          bgColor: Colors.yellow,
+                                          msgColor: Colors.black,
+                                          titleColor: Colors.black);
                                     }
-                                  } else {
-                                    Snack().createSnack(
-                                        title: 'Warning',
-                                        msg: 'No Enough Quantity',
-                                        bgColor: Colors.yellow,
-                                        msgColor: Colors.black,
-                                        titleColor: Colors.black);
                                   }
                                 } else {
-                                  // Fluttertoast.showToast(
-                                  //     msg:
-                                  //         "this item already exist in your cart", // message
-                                  //     toastLength: Toast.LENGTH_SHORT, // length
-                                  //     gravity: ToastGravity.CENTER, // location
-                                  //     webPosition: 'center',
-                                  //     timeInSecForIosWeb: 2 // duration
-                                  //     );
                                   Snack().createSnack(
                                       title: 'Warning',
-                                      msg:
-                                          'This Item Already Exist In Your Cart',
+                                      msg: 'No Enough Quantity',
                                       bgColor: Colors.yellow,
                                       msgColor: Colors.black,
-                                      icon: const Icon(
-                                        Icons.check,
-                                        color: Colors.white,
-                                      ));
+                                      titleColor: Colors.black);
                                 }
+                                // } else {
+                                //   Snack().createSnack(
+                                //       title: 'Warning',
+                                //       msg:
+                                //           'This Item Already Exist In Your Cart',
+                                //       bgColor: Colors.yellow,
+                                //       msgColor: Colors.black,
+                                //       icon: const Icon(
+                                //         Icons.check,
+                                //         color: Colors.white,
+                                //       ));
+                                // }
                               }
                             },
                   child: Container(

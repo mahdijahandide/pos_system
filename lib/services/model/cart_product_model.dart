@@ -7,6 +7,8 @@ class CartProductModel {
   String? title;
   String? titleAr;
   String? tempUniqueId;
+  String? sizeId;
+  String? colorId;
   bool isSelected = false;
 
   CartProductModel(
@@ -17,6 +19,8 @@ class CartProductModel {
       required mQuantity,
       required mTitle,
       required mTitleAr,
+      dynamic mSizeId,
+      dynamic mColorId,
       required mTempUniqueId}) {
     id = mId;
     productId = pId.toString();
@@ -26,5 +30,7 @@ class CartProductModel {
     title = mTitle;
     titleAr = mTitleAr;
     tempUniqueId = mTempUniqueId;
+    sizeId = mSizeId ?? '';
+    colorId = mColorId ?? '';
   }
 }

@@ -131,30 +131,30 @@ class ProductsModal extends StatelessWidget {
                                   ));
                             }
                           } else {
-                            bool contain = Get.find<CartController>()
-                                .addToCartList
-                                .value
-                                .where((element) =>
-                                    element.productId.toString() ==
-                                    currentItem.id.toString())
-                                .isEmpty;
-                            if (contain) {
-                              Get.find<ProductController>().getProductDetails(
-                                  productId: currentItem.id.toString(),
-                                  title: currentItem.title);
-                            } else {
-                              Get.back(closeOverlays: true);
-                              Snack().createSnack(
-                                  title: 'Warning',
-                                  msg: 'This Item Already Exist In Your Cart',
-                                  bgColor: Colors.green,
-                                  msgColor: Colors.black,
-                                  titleColor: Colors.black,
-                                  icon: const Icon(
-                                    Icons.check,
-                                    color: Colors.white,
-                                  ));
-                            }
+                            // bool contain = Get.find<CartController>()
+                            //     .addToCartList
+                            //     .value
+                            //     .where((element) =>
+                            //         element.productId.toString() ==
+                            //         currentItem.id.toString())
+                            //     .isEmpty;
+                            // if (contain) {
+                            Get.find<ProductController>().getProductDetails(
+                                productId: currentItem.id.toString(),
+                                title: currentItem.title);
+                            // } else {
+                            //   Get.back(closeOverlays: true);
+                            //   Snack().createSnack(
+                            //       title: 'Warning',
+                            //       msg: 'This Item Already Exist In Your Cart',
+                            //       bgColor: Colors.green,
+                            //       msgColor: Colors.black,
+                            //       titleColor: Colors.black,
+                            //       icon: const Icon(
+                            //         Icons.check,
+                            //         color: Colors.white,
+                            //       ));
+                            // }
                           }
                         } else {
                           if (currentItem.subCategory.isNotEmpty) {

@@ -86,6 +86,84 @@ class CartController extends GetxController {
       dynamic title,
       dynamic titleAr}) async {
     LoadingDialog.showCustomDialog(msg: 'Please wait ...');
+
+    int qty = int.parse(quantity.toString());
+    switch (optionSc.toString()) {
+      case '1':
+        bool contain = Get.find<CartController>()
+                .addToCartList
+                .value
+                .where((element) =>
+                    element.sizeId.toString() == sizeAttribute.toString())
+                .isEmpty
+            ? false
+            : true;
+        if (contain) {
+          qty = int.parse(Get.find<CartController>()
+                  .addToCartList
+                  .value
+                  .where((element) =>
+                      element.sizeId.toString() == sizeAttribute.toString())
+                  .first
+                  .quantity
+                  .toString()) +
+              1;
+        } else {
+          qty = 1;
+        }
+        break;
+      case '2':
+        bool contain = Get.find<CartController>()
+                .addToCartList
+                .value
+                .where((element) =>
+                    element.colorId.toString() == colorAttribute.toString())
+                .isEmpty
+            ? false
+            : true;
+        if (contain) {
+          qty = int.parse(Get.find<CartController>()
+                  .addToCartList
+                  .value
+                  .where((element) =>
+                      element.colorId.toString() == colorAttribute.toString())
+                  .first
+                  .quantity
+                  .toString()) +
+              1;
+        } else {
+          qty = 1;
+        }
+        break;
+      case '3':
+        bool contain = Get.find<CartController>()
+                .addToCartList
+                .value
+                .where((element) =>
+                    element.sizeId.toString() == sizeAttribute.toString() &&
+                    element.colorId.toString() == colorAttribute.toString())
+                .isEmpty
+            ? false
+            : true;
+        if (contain) {
+          qty = int.parse(Get.find<CartController>()
+                  .addToCartList
+                  .value
+                  .where((element) =>
+                      element.sizeId.toString() == sizeAttribute.toString() &&
+                      element.colorId.toString() == colorAttribute.toString())
+                  .first
+                  .quantity
+                  .toString()) +
+              1;
+        } else {
+          qty = 1;
+        }
+        break;
+      default:
+        qty = 1;
+    }
+
     var url = ADD_TO_CART;
     final http.Response response = await http.post(Uri.parse(url),
         headers: <String, String>{
@@ -95,7 +173,7 @@ class CartController extends GetxController {
         body: jsonEncode(<String, dynamic>{
           'product_id': productId,
           'price': price,
-          'quantity': quantity,
+          'quantity': isRefund.isFalse ? qty.toString() : quantity,
           'temp_uniqueid': tempUniqueId,
           'option_scection_id': optionSc.toString(),
           if (isRefund.isTrue) 'refund': '1',
@@ -106,9 +184,9 @@ class CartController extends GetxController {
         }));
     if (response.statusCode == 200) {
       Get.back(closeOverlays: true);
-      AudioPlayer audioPlayer = AudioPlayer();
-      const alarmAudioPath = "assets/sounds/beep.mp3";
-      audioPlayer.play(alarmAudioPath);
+      // AudioPlayer audioPlayer = AudioPlayer();
+      // const alarmAudioPath = "assets/sounds/beep.mp3";
+      // audioPlayer.play(alarmAudioPath);
 
       var jsonObject = convert.jsonDecode(response.body);
 
@@ -122,15 +200,154 @@ class CartController extends GetxController {
                     Get.find<OrderController>().discountNesbat.toString());
       }
 
-      addToCartList.value.add(CartProductModel(
-          mId: jsonObject['data']['cart_item_id'],
-          iCode: iCode,
-          mPrice: price,
-          mQuantity: quantity,
-          mTitle: title,
-          mTempUniqueId: tempUniqueId,
-          pId: int.parse(productId),
-          mTitleAr: titleAr));
+      bool contain = Get.find<CartController>()
+              .addToCartList
+              .value
+              .where((element) =>
+                  element.productId.toString() == productId.toString())
+              .isEmpty
+          ? false
+          : true;
+
+      if (!contain) {
+        addToCartList.value.add(
+          CartProductModel(
+              mId: jsonObject['data']['cart_item_id'],
+              iCode: iCode,
+              mPrice: price,
+              mQuantity: quantity,
+              mTitle: title,
+              mTempUniqueId: tempUniqueId,
+              pId: int.parse(productId),
+              mTitleAr: titleAr,
+              mSizeId: sizeAttribute != null ? sizeAttribute.toString() : '',
+              mColorId:
+                  colorAttribute != null ? colorAttribute.toString() : ''),
+        );
+      } else {
+        switch (optionSc.toString()) {
+          case '1':
+            bool contain = Get.find<CartController>()
+                    .addToCartList
+                    .value
+                    .where((element) =>
+                        element.sizeId.toString() == sizeAttribute.toString())
+                    .isEmpty
+                ? false
+                : true;
+
+            if (contain) {
+              var current = Get.find<CartController>()
+                  .addToCartList
+                  .value
+                  .where((element) =>
+                      element.sizeId.toString() == sizeAttribute.toString())
+                  .first;
+              current.quantity =
+                  (int.parse(current.quantity.toString()) + 1).toString();
+            } else {
+              addToCartList.value.add(
+                CartProductModel(
+                    mId: jsonObject['data']['cart_item_id'],
+                    iCode: iCode,
+                    mPrice: price,
+                    mQuantity: quantity,
+                    mTitle: title,
+                    mTempUniqueId: tempUniqueId,
+                    pId: int.parse(productId),
+                    mTitleAr: titleAr,
+                    mSizeId:
+                        sizeAttribute != null ? sizeAttribute.toString() : '',
+                    mColorId: colorAttribute != null
+                        ? colorAttribute.toString()
+                        : ''),
+              );
+            }
+
+            break;
+          case '2':
+            bool contain = Get.find<CartController>()
+                    .addToCartList
+                    .value
+                    .where((element) =>
+                        element.colorId.toString() == colorAttribute.toString())
+                    .isEmpty
+                ? false
+                : true;
+
+            if (contain) {
+              var current = Get.find<CartController>()
+                  .addToCartList
+                  .value
+                  .where((element) =>
+                      element.colorId.toString() == colorAttribute.toString())
+                  .first;
+              current.quantity =
+                  (int.parse(current.quantity.toString()) + 1).toString();
+            } else {
+              addToCartList.value.add(
+                CartProductModel(
+                    mId: jsonObject['data']['cart_item_id'],
+                    iCode: iCode,
+                    mPrice: price,
+                    mQuantity: quantity,
+                    mTitle: title,
+                    mTempUniqueId: tempUniqueId,
+                    pId: int.parse(productId),
+                    mTitleAr: titleAr,
+                    mSizeId:
+                        sizeAttribute != null ? sizeAttribute.toString() : '',
+                    mColorId: colorAttribute != null
+                        ? colorAttribute.toString()
+                        : ''),
+              );
+            }
+
+            break;
+          case '3':
+            bool contain = Get.find<CartController>()
+                    .addToCartList
+                    .value
+                    .where((element) =>
+                        element.sizeId.toString() == sizeAttribute.toString() &&
+                        element.colorId.toString() == colorAttribute.toString())
+                    .isEmpty
+                ? false
+                : true;
+
+            if (contain) {
+              var current = Get.find<CartController>()
+                  .addToCartList
+                  .value
+                  .where((element) =>
+                      element.sizeId.toString() == sizeAttribute.toString() &&
+                      element.colorId.toString() == colorAttribute.toString())
+                  .first;
+              current.quantity =
+                  (int.parse(current.quantity.toString()) + 1).toString();
+            } else {
+              addToCartList.value.add(
+                CartProductModel(
+                    mId: jsonObject['data']['cart_item_id'],
+                    iCode: iCode,
+                    mPrice: price,
+                    mQuantity: quantity,
+                    mTitle: title,
+                    mTempUniqueId: tempUniqueId,
+                    pId: int.parse(productId),
+                    mTitleAr: titleAr,
+                    mSizeId:
+                        sizeAttribute != null ? sizeAttribute.toString() : '',
+                    mColorId: colorAttribute != null
+                        ? colorAttribute.toString()
+                        : ''),
+              );
+            }
+
+            break;
+        }
+      }
+
       totalAmount = double.parse(jsonObject['data']['total_amount'].toString());
 
       saveCartForSecondMonitor();
@@ -652,7 +869,7 @@ class CartController extends GetxController {
             mTitle: element['title'],
             mTempUniqueId: uniqueId,
             pId: element['product_id'],
-            mTitleAr: element['title']));
+            mTitleAr: element['translate']['ar']));
       });
 
       if (index != null) openCartsUDID.removeAt(index);
