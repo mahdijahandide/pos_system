@@ -4,6 +4,7 @@ class OrderItemsModel {
   String ?title;
   String ?titleAr;
   String ?imageUrl;
+  String ?itemCode;
   double? unitPrice;
   int ?quantity;
   double ?subtotal;
@@ -12,6 +13,7 @@ class OrderItemsModel {
   OrderItemsModel({data}) {
     id=data['id']??0;
     productId=data['product_id']??0;
+    itemCode=data['item_code']??0;
     title=data['title']??'';
     titleAr=data['translate']['ar']??'';
     imageUrl=data['imageUrl']??'';

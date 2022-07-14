@@ -122,8 +122,8 @@ class PrintingHistoryView {
                           children: [
                             pw.Expanded(
                                 flex: 1,
-                                child: pw.Text(currentItem.productId.toString(),
-                                    style: const pw.TextStyle(fontSize: 10))),
+                                child: pw.Text(currentItem.itemCode.toString(),
+                                    style: const pw.TextStyle(fontSize: 8))),
                             pw.SizedBox(
                               width: 2,
                             ),
