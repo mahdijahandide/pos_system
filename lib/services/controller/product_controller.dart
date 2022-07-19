@@ -119,7 +119,8 @@ class ProductController extends GetxController {
                   .addToCartList
                   .value
                   .where((element) =>
-                      element.id.toString() == cart['id'].toString())
+                      element.itemCode.toString() ==
+                      details['item_code'].toString())
                   .isEmpty
               ? false
               : true;
@@ -128,14 +129,16 @@ class ProductController extends GetxController {
             Get.find<CartController>()
                 .addToCartList
                 .value
-                .where(
-                    (element) => element.id.toString() == cart['id'].toString())
+                .where((element) =>
+                    element.itemCode.toString() ==
+                    details['item_code'].toString())
                 .first
                 .quantity = (int.parse(Get.find<CartController>()
                         .addToCartList
                         .value
                         .where((element) =>
-                            element.id.toString() == cart['id'].toString())
+                            element.itemCode.toString() ==
+                            details['item_code'].toString())
                         .first
                         .quantity
                         .toString()) +
@@ -143,8 +146,8 @@ class ProductController extends GetxController {
                 .toString();
           } else {
             Get.find<CartController>().addToCartList.value.add(CartProductModel(
-                mId: jsonObject['data']['cart_item_id'],
-                iCode: jsonObject['item_code'].toString(),
+                mId: cart['cart_item_id'],
+                iCode: details['item_code'].toString(),
                 mPrice: details['retail_price'].toString(),
                 mQuantity: '1',
                 mTitle: details['translate']['en'],

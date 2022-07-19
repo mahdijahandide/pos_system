@@ -36,7 +36,12 @@ class OrderController extends GetxController {
 
   var discountNesbat;
 
-  Future<void> getOrders({dynamic id, dynamic reqStatus}) async {
+  Future<void> getOrders(
+      {dynamic id, dynamic reqStatus, dynamic isRefund}) async {
+    print(jsonEncode(<String, dynamic>{
+      if (reqStatus == 'refund') 'search_order_id': id.toString(),
+      if (isRefund != null) 'checkUser': '0'
+    }));
     orderList.value.clear();
     if (reqStatus == 'refund') {
       LoadingDialog.showCustomDialog(msg: 'Please wait ...');
@@ -48,7 +53,8 @@ class OrderController extends GetxController {
           'Authorization': 'Bearer ${Get.find<AuthController>().token}'
         },
         body: jsonEncode(<String, String>{
-          if (reqStatus == 'refund') 'search_order_id': id.toString()
+          if (reqStatus == 'refund') 'search_order_id': id.toString(),
+          if (isRefund == false) 'checkUser': '0'
         }));
     if (response.statusCode == 200) {
       var jsonObject = convert.jsonDecode(response.body);

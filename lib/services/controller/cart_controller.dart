@@ -419,6 +419,10 @@ class CartController extends GetxController {
     required tempUniqueId,
   }) async {
     LoadingDialog.showCustomDialog(msg: 'Please wait ...');
+    print(jsonEncode(<String, String>{
+      'id': id.toString(),
+      'temp_uniqueid': tempUniqueId,
+    }));
     var url = REMOVE_FROM_CART;
     final http.Response response = await http.post(Uri.parse(url),
         headers: <String, String>{

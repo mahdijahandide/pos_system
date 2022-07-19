@@ -43,7 +43,8 @@ class RefundFactorNumDialog {
                       Get.find<OrderController>().getOrders(
                           id: Get.find<AuthController>().coDetails['prefix'] +
                               controller.refundFactorNumController.text,
-                          reqStatus: 'refund');
+                          reqStatus: 'refund',
+                          isRefund: false);
                     } else {
                       Snack().createSnack(
                           title: 'Warning',
@@ -77,7 +78,8 @@ class RefundFactorNumDialog {
             Get.find<OrderController>().getOrders(
                 id: Get.find<AuthController>().coDetails['prefix'] +
                     Get.find<CartController>().refundFactorNumController.text,
-                reqStatus: 'refund');
+                reqStatus: 'refund',
+                isRefund: false);
           } else {
             Snack().createSnack(
                 title: 'Warning',
