@@ -94,7 +94,8 @@ class CartController extends GetxController {
                 .addToCartList
                 .value
                 .where((element) =>
-                    element.sizeId.toString() == sizeAttribute.toString())
+                    element.sizeId.toString() == sizeAttribute.toString() &&
+                    element.itemCode.toString() == iCode.toString())
                 .isEmpty
             ? false
             : true;
@@ -103,7 +104,8 @@ class CartController extends GetxController {
                   .addToCartList
                   .value
                   .where((element) =>
-                      element.sizeId.toString() == sizeAttribute.toString())
+                      element.sizeId.toString() == sizeAttribute.toString() &&
+                      element.itemCode.toString() == iCode.toString())
                   .first
                   .quantity
                   .toString()) +
@@ -117,7 +119,8 @@ class CartController extends GetxController {
                 .addToCartList
                 .value
                 .where((element) =>
-                    element.colorId.toString() == colorAttribute.toString())
+                    element.colorId.toString() == colorAttribute.toString() &&
+                    element.itemCode.toString() == iCode.toString())
                 .isEmpty
             ? false
             : true;
@@ -126,7 +129,8 @@ class CartController extends GetxController {
                   .addToCartList
                   .value
                   .where((element) =>
-                      element.colorId.toString() == colorAttribute.toString())
+                      element.colorId.toString() == colorAttribute.toString() &&
+                      element.itemCode.toString() == iCode.toString())
                   .first
                   .quantity
                   .toString()) +
@@ -141,7 +145,8 @@ class CartController extends GetxController {
                 .value
                 .where((element) =>
                     element.sizeId.toString() == sizeAttribute.toString() &&
-                    element.colorId.toString() == colorAttribute.toString())
+                    element.colorId.toString() == colorAttribute.toString() &&
+                    element.itemCode.toString() == iCode.toString())
                 .isEmpty
             ? false
             : true;
@@ -151,7 +156,8 @@ class CartController extends GetxController {
                   .value
                   .where((element) =>
                       element.sizeId.toString() == sizeAttribute.toString() &&
-                      element.colorId.toString() == colorAttribute.toString())
+                      element.colorId.toString() == colorAttribute.toString() &&
+                      element.itemCode.toString() == iCode.toString())
                   .first
                   .quantity
                   .toString()) +
@@ -184,9 +190,9 @@ class CartController extends GetxController {
         }));
     if (response.statusCode == 200) {
       Get.back(closeOverlays: true);
-      // AudioPlayer audioPlayer = AudioPlayer();
-      // const alarmAudioPath = "assets/sounds/beep.mp3";
-      // audioPlayer.play(alarmAudioPath);
+      AudioPlayer audioPlayer = AudioPlayer();
+      const alarmAudioPath = "assets/sounds/beep.mp3";
+      audioPlayer.play(alarmAudioPath);
 
       var jsonObject = convert.jsonDecode(response.body);
 
@@ -203,8 +209,8 @@ class CartController extends GetxController {
       bool contain = Get.find<CartController>()
               .addToCartList
               .value
-              .where((element) =>
-                  element.productId.toString() == productId.toString())
+              .where(
+                  (element) => element.itemCode.toString() == iCode.toString())
               .isEmpty
           ? false
           : true;
@@ -231,7 +237,8 @@ class CartController extends GetxController {
                     .addToCartList
                     .value
                     .where((element) =>
-                        element.sizeId.toString() == sizeAttribute.toString())
+                        element.sizeId.toString() == sizeAttribute.toString() &&
+                        element.itemCode.toString() == iCode.toString())
                     .isEmpty
                 ? false
                 : true;
@@ -241,7 +248,8 @@ class CartController extends GetxController {
                   .addToCartList
                   .value
                   .where((element) =>
-                      element.sizeId.toString() == sizeAttribute.toString())
+                      element.sizeId.toString() == sizeAttribute.toString() &&
+                      element.itemCode.toString() == iCode.toString())
                   .first;
               current.quantity =
                   (int.parse(current.quantity.toString()) + 1).toString();
@@ -270,7 +278,9 @@ class CartController extends GetxController {
                     .addToCartList
                     .value
                     .where((element) =>
-                        element.colorId.toString() == colorAttribute.toString())
+                        element.colorId.toString() ==
+                            colorAttribute.toString() &&
+                        element.itemCode.toString() == iCode.toString())
                     .isEmpty
                 ? false
                 : true;
@@ -280,7 +290,8 @@ class CartController extends GetxController {
                   .addToCartList
                   .value
                   .where((element) =>
-                      element.colorId.toString() == colorAttribute.toString())
+                      element.colorId.toString() == colorAttribute.toString() &&
+                      element.itemCode.toString() == iCode.toString())
                   .first;
               current.quantity =
                   (int.parse(current.quantity.toString()) + 1).toString();
@@ -310,7 +321,9 @@ class CartController extends GetxController {
                     .value
                     .where((element) =>
                         element.sizeId.toString() == sizeAttribute.toString() &&
-                        element.colorId.toString() == colorAttribute.toString())
+                        element.colorId.toString() ==
+                            colorAttribute.toString() &&
+                        element.itemCode.toString() == iCode.toString())
                     .isEmpty
                 ? false
                 : true;
@@ -321,7 +334,8 @@ class CartController extends GetxController {
                   .value
                   .where((element) =>
                       element.sizeId.toString() == sizeAttribute.toString() &&
-                      element.colorId.toString() == colorAttribute.toString())
+                      element.colorId.toString() == colorAttribute.toString() &&
+                      element.itemCode.toString() == iCode.toString())
                   .first;
               current.quantity =
                   (int.parse(current.quantity.toString()) + 1).toString();
@@ -377,6 +391,7 @@ class CartController extends GetxController {
       required tempUniqueId,
       required index}) async {
     LoadingDialog.showCustomDialog(msg: 'Please wait ...');
+    print(index);
     var url = EDIT_CART_QTY;
     final http.Response response = await http.post(Uri.parse(url),
         headers: <String, String>{

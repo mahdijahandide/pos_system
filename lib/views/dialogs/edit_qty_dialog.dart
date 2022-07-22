@@ -68,7 +68,9 @@ class EditQtyDialog {
                             .addToCartList
                             .value
                             .indexWhere((element) =>
-                                element.productId == current.productId));
+                                element.productId == current.productId &&
+                                element.itemCode.toString() ==
+                                    current.itemCode.toString()));
                   }
                 },
               ),
@@ -118,8 +120,11 @@ class EditQtyDialog {
                 index: Get.find<CartController>()
                     .addToCartList
                     .value
-                    .indexWhere(
-                        (element) => element.productId == current.productId));
+                    .indexWhere((element) =>
+                        element.itemCode.toString() ==
+                            current.itemCode.toString() &&
+                        element.productId.toString() ==
+                            current.productId.toString()));
           }
         },
         child: Container(
