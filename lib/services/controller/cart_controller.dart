@@ -406,7 +406,7 @@ class CartController extends GetxController {
         }));
     if (response.statusCode == 200) {
       var jsonObject = convert.jsonDecode(response.body);
-      Get.log(jsonObject.toString());
+      print(jsonObject.toString());
 
       if (addToCartList.value[index].quantity == '0') {
         addToCartList.value.removeAt(index);

@@ -15,7 +15,8 @@ class EditQtyDialog {
 
   factory EditQtyDialog() => _instance;
 
-  static void showCustomDialog({required title, required productId}) {
+  static void showCustomDialog(
+      {required title, required productId, required itemIndex}) {
     TextEditingController qtyController = TextEditingController();
     Get.defaultDialog(
       title: title,
@@ -64,13 +65,7 @@ class EditQtyDialog {
                         tempId: current.id.toString(),
                         quantity: qtyController.text,
                         tempUniqueId: Get.find<CartController>().uniqueId,
-                        index: Get.find<CartController>()
-                            .addToCartList
-                            .value
-                            .indexWhere((element) =>
-                                element.productId == current.productId &&
-                                element.itemCode.toString() ==
-                                    current.itemCode.toString()));
+                        index: int.parse(itemIndex.toString()));
                   }
                 },
               ),
@@ -92,9 +87,7 @@ class EditQtyDialog {
         onTap: () {
           var current = Get.find<CartController>()
               .addToCartList
-              .value
-              .where((element) => element.productId == productId.toString())
-              .toList()[0];
+              .value[int.parse(itemIndex.toString())];
 
           if (int.parse(qtyController.text.toString()) >
               int.parse(Get.find<ProductController>()
@@ -117,14 +110,7 @@ class EditQtyDialog {
                 tempId: current.id.toString(),
                 quantity: qtyController.text,
                 tempUniqueId: Get.find<CartController>().uniqueId,
-                index: Get.find<CartController>()
-                    .addToCartList
-                    .value
-                    .indexWhere((element) =>
-                        element.itemCode.toString() ==
-                            current.itemCode.toString() &&
-                        element.productId.toString() ==
-                            current.productId.toString()));
+                index: int.parse(itemIndex.toString()));
           }
         },
         child: Container(

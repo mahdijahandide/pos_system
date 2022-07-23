@@ -51,7 +51,7 @@ class TextFieldSearch extends StatefulWidget {
 }
 
 class _TextFieldSearchState extends State<TextFieldSearch> {
-  late OverlayEntry _overlayEntry;
+  late OverlayEntry _overlayEntry = _createOverlayEntry();
 
   // FocusNode _focusNode = FocusNode();
 
@@ -73,23 +73,23 @@ class _TextFieldSearchState extends State<TextFieldSearch> {
     _overlayEntry.markNeedsBuild();
   }
 
-  void setLoading() {
-    if (!loading) {
-      setState(() {
-        loading = true;
-      });
-    }
-  }
+  // void setLoading() {
+  //   if (!loading) {
+  //     setState(() {
+  //       loading = true;
+  //     });
+  //   }
+  // }
 
   void resetState(List tempList) {
-    setState(() {
-      // after loop is done, set the filteredList state from the tempList
-      filteredList = tempList;
-      loading = false;
-      // if no items are found, add message none found
-      itemsFound =
-          tempList.isEmpty && widget.controller.text.isNotEmpty ? false : true;
-    });
+    // setState(() {
+    // after loop is done, set the filteredList state from the tempList
+    filteredList = tempList;
+    loading = false;
+    // if no items are found, add message none found
+    itemsFound =
+        tempList.isEmpty && widget.controller.text.isNotEmpty ? false : true;
+    // });
     // mark that the overlay widget needs to be rebuilt so results can show
     _overlayEntry.markNeedsBuild();
   }
@@ -99,7 +99,7 @@ class _TextFieldSearchState extends State<TextFieldSearch> {
     // so loader can show
     _overlayEntry.markNeedsBuild();
     if (widget.controller.text.length > widget.minStringLength) {
-      setLoading();
+      // setLoading();
       widget.future!().then((value) {
         filteredList = value;
         // create an empty temp list
@@ -146,7 +146,7 @@ class _TextFieldSearchState extends State<TextFieldSearch> {
 
   void updateList() {
     // widget.focusNode.requestFocus();
-    setLoading();
+    // setLoading();
     // set the filtered list using the initial list
     filteredList = widget.initialList;
     // create an empty temp list
@@ -220,12 +220,12 @@ class _TextFieldSearchState extends State<TextFieldSearch> {
     });
   }
 
-  @override
-  void dispose() {
-    // Clean up the controller when the widget is disposed.
-    widget.controller.dispose();
-    super.dispose();
-  }
+  // @override
+  // void dispose() {
+  //   // Clean up the controller when the widget is disposed.
+  //   widget.controller.dispose();
+  //   super.dispose();
+  // }
 
   ListView _listViewBuilder(context) {
     if (itemsFound == false) {

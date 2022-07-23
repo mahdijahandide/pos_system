@@ -108,7 +108,12 @@ class DashboardSidebar {
                               .where((element) => element.isSelected == true)
                               .toList()
                               .first
-                              .productId);
+                              .productId,
+                          itemIndex: Get.find<CartController>()
+                              .addToCartList
+                              .value
+                              .indexWhere(
+                                  (element) => element.isSelected == true));
                     }
                   },
                   child: Container(
