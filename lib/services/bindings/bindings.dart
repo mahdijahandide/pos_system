@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 import 'package:pos_system/services/controller/auth_controller.dart';
 import 'package:pos_system/services/controller/order_controller.dart';
 
+import '../controller/address_controller.dart';
 import '../controller/cart_controller.dart';
 import '../controller/cash_controller.dart';
 import '../controller/category_controller.dart';
@@ -23,6 +24,7 @@ class AppBindings extends Bindings {
     Get.put(CartController());
     Get.put(CustomerController());
     Get.put(CashController());
+    Get.put(AddressController());
     Get.lazyPut(() => ShiftController());
   }
 }

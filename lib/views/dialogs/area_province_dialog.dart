@@ -52,6 +52,7 @@ class AreaProvinceDialog {
                   );
                 }).toList(),
               ),
+
               //province
               Get.find<CartController>().selectedCountryId == ''
                   ? const SizedBox()
@@ -99,6 +100,7 @@ class AreaProvinceDialog {
                         );
                       }).toList(),
                     ),
+
               //area
               Get.find<CartController>().selectedProvinceId == ''
                   ? const SizedBox()

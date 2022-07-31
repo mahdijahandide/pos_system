@@ -50,11 +50,17 @@ class CartController extends GetxController {
   RxString selectedCountryName = ''.obs;
   RxString selectedProvinceName = ''.obs;
   RxString selectedAreaName = ''.obs;
+  RxString selectedNewCountryName = ''.obs;
+  RxString selectedNewProvinceName = ''.obs;
+  RxString selectedNewAreaName = ''.obs;
   RxString selectedPaymentType = 'PCARD'.obs;
   RxString balanceStatus = ''.obs;
   String selectedCountryId = '';
   String selectedProvinceId = '';
   String selectedAreaId = '';
+  String selectedNewCountryId = '';
+  String selectedNewProvinceId = '';
+  String selectedNewAreaId = '';
   String refundCartTotalPrice = '';
 
   Rx<List<CartProductModel>> addToCartList = Rx<List<CartProductModel>>([]);

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:pos_system/services/controller/cart_controller.dart';
 import 'package:pos_system/services/controller/customer_controller.dart';
 import 'package:pos_system/views/pages/largePages/customer/add_customer_modal.dart';
 import 'package:virtual_keyboard_2/virtual_keyboard_2.dart';
@@ -29,7 +30,12 @@ class Customer extends GetView<CustomerController> {
             title: 'Customers'.tr, size: 18, fontWeight: FontWeight.bold),
         actions: [
           IconButton(
-              onPressed: () {
+              onPressed: () async {
+                if (Get.find<CartController>().countryList.isEmpty) {
+                  await Get.find<CartController>().getAreas(
+                    doInBackground: true,
+                  );
+                }
                 Get.bottomSheet(AddCustomerModal().createModal(),
                     isScrollControlled: true, ignoreSafeArea: false);
               },
@@ -71,8 +77,8 @@ class Customer extends GetView<CustomerController> {
                                 borderRadius: BorderRadius.circular(12),
                                 boxShadow: [
                                   BoxShadow(
-                                      color: Colors.black12.withOpacity(0.5),
-                                      offset: const Offset(1, 3),
+                                      color: Colors.black12.withOpacity(0.3),
+                                      offset: const Offset(1, 1),
                                       blurRadius: 3,
                                       spreadRadius: 1)
                                 ]),
