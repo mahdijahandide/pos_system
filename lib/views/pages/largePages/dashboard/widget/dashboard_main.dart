@@ -38,8 +38,11 @@ class DashboardMain {
                                 .showProductDetails
                                 .value,
                             valueFontSize: 10.0,
+                            activeTextFontWeight: FontWeight.bold,
                             width: 110,
                             borderRadius: 30.0,
+                            activeIcon: const Icon(Icons.description),
+                            inactiveIcon: const Icon(Icons.shopping_cart),
                             showOnOff: true,
                             onToggle: (val) {
                               Get.find<DashboardController>()

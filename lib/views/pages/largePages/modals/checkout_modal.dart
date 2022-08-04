@@ -211,8 +211,12 @@ class CheckoutModal extends GetView<CartController> {
                                   textColor: Colors.white,
                                   onPress: () {
                                     Get.bottomSheet(
-                                        AddCustomerModal()
-                                            .createModal(shouldSelect: true),
+                                        AddCustomerModal().createModal(
+                                            shouldSelect: true,
+                                            customerNumber:
+                                                Get.find<CustomerController>()
+                                                    .searchController
+                                                    .text),
                                         isScrollControlled: true);
                                   }),
                             )

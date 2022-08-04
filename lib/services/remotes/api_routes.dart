@@ -3,12 +3,15 @@
 const String DOMAIN = 'https://possystem.gulfweb.ir';
 const String BASE_URL = 'https://kash5a2.gulfweb.ir/api/posv1/';
 const String BASE_URL_IMAGES = 'https://kash5a2.gulfweb.ir/uploads/logo/';
+const String MD5_PRINT_URL = 'https://kash5a2.gulfweb.ir/en/order-print/';
 // const String DOMAIN = 'https://pos.mrk-q8.com';
 // const String BASE_URL = 'https://mrk-q8.com/api/posv1/';
 // const String BASE_URL_IMAGES = 'https://mrk-q8.com/uploads/logo/';
+// const String MD5_PRINT_URL = 'https://kw.mrk-q8.com/en/order-print/';
 // const String DOMAIN = 'https://pos.kash5astore.com';
 // const String BASE_URL = 'https://kash5astore.com/api/posv1/';
-// const String BASE_URL_IMAGES = 'https://kash5astore.com//uploads/logo/';
+// const String BASE_URL_IMAGES = 'https://kash5astore.com/uploads/logo/';
+// const String MD5_PRINT_URL = 'https://kw.kash5astore.com/en/order-print/';
 
 //routes
 const String GET_SETTING_DETAILS_ROUTE = BASE_URL + 'getSetting';
@@ -42,4 +45,20 @@ String getRefundCartRoute(String id) {
 
 String getRefundCartItemRoute(String id) {
   return BASE_URL + 'order/$id/refund/item';
+}
+
+String getCustomerAddress(String customerId) {
+  return BASE_URL + 'user/$customerId/address';
+}
+
+String createNewAddress(String customerId) {
+  return BASE_URL + 'user/$customerId/address';
+}
+
+String updateCustomerAddress(String customerId, String addressId) {
+  return BASE_URL + 'user/$customerId/address/$addressId';
+}
+
+String deleteCustomerAddress(String customerId, String addressId) {
+  return BASE_URL + 'user/$customerId/address/$addressId';
 }

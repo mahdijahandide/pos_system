@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
+import 'package:pos_system/services/controller/address_controller.dart';
 import 'package:pos_system/services/controller/auth_controller.dart';
 import 'package:pos_system/services/model/customer_model.dart';
 import 'package:pos_system/services/model/string_with_string.dart';
@@ -115,7 +116,8 @@ class CustomerController extends GetxController {
     }
   }
 
-  Future<void> addCustomerRequest({dynamic shouldSelect}) async {
+  Future<void> addCustomerRequest(
+      {dynamic shouldSelect, dynamic createCustomerAddress}) async {
     LoadingDialog.showCustomDialog(msg: 'loading'.tr);
     var url = ADD_NEW_CUSTOMER;
     final http.Response response = await http.post(
@@ -134,6 +136,7 @@ class CustomerController extends GetxController {
       Get.back();
       Get.back();
       var jsonObject = convert.jsonDecode(response.body);
+      Get.log(jsonObject.toString());
 
       customerList.add(CustomerModel(data: jsonObject['data']));
       customerName.add(StringWithString(
@@ -160,6 +163,11 @@ class CustomerController extends GetxController {
       addCustomerNameController.text = '';
       addCustomerEmailController.text = '';
       addCustomerNumberController.text = '';
+
+      if (createCustomerAddress == true) {
+        Get.find<AddressController>()
+            .addAddressRequest(customerId: jsonObject['data']['id'].toString());
+      }
 
       update();
     } else {

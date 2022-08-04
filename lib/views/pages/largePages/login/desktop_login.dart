@@ -5,7 +5,6 @@ import 'package:pos_system/services/remotes/local_storage.dart';
 import 'package:pos_system/views/components/textfields/textfield.dart';
 import 'package:pos_system/views/components/texts/customText.dart';
 import 'package:virtual_keyboard_2/virtual_keyboard_2.dart';
-// import 'package:vk/vk.dart';
 
 class DesktopLogin extends GetView<AuthController> {
   @override
@@ -49,6 +48,7 @@ class DesktopLogin extends GetView<AuthController> {
               const SizedBox(
                 height: 40,
               ),
+
               CustomText().createText(
                   title: 'login'.tr, fontWeight: FontWeight.normal, size: 22),
               const SizedBox(

@@ -200,7 +200,7 @@ class _TextFieldSearchState extends State<TextFieldSearch> {
         if (itemsFound == false || loading == true) {
           // reset the list so it's empty and not visible
           resetList();
-          widget.controller.clear();
+          //widget.controller.clear();
         }
         // if we have a list of items, make sure the text input matches one of them
         // if not, clear the input

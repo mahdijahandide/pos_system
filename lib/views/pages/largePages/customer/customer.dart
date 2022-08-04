@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:pos_system/services/controller/address_controller.dart';
 import 'package:pos_system/services/controller/cart_controller.dart';
 import 'package:pos_system/services/controller/customer_controller.dart';
+import 'package:pos_system/views/dialogs/update_address_dialog.dart';
 import 'package:pos_system/views/pages/largePages/customer/add_customer_modal.dart';
 import 'package:virtual_keyboard_2/virtual_keyboard_2.dart';
 
@@ -115,6 +117,15 @@ class Customer extends GetView<CustomerController> {
                                     Icons.keyboard_arrow_down_outlined,
                                     color: Colors.black,
                                   ),
+                                  onExpansionChanged: (e) {
+                                    if (e == true &&
+                                        currentItem.addressList.isEmpty) {
+                                      Get.find<AddressController>()
+                                          .getCustomerAddressRequest(
+                                              customerId:
+                                                  currentItem.id.toString());
+                                    }
+                                  },
                                   title: ListTile(
                                     title: CustomText().createText(
                                         title: 'Show Details',
@@ -148,6 +159,93 @@ class Customer extends GetView<CustomerController> {
                                           ),
                                         ],
                                       ),
+                                    ),
+                                    GetX(
+                                      builder: (AddressController controller) {
+                                        return currentItem.hasAddress.isFalse
+                                            ? const Padding(
+                                                padding: EdgeInsets.all(8.0),
+                                                child:
+                                                    CircularProgressIndicator(),
+                                              )
+                                            : ListView.builder(
+                                                itemCount: currentItem
+                                                    .addressList.value.length,
+                                                physics:
+                                                    const NeverScrollableScrollPhysics(),
+                                                shrinkWrap: true,
+                                                itemBuilder: (context, index) {
+                                                  var currentAddress =
+                                                      currentItem.addressList
+                                                          .value[index];
+                                                  return ListTile(
+                                                      title: CustomText()
+                                                          .createText(
+                                                              title:
+                                                                  currentAddress
+                                                                      .title),
+                                                      subtitle: CustomText()
+                                                          .createText(
+                                                              title:
+                                                                  '${currentAddress.countryName}  ${currentAddress.stateName}  ${currentAddress.areaName} avenue:${currentAddress.avenue} street:${currentAddress.street} house:${currentAddress.house} floor:${currentAddress.floor} block:${currentAddress.block}'),
+                                                      trailing: PopupMenuButton(
+                                                          itemBuilder:
+                                                              (BuildContext
+                                                                      context) =>
+                                                                  <PopupMenuEntry>[
+                                                                    PopupMenuItem(
+                                                                      onTap:
+                                                                          () {
+                                                                        UpdateCustomerDialog.showCustomDialog(
+                                                                            title:
+                                                                                'title',
+                                                                            msg:
+                                                                                'msg');
+                                                                      },
+                                                                      value:
+                                                                          'update',
+                                                                      child: ListTile(
+                                                                          leading: const Icon(
+                                                                            Icons.edit,
+                                                                            color:
+                                                                                Colors.black,
+                                                                          ),
+                                                                          title: Text(
+                                                                            'update'.tr,
+                                                                            style:
+                                                                                const TextStyle(
+                                                                              color: Colors.black,
+                                                                            ),
+                                                                          )),
+                                                                    ),
+                                                                    PopupMenuItem(
+                                                                      value:
+                                                                          'delete',
+                                                                      onTap:
+                                                                          () {
+                                                                        controller.deleteCustomerAddressRequest(
+                                                                            customerId:
+                                                                                currentItem.id.toString(),
+                                                                            addressId: currentAddress.id.toString());
+                                                                      },
+                                                                      child: ListTile(
+                                                                          leading: const Icon(
+                                                                            Icons.delete,
+                                                                            color:
+                                                                                Colors.black,
+                                                                          ),
+                                                                          title: Text(
+                                                                            'delete'.tr,
+                                                                            style:
+                                                                                const TextStyle(
+                                                                              color: Colors.black,
+                                                                            ),
+                                                                          )),
+                                                                    ),
+                                                                  ]));
+                                                },
+                                              );
+                                      },
                                     )
                                   ],
                                 ),

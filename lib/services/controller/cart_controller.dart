@@ -21,12 +21,14 @@ import 'package:pos_system/views/dialogs/loading_dialogs.dart';
 import 'package:pos_system/views/dialogs/refund_factor_num_dialog.dart';
 import 'package:pos_system/views/pages/largePages/modals/success_modal.dart';
 import 'package:printing/printing.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:xid/xid.dart';
 import '../model/temp_orders_model.dart';
 import 'auth_controller.dart';
 import 'customer_controller.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
+import 'package:crypto/crypto.dart';
 
 import 'order_controller.dart';
 
@@ -44,6 +46,8 @@ class CartController extends GetxController {
 
   RxBool isRefund = false.obs;
   RxBool hasModalVk = false.obs;
+
+  RxBool a4selected = false.obs;
 
   RxString printedFactorId = ''.obs;
 
@@ -198,7 +202,7 @@ class CartController extends GetxController {
       Get.back(closeOverlays: true);
       AudioPlayer audioPlayer = AudioPlayer();
       const alarmAudioPath = "assets/sounds/beep.mp3";
-      audioPlayer.play(alarmAudioPath);
+      // audioPlayer.play(alarmAudioPath);
 
       var jsonObject = convert.jsonDecode(response.body);
 
@@ -700,6 +704,9 @@ class CartController extends GetxController {
       }
 
       printedFactorId.value = jsonObject['data']['trackid'];
+      var md5FactorId =
+          md5.convert(utf8.encode(printedFactorId.value.toString())).toString();
+
       totalPaidForPrint = double.parse(calController.text.toString());
       totalAmountForPrint = totalAmount;
       deliveryAmountForPrint = deliveryAmount;
@@ -723,7 +730,9 @@ class CartController extends GetxController {
             color: Colors.white,
           ));
       Get.bottomSheet(
-        const SuccessModal(),
+        SuccessModal(
+          md5Id: printedFactorId.value.toString(),
+        ),
         isScrollControlled: true,
         enableDrag: true,
         shape: RoundedRectangleBorder(

@@ -58,6 +58,7 @@ dependencies:
   virtual_keyboard_2: ^0.0.2
   new_keyboard_shortcuts: ^0.1.4
   flutter_switch: ^0.3.2
+  fwfh_webview: ^0.6.2+2
 
 dev_dependencies:
   flutter_test:
