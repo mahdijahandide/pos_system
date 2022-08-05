@@ -209,7 +209,12 @@ class CheckoutModal extends GetView<CartController> {
                                   ),
                                   buttonColor: Colors.teal,
                                   textColor: Colors.white,
-                                  onPress: () {
+                                  onPress: () async{
+                                    if (Get.find<CartController>().countryList.isEmpty) {
+                  await Get.find<CartController>().getAreas(
+                    doInBackground: true,
+                  );
+                }
                                     Get.bottomSheet(
                                         AddCustomerModal().createModal(
                                             shouldSelect: true,

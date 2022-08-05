@@ -3,8 +3,8 @@ import 'package:get/get.dart';
 import 'package:pos_system/services/controller/address_controller.dart';
 import 'package:pos_system/services/controller/cart_controller.dart';
 import 'package:pos_system/services/controller/customer_controller.dart';
-import 'package:pos_system/views/dialogs/update_address_dialog.dart';
 import 'package:pos_system/views/pages/largePages/customer/add_customer_modal.dart';
+import 'package:pos_system/views/pages/largePages/modals/update_user_address_modal.dart';
 import 'package:virtual_keyboard_2/virtual_keyboard_2.dart';
 
 import '../../../components/texts/customText.dart';
@@ -194,17 +194,19 @@ class Customer extends GetView<CustomerController> {
                                                                       context) =>
                                                                   <PopupMenuEntry>[
                                                                     PopupMenuItem(
-                                                                      onTap:
-                                                                          () {
-                                                                        UpdateCustomerDialog.showCustomDialog(
-                                                                            title:
-                                                                                'title',
-                                                                            msg:
-                                                                                'msg');
-                                                                      },
                                                                       value:
                                                                           'update',
                                                                       child: ListTile(
+                                                                          onTap: () async {
+                                                                            if (Get.find<CartController>().countryList.isEmpty) {
+                                                                              await Get.find<CartController>().getAreas(
+                                                                                doInBackground: true,
+                                                                              );
+                                                                            }
+                                                                            Get.bottomSheet(UpdateUserModal().createModal(userId: currentItem.id.toString(), addressId: currentAddress.id.toString(), areaNameTxt: currentAddress.areaName.toString(), areaId: currentAddress.areaId.toString(), avenueTxt: currentAddress.avenue.toString(), blockTxt: currentAddress.block.toString(), countryId: currentAddress.countryId.toString(), countryNameTxt: currentAddress.countryName.toString(), floorTxt: currentAddress.floor.toString(), houseTxt: currentAddress.house.toString(), stateId: currentAddress.stateId.toString(), stateNameTxt: currentAddress.stateName.toString(), streetTxt: currentAddress.stateName.toString(), titleTxt: currentAddress.title.toString()),
+                                                                                isScrollControlled: true,
+                                                                                ignoreSafeArea: false);
+                                                                          },
                                                                           leading: const Icon(
                                                                             Icons.edit,
                                                                             color:

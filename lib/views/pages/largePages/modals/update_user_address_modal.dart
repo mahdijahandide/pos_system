@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pos_system/services/controller/address_controller.dart';
-import 'package:pos_system/services/controller/customer_controller.dart';
-import 'package:pos_system/views/components/snackbar/snackbar.dart';
 import 'package:virtual_keyboard_2/virtual_keyboard_2.dart';
 
 import '../../../../services/controller/cart_controller.dart';
@@ -13,11 +11,7 @@ import '../../../components/buttons/custom_text_button.dart';
 import '../../../components/textfields/textfield.dart';
 import '../../../components/texts/customText.dart';
 
-class AddCustomerModal {
-  FocusNode name = FocusNode();
-  FocusNode number = FocusNode();
-  FocusNode email = FocusNode();
-
+class UpdateUserModal {
   FocusNode title = FocusNode();
   FocusNode block = FocusNode();
   FocusNode street = FocusNode();
@@ -27,30 +21,39 @@ class AddCustomerModal {
 
   final ScrollController _controller = ScrollController();
 
-  Widget createModal({dynamic shouldSelect, dynamic customerNumber}) {
-    Get.find<AddressController>().titleController.text = '';
-    Get.find<AddressController>().blockController.text = '';
-    Get.find<AddressController>().streetController.text = '';
-    Get.find<AddressController>().avenueController.text = '';
-    Get.find<AddressController>().houseApartmanController.text = '';
-    Get.find<AddressController>().floorController.text = '';
-    Get.find<CartController>().selectedNewCountryId = '';
-    Get.find<CartController>().selectedNewProvinceId = '';
-    Get.find<CartController>().selectedNewAreaId = '';
-    Get.find<CartController>().selectedNewCountryName.value = '';
-    Get.find<CartController>().selectedNewProvinceName.value = '';
-    Get.find<CartController>().selectedNewAreaName.value = '';
-    if (customerNumber != null) {
-      Get.find<CustomerController>().addCustomerNumberController.text =
-          customerNumber;
-    }
+  Widget createModal(
+      {required String userId,
+      required String addressId,
+      required String titleTxt,
+      required String countryId,
+      required String countryNameTxt,
+      required String stateId,
+      required String stateNameTxt,
+      required String areaId,
+      required String areaNameTxt,
+      required String blockTxt,
+      required String streetTxt,
+      required String avenueTxt,
+      required String houseTxt,
+      required String floorTxt}) {
+    Get.find<AddressController>().titleController.text = titleTxt;
+    Get.find<AddressController>().blockController.text = blockTxt;
+    Get.find<AddressController>().streetController.text = streetTxt;
+    Get.find<AddressController>().avenueController.text = avenueTxt;
+    Get.find<AddressController>().houseApartmanController.text = houseTxt;
+    Get.find<AddressController>().floorController.text = floorTxt;
+    Get.find<CartController>().selectedNewCountryId = countryId.toString();
+    Get.find<CartController>().selectedNewProvinceId = stateId.toString();
+    Get.find<CartController>().selectedNewAreaId = areaId.toString();
+    Get.find<CartController>().selectedNewCountryName.value =
+        countryNameTxt.toString();
+    Get.find<CartController>().selectedNewProvinceName.value =
+        stateNameTxt.toString();
+    Get.find<CartController>().selectedNewAreaName.value =
+        areaNameTxt.toString();
 
     return GestureDetector(
       onTap: () {
-        Get.find<CustomerController>().focusName.value = false;
-        Get.find<CustomerController>().focusEmail.value = false;
-        Get.find<CustomerController>().focusNumber.value = false;
-
         Get.find<AddressController>().focusTitle.value = false;
         Get.find<AddressController>().focusBlock.value = false;
         Get.find<AddressController>().focusStreet.value = false;
@@ -75,7 +78,7 @@ class AddCustomerModal {
                       children: [
                         const SizedBox(),
                         CustomText().createText(
-                            title: 'Add Customer',
+                            title: 'Customer Address',
                             size: 18,
                             fontWeight: FontWeight.bold),
                         InkWell(
@@ -90,146 +93,11 @@ class AddCustomerModal {
                       ],
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const SizedBox(
-                          height: 60,
-                        ),
-                        CustomText().createText(title: 'Customer Name'),
-                        const SizedBox(
-                          height: 3,
-                        ),
-                        CustomTextField().createTextField(
-                            node: name,
-                            hint: '',
-                            onTap: () {
-                              Get.find<CustomerController>().focusName.value =
-                                  !Get.find<CustomerController>()
-                                      .focusName
-                                      .value;
-                              Get.find<CustomerController>().focusNumber.value =
-                                  false;
-                              Get.find<CustomerController>().focusEmail.value =
-                                  false;
-
-                              Get.find<AddressController>().focusTitle.value =
-                                  false;
-                              Get.find<AddressController>().focusBlock.value =
-                                  false;
-                              Get.find<AddressController>().focusAvenue.value =
-                                  false;
-                              Get.find<AddressController>().focusStreet.value =
-                                  false;
-                              Get.find<AddressController>().focusFloor.value =
-                                  false;
-                              Get.find<AddressController>()
-                                  .focusHouseApartment
-                                  .value = false;
-                              _controller.animateTo(
-                                  _controller.position.maxScrollExtent,
-                                  duration: const Duration(milliseconds: 100),
-                                  curve: Curves.easeOut);
-                            },
-                            height: 50,
-                            controller: Get.find<CustomerController>()
-                                .addCustomerNameController),
-                        const SizedBox(
-                          height: 8.0,
-                        ),
-                        CustomText().createText(title: 'Customer Mobile'),
-                        const SizedBox(
-                          height: 3,
-                        ),
-                        CustomTextField().createTextField(
-                            hint: '',
-                            node: number,
-                            onTap: () {
-                              Get.find<CustomerController>().focusName.value =
-                                  false;
-                              Get.find<CustomerController>().focusNumber.value =
-                                  !Get.find<CustomerController>()
-                                      .focusNumber
-                                      .value;
-                              Get.find<CustomerController>().focusEmail.value =
-                                  false;
-
-                              Get.find<AddressController>().focusTitle.value =
-                                  false;
-                              Get.find<AddressController>().focusBlock.value =
-                                  false;
-                              Get.find<AddressController>().focusAvenue.value =
-                                  false;
-                              Get.find<AddressController>().focusStreet.value =
-                                  false;
-                              Get.find<AddressController>().focusFloor.value =
-                                  false;
-                              Get.find<AddressController>()
-                                  .focusHouseApartment
-                                  .value = false;
-                              _controller.animateTo(
-                                  _controller.position.maxScrollExtent,
-                                  duration: const Duration(milliseconds: 100),
-                                  curve: Curves.easeOut);
-                            },
-                            height: 50,
-                            controller: Get.find<CustomerController>()
-                                .addCustomerNumberController),
-                        const SizedBox(
-                          height: 8.0,
-                        ),
-                        CustomText().createText(title: 'Customer Email'),
-                        const SizedBox(
-                          height: 3,
-                        ),
-                        CustomTextField().createTextField(
-                            hint: '',
-                            node: email,
-                            onTap: () {
-                              Get.find<CustomerController>().focusName.value =
-                                  false;
-                              Get.find<CustomerController>().focusNumber.value =
-                                  false;
-                              Get.find<CustomerController>().focusEmail.value =
-                                  !Get.find<CustomerController>()
-                                      .focusEmail
-                                      .value;
-
-                              Get.find<AddressController>().focusTitle.value =
-                                  false;
-                              Get.find<AddressController>().focusBlock.value =
-                                  false;
-                              Get.find<AddressController>().focusAvenue.value =
-                                  false;
-                              Get.find<AddressController>().focusStreet.value =
-                                  false;
-                              Get.find<AddressController>().focusFloor.value =
-                                  false;
-                              Get.find<AddressController>()
-                                  .focusHouseApartment
-                                  .value = false;
-                              _controller.animateTo(
-                                  _controller.position.maxScrollExtent,
-                                  duration: const Duration(milliseconds: 100),
-                                  curve: Curves.easeOut);
-                            },
-                            height: 50,
-                            controller: Get.find<CustomerController>()
-                                .addCustomerEmailController),
-                        const SizedBox(
-                          height: 40,
-                        ),
-                      ],
-                    ),
+                  const SizedBox(
+                    height: 25,
                   ),
                   Column(
                     children: [
-                      CustomText().createText(
-                          title: 'Customer Address',
-                          fontWeight: FontWeight.bold,
-                          size: 22),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -247,16 +115,6 @@ class AddCustomerModal {
                                     height: 50,
                                     node: title,
                                     onTap: () {
-                                      Get.find<CustomerController>()
-                                          .focusName
-                                          .value = false;
-                                      Get.find<CustomerController>()
-                                          .focusNumber
-                                          .value = false;
-                                      Get.find<CustomerController>()
-                                          .focusEmail
-                                          .value = false;
-
                                       Get.find<AddressController>()
                                               .focusTitle
                                               .value =
@@ -590,16 +448,6 @@ class AddCustomerModal {
                                     hint: '',
                                     height: 50,
                                     onTap: () {
-                                      Get.find<CustomerController>()
-                                          .focusName
-                                          .value = false;
-                                      Get.find<CustomerController>()
-                                          .focusNumber
-                                          .value = false;
-                                      Get.find<CustomerController>()
-                                          .focusEmail
-                                          .value = false;
-
                                       Get.find<AddressController>()
                                           .focusTitle
                                           .value = false;
@@ -653,16 +501,6 @@ class AddCustomerModal {
                                     hint: '',
                                     height: 50,
                                     onTap: () {
-                                      Get.find<CustomerController>()
-                                          .focusName
-                                          .value = false;
-                                      Get.find<CustomerController>()
-                                          .focusNumber
-                                          .value = false;
-                                      Get.find<CustomerController>()
-                                          .focusEmail
-                                          .value = false;
-
                                       Get.find<AddressController>()
                                           .focusTitle
                                           .value = false;
@@ -711,16 +549,6 @@ class AddCustomerModal {
                                     hint: '',
                                     height: 50,
                                     onTap: () {
-                                      Get.find<CustomerController>()
-                                          .focusName
-                                          .value = false;
-                                      Get.find<CustomerController>()
-                                          .focusNumber
-                                          .value = false;
-                                      Get.find<CustomerController>()
-                                          .focusEmail
-                                          .value = false;
-
                                       Get.find<AddressController>()
                                           .focusTitle
                                           .value = false;
@@ -775,16 +603,6 @@ class AddCustomerModal {
                                     hint: '',
                                     height: 50,
                                     onTap: () {
-                                      Get.find<CustomerController>()
-                                          .focusName
-                                          .value = false;
-                                      Get.find<CustomerController>()
-                                          .focusNumber
-                                          .value = false;
-                                      Get.find<CustomerController>()
-                                          .focusEmail
-                                          .value = false;
-
                                       Get.find<AddressController>()
                                           .focusTitle
                                           .value = false;
@@ -833,16 +651,6 @@ class AddCustomerModal {
                                     hint: '',
                                     height: 50,
                                     onTap: () {
-                                      Get.find<CustomerController>()
-                                          .focusName
-                                          .value = false;
-                                      Get.find<CustomerController>()
-                                          .focusNumber
-                                          .value = false;
-                                      Get.find<CustomerController>()
-                                          .focusEmail
-                                          .value = false;
-
                                       Get.find<AddressController>()
                                           .focusTitle
                                           .value = false;
@@ -888,57 +696,26 @@ class AddCustomerModal {
                         height: 60,
                         child: CustomTextButton().createTextButton(
                             onPress: () {
-                              if (Get.find<CustomerController>()
-                                  .addCustomerNumberController
-                                  .text
-                                  .isNotEmpty) {
-                                if (Get.find<AddressController>()
-                                        .titleController
-                                        .text
-                                        .isNotEmpty &&
-                                    Get
-                                            .find<CartController>()
-                                        .selectedNewCountryName
-                                        .isNotEmpty &&
-                                    Get.find<CartController>()
-                                        .selectedNewProvinceName
-                                        .isNotEmpty &&
-                                    Get.find<CartController>()
-                                        .selectedNewAreaName
-                                        .isNotEmpty) {
-                                  Get.find<CustomerController>()
-                                      .addCustomerRequest(
-                                          shouldSelect: shouldSelect,
-                                          createCustomerAddress: true);
-                                } else {
-                                  Get.find<CustomerController>()
-                                      .addCustomerRequest(
-                                          shouldSelect: shouldSelect);
-                                }
-                              } else {
-                                Snack().createSnack(
-                                    title: 'Warning',
-                                    msg: 'Please Fill The Form',
-                                    bgColor: Colors.yellow,
-                                    msgColor: Colors.black,
-                                    titleColor: Colors.black);
-                              }
+                              Get.find<AddressController>()
+                                  .updateCustomerAddressRequest(
+                                      customerId: userId.toString(),
+                                      addressId: addressId.toString(),
+                                      areaName: areaNameTxt,
+                                      countryName: countryNameTxt,
+                                      stateName: stateNameTxt);
                             },
                             elevation: 6,
                             icon: const Icon(
                               Icons.add,
                               color: Colors.white,
                             ),
-                            buttonText: 'Add',
+                            buttonText: 'Update',
                             buttonColor: Colors.teal,
                             textColor: Colors.white)),
                   ),
                   const SizedBox(
                     height: 15.0,
                   ),
-                  createNameKeyboard(),
-                  createNumberKeyboard(),
-                  createEmailKeyboard(),
                   createTitleKeyboard(),
                   createBlockKeyboard(),
                   createStreetKeyboard(),
@@ -950,71 +727,6 @@ class AddCustomerModal {
             );
           })),
     );
-  }
-
-  Widget createNameKeyboard() {
-    if (Get.find<CustomerController>().focusName.isTrue) {
-      return Align(
-        alignment: Alignment.bottomCenter,
-        child: Container(
-          height: 350,
-          color: const Color(0xffeeeeee),
-          child: VirtualKeyboard(
-            focusNode: FocusNode(),
-            textColor: Colors.black,
-            type: VirtualKeyboardType.Alphanumeric,
-            textController:
-                Get.find<CustomerController>().addCustomerNameController,
-            // focusNode: name,
-          ),
-        ),
-      );
-    } else {
-      return const SizedBox();
-    }
-  }
-
-  Widget createNumberKeyboard() {
-    if (Get.find<CustomerController>().focusNumber.isTrue) {
-      return Align(
-        alignment: Alignment.bottomCenter,
-        child: Container(
-          height: 350,
-          color: const Color(0xffeeeeee),
-          child: VirtualKeyboard(
-            textColor: Colors.black, focusNode: FocusNode(),
-            type: VirtualKeyboardType.Alphanumeric,
-            textController:
-                Get.find<CustomerController>().addCustomerNumberController,
-            // focusNode: number,
-          ),
-        ),
-      );
-    } else {
-      return const SizedBox();
-    }
-  }
-
-  Widget createEmailKeyboard() {
-    if (Get.find<CustomerController>().focusEmail.isTrue) {
-      return Align(
-        alignment: Alignment.bottomCenter,
-        child: Container(
-          height: 350,
-          color: const Color(0xffeeeeee),
-          child: VirtualKeyboard(
-            focusNode: FocusNode(),
-            textColor: Colors.black,
-            type: VirtualKeyboardType.Alphanumeric,
-            textController:
-                Get.find<CustomerController>().addCustomerEmailController,
-            // focusNode: email,
-          ),
-        ),
-      );
-    } else {
-      return const SizedBox();
-    }
   }
 
   Widget createTitleKeyboard() {

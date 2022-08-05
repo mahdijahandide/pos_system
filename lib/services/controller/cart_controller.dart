@@ -202,7 +202,7 @@ class CartController extends GetxController {
       Get.back(closeOverlays: true);
       AudioPlayer audioPlayer = AudioPlayer();
       const alarmAudioPath = "assets/sounds/beep.mp3";
-      // audioPlayer.play(alarmAudioPath);
+      audioPlayer.play(alarmAudioPath);
 
       var jsonObject = convert.jsonDecode(response.body);
 

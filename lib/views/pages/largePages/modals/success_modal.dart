@@ -140,7 +140,7 @@ class SuccessModal extends GetView<CartController> {
                         }
                         LoadingDialog.showCustomDialog(msg: 'loading'.tr);
                         Timer(
-                          const Duration(seconds: 3),
+                          const Duration(seconds: 4),
                           () {
                             Get.back();
                           },

@@ -112,6 +112,84 @@ class AddressController extends GetxController {
     }
   }
 
+  Future<void> updateCustomerAddressRequest({
+    required String customerId,
+    required String addressId,
+    required String countryName,
+    required String stateName,
+    required String areaName,
+  }) async {
+    Get.back();
+    LoadingDialog.showCustomDialog(msg: 'loading'.tr);
+    var url = updateCustomerAddress(customerId, addressId);
+    final http.Response response = await http.put(Uri.parse(url),
+        headers: <String, String>{
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ${Get.find<AuthController>().token}'
+        },
+        body: jsonEncode(<String, String>{
+          'title': titleController.text,
+          'country': Get.find<CartController>().selectedNewCountryId,
+          'state': Get.find<CartController>().selectedNewProvinceId,
+          'area': Get.find<CartController>().selectedNewAreaId,
+          'block': blockController.text,
+          'street': streetController.text,
+          'avenue': avenueController.text,
+          'house': houseApartmanController.text,
+          'floor': floorController.text
+        }));
+    if (response.statusCode == 200) {
+      var jsonObject = convert.jsonDecode(response.body);
+      Get.log(jsonObject.toString());
+      Get.back();
+
+      var currentCustomer = Get.find<CustomerController>()
+          .customerList
+          .where((element) => element.id.toString() == customerId)
+          .first;
+
+      int currentAddressIndex = currentCustomer.addressList.value
+          .indexWhere((element) => element.id.toString() == addressId);
+
+      currentCustomer.addressList[currentAddressIndex].title =
+          titleController.text;
+      currentCustomer.addressList[currentAddressIndex].countryId =
+          int.parse(Get.find<CartController>().selectedNewCountryId);
+      currentCustomer.addressList[currentAddressIndex].stateId =
+          int.parse(Get.find<CartController>().selectedNewProvinceId);
+      currentCustomer.addressList[currentAddressIndex].areaId =
+          int.parse(Get.find<CartController>().selectedNewAreaId);
+      currentCustomer.addressList[currentAddressIndex].countryName =
+          countryName;
+      currentCustomer.addressList[currentAddressIndex].stateName = stateName;
+      currentCustomer.addressList[currentAddressIndex].areaName = areaName;
+      currentCustomer.addressList[currentAddressIndex].block =
+          blockController.text;
+      currentCustomer.addressList[currentAddressIndex].avenue =
+          avenueController.text;
+      currentCustomer.addressList[currentAddressIndex].street =
+          streetController.text;
+      currentCustomer.addressList[currentAddressIndex].house =
+          houseApartmanController.text;
+      currentCustomer.addressList[currentAddressIndex].floor =
+          floorController.text;
+
+      titleController.text = '';
+      blockController.text = '';
+      streetController.text = '';
+      avenueController.text = '';
+      houseApartmanController.text = '';
+      floorController.text = '';
+      currentCustomer.addressList.refresh();
+      update();
+    } else {
+      Get.back();
+      RemoteStatusHandler().errorHandler(
+          code: response.statusCode, error: convert.jsonDecode(response.body));
+      print(response.statusCode);
+    }
+  }
+
   Future<void> deleteCustomerAddressRequest(
       {required String customerId, required String addressId}) async {
     LoadingDialog.showCustomDialog(msg: 'loading'.tr);
