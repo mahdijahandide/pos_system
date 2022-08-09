@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:pos_system/services/controller/address_controller.dart';
 import 'package:pos_system/services/controller/cart_controller.dart';
 import 'package:pos_system/services/controller/product_controller.dart';
 import 'package:pos_system/services/model/cart_product_model.dart';
@@ -133,11 +134,42 @@ class OrderController extends GetxController {
         var subtotal = jsonObject['data']['subTotal'];
         var totalPaid = jsonObject['data']['pay'];
         var totalAmount = jsonObject['data']['total'];
+        var details = jsonObject['data']['details'];
         Get.find<CartController>().totalAmountForPrint = totalAmount ?? 0.0;
         Get.find<CartController>().totalPaidForPrint = totalPaid ?? 0.0;
         Get.find<CartController>().subTotalAmountForPrint = subtotal ?? 0.0;
         Get.find<CartController>().discountAmountForPrint = discount ?? 0.0;
         Get.find<CartController>().deliveryAmountForPrint = delivery ?? 0.0;
+
+        String ave = details['avenue'].toString() != ''
+            ? 'ave:${details['avenue'].toString()}'
+            : '';
+
+        String st = details['street'].toString() != ''
+            ? 'st:${details['street'].toString()}'
+            : '';
+
+        String house = details['house'].toString() != ''
+            ? 'house:${details['house'].toString()}'
+            : '';
+        String floor = details['floor'].toString() != ''
+            ? 'floor:${details['floor'].toString()}'
+            : '';
+        String block = details['block'].toString() != ''
+            ? 'block:${details['block'].toString()}'
+            : '';
+
+        String address = '';
+        if (ave != '' ||
+            st != '' ||
+            house != '' ||
+            floor != '' ||
+            block != '') {
+          address = 'Address: ';
+        }
+
+        Get.find<CartController>().customerAddressForPrint =
+            '$address $ave $st $house $floor $block';
         Get.back();
         selectedItem = current;
         Get.bottomSheet(
@@ -202,11 +234,13 @@ class OrderController extends GetxController {
             jsonObject['data']['orderItems'].forEach((element) {
               orderItemsList.add(OrderItemsModel(data: element));
             });
+
             var discount = jsonObject['data']['details']['seller_discount'];
             var delivery = jsonObject['data']['details']['delivery_charges'];
             var subtotal = jsonObject['data']['subTotal'];
             var totalPaid = jsonObject['data']['pay'];
             var totalAmount = jsonObject['data']['total'];
+
             Get.find<CartController>().totalAmountForPrint = totalAmount ?? 0.0;
             Get.find<CartController>().totalPaidForPrint = totalPaid ?? 0.0;
             Get.find<CartController>().subTotalAmountForPrint = subtotal ?? 0.0;

@@ -1,28 +1,149 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:pos_system/services/controller/address_controller.dart';
 import 'package:pos_system/services/controller/cart_controller.dart';
+import 'package:pos_system/services/controller/customer_controller.dart';
 import 'package:pos_system/services/model/area_model.dart';
 import 'package:pos_system/services/model/city_model.dart';
+import 'package:pos_system/services/model/customer_address_model.dart';
 import 'package:pos_system/services/model/province_model.dart';
 import 'package:pos_system/views/components/texts/customText.dart';
 
-class AreaProvinceDialog {
-  static final AreaProvinceDialog _instance = AreaProvinceDialog.internal();
+class CustomerAddressDialog {
+  static final CustomerAddressDialog _instance =
+      CustomerAddressDialog.internal();
 
-  AreaProvinceDialog.internal();
+  CustomerAddressDialog.internal();
 
-  factory AreaProvinceDialog() => _instance;
+  factory CustomerAddressDialog() => _instance;
 
   static void showCustomDialog({required title}) {
     Get.defaultDialog(
       title: title,
       barrierDismissible: false,
       content: GetBuilder(builder: (CartController controller) {
+        List<CustomerAddressModel> addresses =
+            Get.find<CustomerController>().selectedCustomer.addressList;
         return Container(
           width: Get.width / 2,
           padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 15),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              CustomText().createText(
+                  title: 'Customer Addresses',
+                  size: 18,
+                  fontWeight: FontWeight.bold),
+              //customerAddresses
+              DropdownButton<String>(
+                isExpanded: true,
+                focusColor: Colors.white,
+                hint: Text(Get.find<AddressController>()
+                    .selectedCustomerAddressTitle
+                    .value
+                    .toString()),
+                onChanged: (val) {
+                  Get.find<AddressController>().selectedAddress = addresses
+                      .where(
+                          (element) => element.id.toString() == val.toString())
+                      .first;
+
+                  Get.find<AddressController>()
+                          .selectedCustomerAddressTitle
+                          .value =
+                      Get.find<AddressController>()
+                          .selectedAddress!
+                          .title
+                          .toString();
+
+                  Get.find<AddressController>().selectedCustomerAddressId =
+                      val.toString();
+
+                  Get.find<CartController>().selectedCountryId =
+                      Get.find<AddressController>()
+                          .selectedAddress!
+                          .countryId
+                          .toString();
+                  Get.find<CartController>().selectedCountryName.value =
+                      Get.find<AddressController>()
+                          .selectedAddress!
+                          .countryName
+                          .toString();
+                  Get.find<CartController>().selectedProvinceId =
+                      Get.find<AddressController>()
+                          .selectedAddress!
+                          .stateId
+                          .toString();
+                  Get.find<CartController>().selectedAreaId =
+                      Get.find<AddressController>()
+                          .selectedAddress!
+                          .areaId
+                          .toString();
+                  Get.find<CartController>().selectedProvinceName.value =
+                      Get.find<AddressController>()
+                          .selectedAddress!
+                          .stateName
+                          .toString();
+                  Get.find<CartController>().selectedAreaName.value =
+                      Get.find<AddressController>()
+                          .selectedAddress!
+                          .areaName
+                          .toString();
+
+                  Get.find<CartController>().deliveryAmount = double.parse(
+                      Get.find<CartController>()
+                          .countryList
+                          .where((element) =>
+                              element.id.toString() ==
+                              Get.find<AddressController>()
+                                  .selectedAddress!
+                                  .countryId
+                                  .toString())
+                          .first
+                          .provinceList
+                          .where((element) =>
+                              element.id.toString() ==
+                              Get.find<AddressController>()
+                                  .selectedAddress!
+                                  .stateId
+                                  .toString())
+                          .first
+                          .areaList
+                          .where((element) =>
+                              element.id.toString() ==
+                              Get.find<AddressController>()
+                                  .selectedAddress!
+                                  .areaId
+                                  .toString())
+                          .first
+                          .deliveryFee
+                          .toString());
+
+                  controller.update();
+                },
+                items: addresses.map((CustomerAddressModel value) {
+                  return DropdownMenuItem<String>(
+                    value: value.id.toString(),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(value.title.toString()),
+                        Text(
+                            '${value.countryName} ${value.stateName} ${value.areaName} ave:${value.avenue} st:${value.street} house:${value.house} floor:${value.floor} block:${value.block}'),
+                      ],
+                    ),
+                  );
+                }).toList(),
+              ),
+
+              const SizedBox(
+                height: 15,
+              ),
+
+              CustomText().createText(
+                  title: 'Custom Address',
+                  size: 18,
+                  fontWeight: FontWeight.bold),
               //country
               DropdownButton<String>(
                 isExpanded: true,

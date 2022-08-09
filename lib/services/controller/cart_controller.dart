@@ -7,10 +7,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'dart:convert' as convert;
 import 'package:http/http.dart' as http;
+import 'package:pos_system/services/controller/address_controller.dart';
 
 import 'package:pos_system/services/controller/product_controller.dart';
 import 'package:pos_system/services/controller/user_controller.dart';
 import 'package:pos_system/services/model/cart_product_model.dart';
+import 'package:pos_system/services/model/customer_address_model.dart';
 import 'package:pos_system/services/model/province_model.dart';
 import 'package:pos_system/services/remotes/api_routes.dart';
 import 'package:pos_system/services/remotes/local_storage.dart';
@@ -23,6 +25,7 @@ import 'package:pos_system/views/pages/largePages/modals/success_modal.dart';
 import 'package:printing/printing.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:xid/xid.dart';
+import '../../views/dialogs/customer_address_dialog.dart';
 import '../model/temp_orders_model.dart';
 import 'auth_controller.dart';
 import 'customer_controller.dart';
@@ -51,6 +54,7 @@ class CartController extends GetxController {
 
   RxString printedFactorId = ''.obs;
 
+  String customerAddressForPrint = '';
   RxString selectedCountryName = ''.obs;
   RxString selectedProvinceName = ''.obs;
   RxString selectedAreaName = ''.obs;
@@ -202,7 +206,7 @@ class CartController extends GetxController {
       Get.back(closeOverlays: true);
       AudioPlayer audioPlayer = AudioPlayer();
       const alarmAudioPath = "assets/sounds/beep.mp3";
-      audioPlayer.play(alarmAudioPath);
+      // audioPlayer.play(alarmAudioPath);
 
       var jsonObject = convert.jsonDecode(response.body);
 
@@ -572,7 +576,11 @@ class CartController extends GetxController {
       Get.back(closeOverlays: true);
 
       if (doInBackground != true) {
-        AreaProvinceDialog.showCustomDialog(title: 'Province & Areas');
+        if (Get.find<CustomerController>().selectedCustomer != null) {
+          CustomerAddressDialog.showCustomDialog(title: 'Province & Areas');
+        } else {
+          AreaProvinceDialog.showCustomDialog(title: 'Province & Areas');
+        }
       }
       Get.find<CartController>().update();
     } else {
@@ -615,6 +623,7 @@ class CartController extends GetxController {
   }
 
   Future<void> checkoutCart() async {
+    CustomerAddressModel address;
     LoadingDialog.showCustomDialog(msg: 'Please wait ...');
     print(jsonEncode(<String, dynamic>{
       'temp_uniqueid': uniqueId,
@@ -636,6 +645,18 @@ class CartController extends GetxController {
       'name': Get.find<CustomerController>().customerNameController.text,
       'mobile': Get.find<CustomerController>().customerNumberController.text,
       'email': Get.find<CustomerController>().customerEmailController.text,
+      'area': Get.find<AddressController>().selectedAddress != null
+          ? Get.find<AddressController>().selectedAddress!.areaName.toString()
+          : '',
+      'block': Get.find<AddressController>().selectedAddress != null
+          ? Get.find<AddressController>().selectedAddress!.block.toString()
+          : '',
+      'street': Get.find<AddressController>().selectedAddress != null
+          ? Get.find<AddressController>().selectedAddress!.street.toString()
+          : '',
+      'house': Get.find<AddressController>().selectedAddress != null
+          ? Get.find<AddressController>().selectedAddress!.house.toString()
+          : '',
       'delivery_status': deliveryAmount > 0 ? '1' : '0',
       if (deliveryAmount > 0) 'area': selectedAreaId.toString(),
       'user_discount': discountAmount.toString(),
@@ -675,6 +696,21 @@ class CartController extends GetxController {
           'mobile':
               Get.find<CustomerController>().customerNumberController.text,
           'email': Get.find<CustomerController>().customerEmailController.text,
+          'area': Get.find<AddressController>().selectedAddress != null
+              ? Get.find<AddressController>()
+                  .selectedAddress!
+                  .areaName
+                  .toString()
+              : '',
+          'block': Get.find<AddressController>().selectedAddress != null
+              ? Get.find<AddressController>().selectedAddress!.block.toString()
+              : '',
+          'street': Get.find<AddressController>().selectedAddress != null
+              ? Get.find<AddressController>().selectedAddress!.street.toString()
+              : '',
+          'house': Get.find<AddressController>().selectedAddress != null
+              ? Get.find<AddressController>().selectedAddress!.house.toString()
+              : '',
           'delivery_status': deliveryAmount > 0 ? '1' : '0',
           if (deliveryAmount > 0) 'area': selectedAreaId.toString(),
           'user_discount': discountAmount.toString(),
@@ -711,6 +747,15 @@ class CartController extends GetxController {
       totalAmountForPrint = totalAmount;
       deliveryAmountForPrint = deliveryAmount;
       discountAmountForPrint = discountAmount;
+
+      if (Get.find<AddressController>().selectedAddress != null) {
+        CustomerAddressModel? value =
+            Get.find<AddressController>().selectedAddress;
+        customerAddressForPrint =
+            '${value!.countryName} ${value.stateName} ${value.areaName} ave:${value.avenue} st:${value.street} house:${value.house} floor:${value.floor} block:${value.block}';
+      } else {
+        customerAddressForPrint = '';
+      }
 
       addToCartList.value.clear();
       newSale();
@@ -943,6 +988,9 @@ class CartController extends GetxController {
     selectedAreaName.value = '';
     selectedAreaId = '';
     //isRefund.value = false;
+    Get.find<AddressController>().selectedCustomerAddressTitle.value = '';
+    Get.find<AddressController>().selectedCustomerAddressId = '';
+    Get.find<AddressController>().selectedAddress = null;
     Get.find<CustomerController>().selectedCustomerName.value = '';
     Get.find<CustomerController>().selectedCustomer = null;
     Get.find<CustomerController>().customerNameController.text = '';
@@ -1216,6 +1264,14 @@ class CartController extends GetxController {
                     ),
                   ]),
               pw.SizedBox(height: 25),
+              Get.find<CartController>().customerAddressForPrint != ''
+                  ? pw.Center(
+                      child: pw.Text(
+                      'Address: ' +
+                          Get.find<CartController>().customerAddressForPrint,
+                    ))
+                  : pw.SizedBox(),
+              pw.SizedBox(height: 12),
               pw.SvgImage(svg: svg),
               pw.SizedBox(height: 25),
               pw.Center(

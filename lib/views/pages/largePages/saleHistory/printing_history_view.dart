@@ -229,6 +229,13 @@ class PrintingHistoryView {
                     ),
                   ]),
               pw.SizedBox(height: 25),
+              Get.find<CartController>().customerAddressForPrint != ''
+                  ? pw.Center(
+                      child: pw.Text(
+                      Get.find<CartController>().customerAddressForPrint,
+                    ))
+                  : pw.SizedBox(),
+              pw.SizedBox(height: 12),
               pw.SvgImage(svg: svg),
               pw.SizedBox(height: 25),
               pw.Center(

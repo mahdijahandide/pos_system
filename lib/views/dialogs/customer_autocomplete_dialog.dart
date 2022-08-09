@@ -1,5 +1,9 @@
+// ignore_for_file: unnecessary_null_comparison
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:pos_system/services/controller/address_controller.dart';
+import 'package:pos_system/services/controller/cart_controller.dart';
 import 'package:pos_system/services/controller/customer_controller.dart';
 import 'package:pos_system/services/controller/product_controller.dart';
 import 'package:pos_system/services/model/string_with_string.dart';
@@ -54,13 +58,34 @@ class CustomerAutoCompleteDialog {
       contentPadding: const EdgeInsets.all(15),
       confirm: InkWell(
         onTap: () {
-          Get.find<CustomerController>().selectedCustomer =
-              Get.find<CustomerController>()
+          if (Get.find<CustomerController>()
                   .customerList
                   .where((element) => element.name == customerController.text)
-                  .first;
-          Get.find<CustomerController>().update();
-          Get.back();
+                  .first !=
+              null) {
+            Get.back();
+            Get.find<CustomerController>().selectedCustomer =
+                Get.find<CustomerController>()
+                    .customerList
+                    .where((element) => element.name == customerController.text)
+                    .first;
+            Get.find<CustomerController>().update();
+            Get.find<AddressController>().getCustomerAddressRequest(
+                customerId: Get.find<CustomerController>()
+                    .selectedCustomer
+                    .id
+                    .toString(),
+                hasLoading: true);
+
+            Get.find<CartController>().deliveryAmount = 0.0;
+            Get.find<CartController>().selectedCountryName.value = '';
+            Get.find<CartController>().selectedCountryId = '';
+            Get.find<CartController>().selectedProvinceName.value = '';
+            Get.find<CartController>().selectedProvinceId = '';
+            Get.find<CartController>().selectedAreaName.value = '';
+            Get.find<CartController>().selectedAreaId = '';
+            Get.find<CartController>().update();
+          }
         },
         child: Container(
           width: 90,

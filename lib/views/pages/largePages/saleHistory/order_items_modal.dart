@@ -5,8 +5,6 @@ import 'package:pos_system/views/pages/largePages/saleHistory/printing_history_v
 import 'package:printing/printing.dart';
 
 import '../../../components/texts/customText.dart';
-import 'package:pdf/widgets.dart' as pw;
-import 'package:pdf/pdf.dart';
 
 class OrderItemsModal {
   Widget orderItems() {
@@ -21,12 +19,6 @@ class OrderItemsModal {
             children: [
               IconButton(
                   onPressed: () async {
-                    // await for (var page in Printing.raster(await PrintingHistoryView().generatePdf().save(),
-                    //     pages: [0, 1], dpi: 72)) {
-                    //   final image = page.toImage(); // ...or page.toPng()
-                    //   print(image);
-                    // }
-                    // Get.toNamed('/print');
                     await Printing.layoutPdf(
                       onLayout: (_) => PrintingHistoryView().generatePdf(),
                     );

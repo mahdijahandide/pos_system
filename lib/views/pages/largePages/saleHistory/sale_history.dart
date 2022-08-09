@@ -154,6 +154,8 @@ class SaleHistory extends GetView<OrderController> {
                                 InkWell(
                                     onTap: () {
                                       Get.find<CartController>()
+                                          .customerAddressForPrint = '';
+                                      Get.find<CartController>()
                                               .printedFactorId
                                               .value =
                                           currentItem.orderId.toString();

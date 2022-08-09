@@ -5,6 +5,7 @@ import 'package:pos_system/services/controller/cart_controller.dart';
 import 'package:pos_system/services/controller/customer_controller.dart';
 import 'package:pos_system/views/components/snackbar/snackbar.dart';
 import 'package:pos_system/views/components/texts/customText.dart';
+import 'package:pos_system/views/dialogs/customer_address_dialog.dart';
 import 'package:pos_system/views/dialogs/discount_dialog.dart';
 import 'package:pos_system/views/dialogs/edit_qty_dialog.dart';
 import 'package:pos_system/views/pages/largePages/dashboard/widget/iconTextBox.dart';
@@ -515,8 +516,15 @@ class DashboardSidebar {
                           if (Get.find<CartController>()
                               .countryList
                               .isNotEmpty) {
-                            AreaProvinceDialog.showCustomDialog(
-                                title: 'Province & Areas');
+                            if (Get.find<CustomerController>()
+                                    .selectedCustomer !=
+                                null) {
+                              CustomerAddressDialog.showCustomDialog(
+                                  title: 'Province & Areas');
+                            } else {
+                              AreaProvinceDialog.showCustomDialog(
+                                  title: 'Province & Areas');
+                            }
                           } else {
                             Get.find<CartController>().getAreas();
                           }

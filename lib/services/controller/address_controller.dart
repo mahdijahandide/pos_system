@@ -28,7 +28,16 @@ class AddressController extends GetxController {
   TextEditingController houseApartmanController = TextEditingController();
   TextEditingController floorController = TextEditingController();
 
-  Future<void> getCustomerAddressRequest({required String customerId}) async {
+  RxString selectedCustomerAddressTitle = ''.obs;
+  String selectedCustomerAddressId = '';
+
+  CustomerAddressModel? selectedAddress;
+
+  Future<void> getCustomerAddressRequest(
+      {required String customerId, dynamic hasLoading}) async {
+    if (hasLoading == true) {
+      LoadingDialog.showCustomDialog(msg: 'loading'.tr);
+    }
     var url = getCustomerAddress(customerId);
     final http.Response response = await http.get(
       Uri.parse(url),
@@ -39,6 +48,14 @@ class AddressController extends GetxController {
     );
     if (response.statusCode == 200) {
       var jsonObject = convert.jsonDecode(response.body);
+      if (jsonObject['data'] == null) {
+        selectedCustomerAddressTitle.value = '';
+        selectedCustomerAddressId = '';
+        selectedAddress = null;
+        if (hasLoading == true) {
+          Get.back(closeOverlays: true);
+        }
+      }
       Get.log(jsonObject.toString());
       Get.find<CustomerController>()
           .customerList
@@ -46,6 +63,13 @@ class AddressController extends GetxController {
           .first
           .hasAddress
           .value = true;
+
+      Get.find<CustomerController>()
+          .customerList
+          .where((element) => element.id.toString() == customerId)
+          .first
+          .addressList
+          .clear();
 
       jsonObject['data'].forEach((element) {
         Get.find<CustomerController>()
@@ -55,16 +79,18 @@ class AddressController extends GetxController {
             .addressList
             .value
             .add(CustomerAddressModel(data: element));
-        print(Get.find<CustomerController>()
-            .customerList
-            .where((element) => element.id.toString() == customerId)
-            .first
-            .name);
+
         update();
       });
 
       update();
       Get.find<CustomerController>().update();
+      if (hasLoading == true) {
+        selectedCustomerAddressTitle.value = '';
+        selectedCustomerAddressId = '';
+        selectedAddress = null;
+        Get.back(closeOverlays: true);
+      }
     } else {
       RemoteStatusHandler().errorHandler(
           code: response.statusCode, error: convert.jsonDecode(response.body));
