@@ -22,7 +22,7 @@ class CustomerAddressDialog {
       title: title,
       barrierDismissible: false,
       content: GetBuilder(builder: (CartController controller) {
-        List<CustomerAddressModel> addresses =
+        Get.find<AddressController>().addresses.value =
             Get.find<CustomerController>().selectedCustomer.addressList;
         return Container(
           width: Get.width / 2,
@@ -43,7 +43,7 @@ class CustomerAddressDialog {
                     .value
                     .toString()),
                 onChanged: (val) {
-                  Get.find<AddressController>().selectedAddress = addresses
+                  Get.find<AddressController>().selectedAddress = Get.find<AddressController>().addresses.value
                       .where(
                           (element) => element.id.toString() == val.toString())
                       .first;
@@ -121,7 +121,7 @@ class CustomerAddressDialog {
 
                   controller.update();
                 },
-                items: addresses.map((CustomerAddressModel value) {
+                items: Get.find<AddressController>().addresses.value.map((CustomerAddressModel value) {
                   return DropdownMenuItem<String>(
                     value: value.id.toString(),
                     child: Column(
@@ -336,6 +336,7 @@ class CustomerAddressDialog {
             Get.find<CartController>().selectedProvinceId = '';
             Get.find<CartController>().selectedAreaName.value = '';
             Get.find<CartController>().selectedAreaId = '';
+            Get.find<CartController>().hasDelivery.value=false;
             Get.find<CartController>().update();
             Get.back();
           },

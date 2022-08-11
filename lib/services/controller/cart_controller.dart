@@ -51,6 +51,7 @@ class CartController extends GetxController {
   RxBool hasModalVk = false.obs;
 
   RxBool a4selected = false.obs;
+  RxBool hasDelivery = false.obs;
 
   RxString printedFactorId = ''.obs;
 
@@ -623,7 +624,6 @@ class CartController extends GetxController {
   }
 
   Future<void> checkoutCart() async {
-    CustomerAddressModel address;
     LoadingDialog.showCustomDialog(msg: 'Please wait ...');
     print(jsonEncode(<String, dynamic>{
       'temp_uniqueid': uniqueId,
@@ -748,13 +748,18 @@ class CartController extends GetxController {
       deliveryAmountForPrint = deliveryAmount;
       discountAmountForPrint = discountAmount;
 
+
       if (Get.find<AddressController>().selectedAddress != null) {
         CustomerAddressModel? value =
             Get.find<AddressController>().selectedAddress;
         customerAddressForPrint =
             '${value!.countryName} ${value.stateName} ${value.areaName} ave:${value.avenue} st:${value.street} house:${value.house} floor:${value.floor} block:${value.block}';
       } else {
-        customerAddressForPrint = '';
+        if(hasDelivery.isTrue){
+          customerAddressForPrint='${selectedCountryName.value} ${selectedProvinceName.value} ${selectedAreaName.value}';
+        }else {
+          customerAddressForPrint = '';
+        }
       }
 
       addToCartList.value.clear();
@@ -955,6 +960,7 @@ class CartController extends GetxController {
       Get.back(closeOverlays: true);
 
       totalAmount = double.parse(jsonObject['data']['total'].toString());
+      hasDelivery.value=true;
       saveCartForSecondMonitor();
       update();
     } else {
@@ -1002,6 +1008,7 @@ class CartController extends GetxController {
     Get.find<OrderController>().orderRefundTotalAmount = 0.0;
     Get.find<OrderController>().orderRefundDeliveryAmount = 0.0;
     Get.find<OrderController>().orderRefundSellerDiscount = 0.0;
+    Get.find<CartController>().hasDelivery.value=false;
     update();
   }
 
@@ -1072,7 +1079,15 @@ class CartController extends GetxController {
                   child: pw.Text(
                 Get.find<AuthController>().webSite,
               )),
-              pw.SizedBox(height: 10),
+              pw.SizedBox(height: 12),
+              Get.find<CartController>().customerAddressForPrint != ''
+                  ? pw.Center(
+                  child: pw.Text(
+                    'Customer Address: ' +
+                        Get.find<CartController>().customerAddressForPrint,
+                  ))
+                  : pw.SizedBox(),
+              pw.SizedBox(height: 25),
               pw.Row(
                   mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
                   children: [
@@ -1263,14 +1278,7 @@ class CartController extends GetxController {
                       'Balance: ${(totalPaidForPrint - (totalAmountForPrint - discountAmountForPrint + deliveryAmountForPrint)).toStringAsFixed(3)}',
                     ),
                   ]),
-              pw.SizedBox(height: 25),
-              Get.find<CartController>().customerAddressForPrint != ''
-                  ? pw.Center(
-                      child: pw.Text(
-                      'Address: ' +
-                          Get.find<CartController>().customerAddressForPrint,
-                    ))
-                  : pw.SizedBox(),
+
               pw.SizedBox(height: 12),
               pw.SvgImage(svg: svg),
               pw.SizedBox(height: 25),

@@ -31,6 +31,7 @@ class CustomerAutoCompleteDialog {
     final FocusNode focusNode = FocusNode();
     Get.defaultDialog(
       title: title,
+      barrierDismissible: false,
       content: GetBuilder(builder: (ProductController controller) {
         return Column(
           children: [
@@ -96,7 +97,24 @@ class CustomerAutoCompleteDialog {
         ),
       ),
       cancel: InkWell(
-        onTap: () => Get.back(),
+        onTap: () {
+          Get.back();
+
+          Get.find<CustomerController>().selectedCustomer =null;
+
+
+
+
+          Get.find<CartController>().deliveryAmount = 0.0;
+          Get.find<CartController>().selectedCountryName.value = '';
+          Get.find<CartController>().selectedCountryId = '';
+          Get.find<CartController>().selectedProvinceName.value = '';
+          Get.find<CartController>().selectedProvinceId = '';
+          Get.find<CartController>().selectedAreaName.value = '';
+          Get.find<CartController>().selectedAreaId = '';
+          Get.find<CartController>().update();
+          Get.find<CustomerController>().update();
+        },
         child: Container(
           width: 90,
           height: 50,

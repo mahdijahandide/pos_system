@@ -33,8 +33,10 @@ class AddressController extends GetxController {
 
   CustomerAddressModel? selectedAddress;
 
+  RxList<CustomerAddressModel> addresses = RxList([]);
+
   Future<void> getCustomerAddressRequest(
-      {required String customerId, dynamic hasLoading}) async {
+      {required String customerId, dynamic hasLoading,dynamic closeOverLays}) async {
     if (hasLoading == true) {
       LoadingDialog.showCustomDialog(msg: 'loading'.tr);
     }
@@ -53,7 +55,8 @@ class AddressController extends GetxController {
         selectedCustomerAddressId = '';
         selectedAddress = null;
         if (hasLoading == true) {
-          Get.back(closeOverlays: true);
+          closeOverLays==false?Get.back():
+          Get.back(closeOverlays: true,);
         }
       }
       Get.log(jsonObject.toString());
@@ -68,8 +71,9 @@ class AddressController extends GetxController {
           .customerList
           .where((element) => element.id.toString() == customerId)
           .first
-          .addressList
+          .addressList.value
           .clear();
+
 
       jsonObject['data'].forEach((element) {
         Get.find<CustomerController>()
@@ -80,17 +84,32 @@ class AddressController extends GetxController {
             .value
             .add(CustomerAddressModel(data: element));
 
+        Get
+            .find<AddressController>()
+            .addresses
+            .value = Get
+            .find<CustomerController>()
+            .selectedCustomer
+            .addressList;
+
         update();
+        Get.find<CartController>().update();
+
       });
 
       update();
       Get.find<CustomerController>().update();
+      Get.find<CartController>().update();
       if (hasLoading == true) {
         selectedCustomerAddressTitle.value = '';
         selectedCustomerAddressId = '';
         selectedAddress = null;
-        Get.back(closeOverlays: true);
+        closeOverLays==false?Get.back():
+        Get.back(closeOverlays: true,);
       }
+      Get.find<CartController>().update();
+      Get.find<AddressController>().update();
+      update();
     } else {
       RemoteStatusHandler().errorHandler(
           code: response.statusCode, error: convert.jsonDecode(response.body));
