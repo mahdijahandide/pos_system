@@ -31,9 +31,8 @@ class CustomerAddressDialog {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               CustomText().createText(
-                  title: 'Customer Addresses',
-                  size: 18,
-                  fontWeight: FontWeight.bold),
+                title: 'Customer Addresses',
+              ),
               //customerAddresses
               DropdownButton<String>(
                 isExpanded: true,
@@ -43,10 +42,13 @@ class CustomerAddressDialog {
                     .value
                     .toString()),
                 onChanged: (val) {
-                  Get.find<AddressController>().selectedAddress = Get.find<AddressController>().addresses.value
-                      .where(
-                          (element) => element.id.toString() == val.toString())
-                      .first;
+                  Get.find<AddressController>().selectedAddress =
+                      Get.find<AddressController>()
+                          .addresses
+                          .value
+                          .where((element) =>
+                              element.id.toString() == val.toString())
+                          .first;
 
                   Get.find<AddressController>()
                           .selectedCustomerAddressTitle
@@ -121,7 +123,10 @@ class CustomerAddressDialog {
 
                   controller.update();
                 },
-                items: Get.find<AddressController>().addresses.value.map((CustomerAddressModel value) {
+                items: Get.find<AddressController>()
+                    .addresses
+                    .value
+                    .map((CustomerAddressModel value) {
                   return DropdownMenuItem<String>(
                     value: value.id.toString(),
                     child: Column(
@@ -141,9 +146,8 @@ class CustomerAddressDialog {
               ),
 
               CustomText().createText(
-                  title: 'Custom Address',
-                  size: 18,
-                  fontWeight: FontWeight.bold),
+                title: 'Custom Address',
+              ),
               //country
               DropdownButton<String>(
                 isExpanded: true,
@@ -336,7 +340,7 @@ class CustomerAddressDialog {
             Get.find<CartController>().selectedProvinceId = '';
             Get.find<CartController>().selectedAreaName.value = '';
             Get.find<CartController>().selectedAreaId = '';
-            Get.find<CartController>().hasDelivery.value=false;
+            Get.find<CartController>().hasDelivery.value = false;
             Get.find<CartController>().update();
             Get.back();
           },

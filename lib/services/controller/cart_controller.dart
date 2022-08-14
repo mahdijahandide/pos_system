@@ -574,7 +574,6 @@ class CartController extends GetxController {
       jsonObject['data'].forEach((element) {
         countryList.add(ProvinceModel(data: element));
       });
-      Get.back(closeOverlays: true);
 
       if (doInBackground != true) {
         if (Get.find<CustomerController>().selectedCustomer != null) {
@@ -582,6 +581,9 @@ class CartController extends GetxController {
         } else {
           AreaProvinceDialog.showCustomDialog(title: 'Province & Areas');
         }
+        Get.back(closeOverlays: true);
+      } else {
+        Get.back();
       }
       Get.find<CartController>().update();
     } else {
@@ -748,17 +750,21 @@ class CartController extends GetxController {
       deliveryAmountForPrint = deliveryAmount;
       discountAmountForPrint = discountAmount;
 
-
       if (Get.find<AddressController>().selectedAddress != null) {
         CustomerAddressModel? value =
             Get.find<AddressController>().selectedAddress;
         customerAddressForPrint =
             '${value!.countryName} ${value.stateName} ${value.areaName} ave:${value.avenue} st:${value.street} house:${value.house} floor:${value.floor} block:${value.block}';
       } else {
-        if(hasDelivery.isTrue){
-          customerAddressForPrint='${selectedCountryName.value} ${selectedProvinceName.value} ${selectedAreaName.value}';
-        }else {
-          customerAddressForPrint = '';
+        if (hasDelivery.isTrue) {
+          customerAddressForPrint =
+              '${selectedCountryName.value} ${selectedProvinceName.value} ${selectedAreaName.value}';
+        } else {
+          if (Get.find<CustomerController>().selectedCustomer != null &&
+              customerAddressForPrint != '') {
+          } else {
+            customerAddressForPrint = '';
+          }
         }
       }
 
@@ -960,7 +966,7 @@ class CartController extends GetxController {
       Get.back(closeOverlays: true);
 
       totalAmount = double.parse(jsonObject['data']['total'].toString());
-      hasDelivery.value=true;
+      hasDelivery.value = true;
       saveCartForSecondMonitor();
       update();
     } else {
@@ -1008,7 +1014,7 @@ class CartController extends GetxController {
     Get.find<OrderController>().orderRefundTotalAmount = 0.0;
     Get.find<OrderController>().orderRefundDeliveryAmount = 0.0;
     Get.find<OrderController>().orderRefundSellerDiscount = 0.0;
-    Get.find<CartController>().hasDelivery.value=false;
+    Get.find<CartController>().hasDelivery.value = false;
     update();
   }
 
@@ -1082,10 +1088,10 @@ class CartController extends GetxController {
               pw.SizedBox(height: 12),
               Get.find<CartController>().customerAddressForPrint != ''
                   ? pw.Center(
-                  child: pw.Text(
-                    'Customer Address: ' +
-                        Get.find<CartController>().customerAddressForPrint,
-                  ))
+                      child: pw.Text(
+                      'Customer Address: ' +
+                          Get.find<CartController>().customerAddressForPrint,
+                    ))
                   : pw.SizedBox(),
               pw.SizedBox(height: 25),
               pw.Row(
@@ -1278,7 +1284,6 @@ class CartController extends GetxController {
                       'Balance: ${(totalPaidForPrint - (totalAmountForPrint - discountAmountForPrint + deliveryAmountForPrint)).toStringAsFixed(3)}',
                     ),
                   ]),
-
               pw.SizedBox(height: 12),
               pw.SvgImage(svg: svg),
               pw.SizedBox(height: 25),

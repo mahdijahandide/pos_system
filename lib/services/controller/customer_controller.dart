@@ -165,8 +165,9 @@ class CustomerController extends GetxController {
       addCustomerNumberController.text = '';
 
       if (createCustomerAddress == true) {
-        Get.find<AddressController>()
-            .addAddressRequest(customerId: jsonObject['data']['id'].toString());
+        Get.find<AddressController>().addAddressRequest(
+            customerId: jsonObject['data']['id'].toString(),
+            shouldSelectAddress: shouldSelect);
       }
 
       update();

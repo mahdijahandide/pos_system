@@ -36,7 +36,9 @@ class AddressController extends GetxController {
   RxList<CustomerAddressModel> addresses = RxList([]);
 
   Future<void> getCustomerAddressRequest(
-      {required String customerId, dynamic hasLoading,dynamic closeOverLays}) async {
+      {required String customerId,
+      dynamic hasLoading,
+      dynamic closeOverLays}) async {
     if (hasLoading == true) {
       LoadingDialog.showCustomDialog(msg: 'loading'.tr);
     }
@@ -55,8 +57,11 @@ class AddressController extends GetxController {
         selectedCustomerAddressId = '';
         selectedAddress = null;
         if (hasLoading == true) {
-          closeOverLays==false?Get.back():
-          Get.back(closeOverlays: true,);
+          closeOverLays == false
+              ? Get.back()
+              : Get.back(
+                  closeOverlays: true,
+                );
         }
       }
       Get.log(jsonObject.toString());
@@ -71,9 +76,9 @@ class AddressController extends GetxController {
           .customerList
           .where((element) => element.id.toString() == customerId)
           .first
-          .addressList.value
+          .addressList
+          .value
           .clear();
-
 
       jsonObject['data'].forEach((element) {
         Get.find<CustomerController>()
@@ -84,17 +89,11 @@ class AddressController extends GetxController {
             .value
             .add(CustomerAddressModel(data: element));
 
-        Get
-            .find<AddressController>()
-            .addresses
-            .value = Get
-            .find<CustomerController>()
-            .selectedCustomer
-            .addressList;
+        Get.find<AddressController>().addresses.value =
+            Get.find<CustomerController>().selectedCustomer.addressList;
 
         update();
         Get.find<CartController>().update();
-
       });
 
       update();
@@ -104,8 +103,11 @@ class AddressController extends GetxController {
         selectedCustomerAddressTitle.value = '';
         selectedCustomerAddressId = '';
         selectedAddress = null;
-        closeOverLays==false?Get.back():
-        Get.back(closeOverlays: true,);
+        closeOverLays == false
+            ? Get.back()
+            : Get.back(
+                closeOverlays: true,
+              );
       }
       Get.find<CartController>().update();
       Get.find<AddressController>().update();
@@ -117,7 +119,8 @@ class AddressController extends GetxController {
     }
   }
 
-  Future<void> addAddressRequest({required String customerId}) async {
+  Future<void> addAddressRequest(
+      {required String customerId, dynamic shouldSelectAddress}) async {
     LoadingDialog.showCustomDialog(msg: 'loading'.tr);
     var url = createNewAddress(customerId);
     final http.Response response = await http.post(Uri.parse(url),
@@ -140,6 +143,11 @@ class AddressController extends GetxController {
       var jsonObject = convert.jsonDecode(response.body);
       Get.log(jsonObject.toString());
       Get.back();
+
+      if (shouldSelectAddress == true) {
+        Get.find<CartController>().customerAddressForPrint =
+            '${Get.find<CartController>().selectedNewCountryName.value} ${Get.find<CartController>().selectedNewProvinceName.value} ${Get.find<CartController>().selectedNewAreaName.value} ave:${avenueController.text} st:${streetController.text} house:${houseApartmanController.text} floor:${floorController.text} block:${blockController.text}';
+      }
 
       titleController.text = '';
       blockController.text = '';

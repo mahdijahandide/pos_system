@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:pos_system/services/controller/address_controller.dart';
 import 'package:pos_system/services/controller/cart_controller.dart';
 import 'package:pos_system/services/controller/customer_controller.dart';
+import 'package:pos_system/views/dialogs/delete_dialog.dart';
 import 'package:pos_system/views/pages/largePages/customer/add_customer_modal.dart';
 import 'package:pos_system/views/pages/largePages/modals/update_user_address_modal.dart';
 import 'package:virtual_keyboard_2/virtual_keyboard_2.dart';
@@ -223,14 +224,15 @@ class Customer extends GetView<CustomerController> {
                                                                     PopupMenuItem(
                                                                       value:
                                                                           'delete',
-                                                                      onTap:
-                                                                          () {
-                                                                        controller.deleteCustomerAddressRequest(
-                                                                            customerId:
-                                                                                currentItem.id.toString(),
-                                                                            addressId: currentAddress.id.toString());
-                                                                      },
                                                                       child: ListTile(
+                                                                          onTap: () {
+                                                                            Get.back();
+                                                                            DeleteDialog.showCustomDialog(
+                                                                                title: 'Warning',
+                                                                                msg: 'Deleting Customer Address?',
+                                                                                addressId: currentAddress.id.toString(),
+                                                                                customerId: currentItem.id.toString());
+                                                                          },
                                                                           leading: const Icon(
                                                                             Icons.delete,
                                                                             color:
