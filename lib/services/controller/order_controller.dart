@@ -141,6 +141,17 @@ class OrderController extends GetxController {
         Get.find<CartController>().discountAmountForPrint = discount ?? 0.0;
         Get.find<CartController>().deliveryAmountForPrint = delivery ?? 0.0;
 
+        String country = details['countryName']['en'].toString() != ''
+            ? details['countryName']['en'].toString()
+            : '';
+
+        String province = details['stateName']['en'].toString() != ''
+            ? details['stateName']['en'].toString()
+            : '';
+        String area = details['areaName']['en'].toString() != ''
+            ? details['areaName']['en'].toString()
+            : '';
+
         String ave = details['avenue'].toString() != ''
             ? 'ave:${details['avenue'].toString()}'
             : '';
@@ -160,16 +171,19 @@ class OrderController extends GetxController {
             : '';
 
         String address = '';
-        if (ave != '' ||
+        if (country != '' ||
+            province != '' ||
+            area != '' ||
+            ave != '' ||
             st != '' ||
             house != '' ||
             floor != '' ||
             block != '') {
-          address = 'Address: ';
+          address = 'Customer Address: ';
         }
 
         Get.find<CartController>().customerAddressForPrint =
-            '$address $ave $st $house $floor $block';
+            '$address $country $province $area $ave $st $house $floor $block';
         Get.back();
         selectedItem = current;
         Get.bottomSheet(

@@ -49,6 +49,13 @@ class PrintingHistoryView {
                 pw.Center(child: pw.Text('Mobile: ' + coData['mobile'])),
               ]),
               pw.Center(child: pw.Text(Get.find<AuthController>().webSite)),
+              pw.SizedBox(height: 12),
+              Get.find<CartController>().customerAddressForPrint != ''
+                  ? pw.Center(
+                      child: pw.Text(
+                      Get.find<CartController>().customerAddressForPrint,
+                    ))
+                  : pw.SizedBox(),
               pw.SizedBox(height: 10),
               pw.Row(
                   mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
@@ -228,13 +235,6 @@ class PrintingHistoryView {
                       'Balance: ${(Get.find<CartController>().totalPaidForPrint - Get.find<CartController>().totalAmountForPrint).toStringAsFixed(3)}',
                     ),
                   ]),
-              pw.SizedBox(height: 25),
-              Get.find<CartController>().customerAddressForPrint != ''
-                  ? pw.Center(
-                      child: pw.Text(
-                      Get.find<CartController>().customerAddressForPrint,
-                    ))
-                  : pw.SizedBox(),
               pw.SizedBox(height: 12),
               pw.SvgImage(svg: svg),
               pw.SizedBox(height: 25),

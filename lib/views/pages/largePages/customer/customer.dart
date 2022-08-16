@@ -24,6 +24,7 @@ class Customer extends GetView<CustomerController> {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios),
           onPressed: () {
+            Get.close(1);
             Get.offNamed('/dashboard', preventDuplicates: false);
           },
         ),
@@ -184,11 +185,16 @@ class Customer extends GetView<CustomerController> {
                                                           .createText(
                                                               title:
                                                                   currentAddress
-                                                                      .title),
+                                                                      .title,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold),
                                                       subtitle: CustomText()
                                                           .createText(
                                                               title:
-                                                                  '${currentAddress.countryName}  ${currentAddress.stateName}  ${currentAddress.areaName} avenue:${currentAddress.avenue} street:${currentAddress.street} house:${currentAddress.house} floor:${currentAddress.floor} block:${currentAddress.block}'),
+                                                                  '${currentAddress.countryName}  ${currentAddress.stateName}  ${currentAddress.areaName} avenue:${currentAddress.avenue} street:${currentAddress.street} house:${currentAddress.house} floor:${currentAddress.floor} block:${currentAddress.block}',
+                                                              color:
+                                                                  Colors.black),
                                                       trailing: PopupMenuButton(
                                                           itemBuilder:
                                                               (BuildContext

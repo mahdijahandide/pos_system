@@ -19,6 +19,7 @@ class ProductDetails extends StatelessWidget {
         centerTitle: true,
         leading: IconButton(
             onPressed: () {
+              Get.close(1);
               Get.toNamed(Get.parameters['popRoute'].toString());
             },
             icon: const Icon(Icons.arrow_back_ios)),

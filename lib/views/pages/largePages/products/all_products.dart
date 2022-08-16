@@ -16,6 +16,7 @@ class AllProduct extends StatelessWidget {
         appBar: AppBar(
           leading: IconButton(
               onPressed: () {
+                Get.close(1);
                 Get.offAndToNamed('/dashboard');
                 Get.find<DashboardController>().allProductViewDetails.value =
                     false;

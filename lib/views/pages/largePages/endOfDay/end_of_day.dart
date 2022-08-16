@@ -25,6 +25,7 @@ class EndOfDay extends GetView<ShiftController> {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios),
           onPressed: () {
+            Get.close(1);
             Get.offNamed('/dashboard', preventDuplicates: false);
           },
         ),

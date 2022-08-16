@@ -11,6 +11,7 @@ import 'package:pos_system/views/components/texts/customText.dart';
 import 'package:virtual_keyboard_2/virtual_keyboard_2.dart';
 
 import '../../helper/autocomplete_helper.dart';
+import '../../services/model/customer_address_model.dart';
 
 class CustomerAutoCompleteDialog {
   static final CustomerAutoCompleteDialog _instance =
@@ -100,10 +101,7 @@ class CustomerAutoCompleteDialog {
         onTap: () {
           Get.back();
 
-          Get.find<CustomerController>().selectedCustomer =null;
-
-
-
+          Get.find<CustomerController>().selectedCustomer = null;
 
           Get.find<CartController>().deliveryAmount = 0.0;
           Get.find<CartController>().selectedCountryName.value = '';

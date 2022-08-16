@@ -35,7 +35,7 @@ class DashboardDrawer {
             leading: const Icon(Icons.history),
             title: CustomText().createText(title: 'View Sales History'),
             onTap: () {
-              //Get.find<OrderController>().getOrders();
+              Get.close(1);
               if (Get.find<CartController>().isRefund.isFalse) {
                 Get.toNamed('/saleHistory');
               } else {
@@ -52,7 +52,7 @@ class DashboardDrawer {
             leading: const Icon(Icons.group),
             title: CustomText().createText(title: 'View Customers'),
             onTap: () {
-              // Get.find<CustomerController>().getCustomers(hasOpenPage: true);
+              Get.close(1);
               if (Get.find<CustomerController>().customerList.isNotEmpty) {
                 Get.toNamed('/customers');
               } else {
@@ -64,6 +64,7 @@ class DashboardDrawer {
             leading: const Icon(Icons.money),
             title: CustomText().createText(title: 'Cash In / Out'),
             onTap: () {
+              Get.close(1);
               Get.toNamed('/cashInOut');
             },
           ),
@@ -71,6 +72,7 @@ class DashboardDrawer {
             leading: const Icon(Icons.run_circle_outlined),
             title: CustomText().createText(title: 'Start/End Shift'),
             onTap: () {
+              Get.close(1);
               Get.toNamed('/endOfDay');
             },
           ),
@@ -78,6 +80,7 @@ class DashboardDrawer {
             leading: const Icon(Icons.workspaces_filled),
             title: CustomText().createText(title: 'View All Products'),
             onTap: () {
+              Get.close(1);
               if (Get.find<CartController>().isRefund.isFalse) {
                 Get.find<DashboardController>().showProductDetails.value =
                     false;
@@ -99,6 +102,7 @@ class DashboardDrawer {
             leading: const Icon(Icons.person),
             title: CustomText().createText(title: 'User Info'),
             onTap: () {
+              Get.close(1);
               Get.toNamed('/profile');
             },
           ),
@@ -126,6 +130,7 @@ class DashboardDrawer {
               IconButton(
                 icon: const Icon(Icons.monitor),
                 onPressed: () {
+                  Get.close(1);
                   html.WindowBase _popup = html.window.open(
                       '$DOMAIN/#/showFactor',
                       'Pos system',

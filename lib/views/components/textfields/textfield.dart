@@ -45,7 +45,7 @@ class CustomTextField {
           maxLength: maxLength,
           controller: controller,
           maxLines: maxLines ?? 1,
-          textAlign: align ?? TextAlign.end,
+          textAlign: align ?? TextAlign.start,
           decoration: InputDecoration(
               counterText: '',
               border: InputBorder.none,

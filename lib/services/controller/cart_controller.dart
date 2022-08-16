@@ -56,6 +56,7 @@ class CartController extends GetxController {
   RxString printedFactorId = ''.obs;
 
   String customerAddressForPrint = '';
+  String savedCustomerAddressForPrint = '';
   RxString selectedCountryName = ''.obs;
   RxString selectedProvinceName = ''.obs;
   RxString selectedAreaName = ''.obs;
@@ -704,15 +705,11 @@ class CartController extends GetxController {
                   .areaName
                   .toString()
               : '',
-          'block': Get.find<AddressController>().selectedAddress != null
-              ? Get.find<AddressController>().selectedAddress!.block.toString()
-              : '',
-          'street': Get.find<AddressController>().selectedAddress != null
-              ? Get.find<AddressController>().selectedAddress!.street.toString()
-              : '',
-          'house': Get.find<AddressController>().selectedAddress != null
-              ? Get.find<AddressController>().selectedAddress!.house.toString()
-              : '',
+          'block': Get.find<AddressController>().blockController.text,
+          'street': Get.find<AddressController>().streetController.text,
+          'avenue': Get.find<AddressController>().avenueController.text,
+          'floor': Get.find<AddressController>().floorController.text,
+          'house': Get.find<AddressController>().houseApartmanController.text,
           'delivery_status': deliveryAmount > 0 ? '1' : '0',
           if (deliveryAmount > 0) 'area': selectedAreaId.toString(),
           'user_discount': discountAmount.toString(),
@@ -750,24 +747,7 @@ class CartController extends GetxController {
       deliveryAmountForPrint = deliveryAmount;
       discountAmountForPrint = discountAmount;
 
-      if (Get.find<AddressController>().selectedAddress != null) {
-        CustomerAddressModel? value =
-            Get.find<AddressController>().selectedAddress;
-        customerAddressForPrint =
-            '${value!.countryName} ${value.stateName} ${value.areaName} ave:${value.avenue} st:${value.street} house:${value.house} floor:${value.floor} block:${value.block}';
-      } else {
-        if (hasDelivery.isTrue) {
-          customerAddressForPrint =
-              '${selectedCountryName.value} ${selectedProvinceName.value} ${selectedAreaName.value}';
-        } else {
-          if (Get.find<CustomerController>().selectedCustomer != null &&
-              customerAddressForPrint != '') {
-          } else {
-            customerAddressForPrint = '';
-          }
-        }
-      }
-
+      savedCustomerAddressForPrint = customerAddressForPrint;
       addToCartList.value.clear();
       newSale();
 
@@ -943,10 +923,16 @@ class CartController extends GetxController {
       var jsonObject = convert.jsonDecode(response.body);
       var temps = jsonObject['data']['temoOrders'];
       uniqueId = cartId.toString();
+      Get.log(jsonObject.toString());
 
       if (index != null) {
         discountAmount = openCartsUDID[index].discount!.toDouble();
         deliveryAmount = openCartsUDID[index].delivery!.toDouble();
+      } else {
+        deliveryAmount =
+            double.parse(jsonObject['data']['delivery_charges'].toString());
+        discountAmount =
+            double.parse(jsonObject['data']['user_discount'].toString());
       }
 
       addToCartList.value.clear();
@@ -1010,6 +996,7 @@ class CartController extends GetxController {
     Get.find<CustomerController>().customerNumberController.text = '';
     Get.find<CustomerController>().customerController.text = '';
     Get.find<CustomerController>().customerController.text = '';
+    customerAddressForPrint = '';
     addToCartList.value.clear();
     Get.find<OrderController>().orderRefundTotalAmount = 0.0;
     Get.find<OrderController>().orderRefundDeliveryAmount = 0.0;
@@ -1086,11 +1073,12 @@ class CartController extends GetxController {
                 Get.find<AuthController>().webSite,
               )),
               pw.SizedBox(height: 12),
-              Get.find<CartController>().customerAddressForPrint != ''
+              Get.find<CartController>().savedCustomerAddressForPrint != ''
                   ? pw.Center(
                       child: pw.Text(
                       'Customer Address: ' +
-                          Get.find<CartController>().customerAddressForPrint,
+                          Get.find<CartController>()
+                              .savedCustomerAddressForPrint,
                     ))
                   : pw.SizedBox(),
               pw.SizedBox(height: 25),
