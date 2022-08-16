@@ -1002,6 +1002,7 @@ class CartController extends GetxController {
     Get.find<OrderController>().orderRefundDeliveryAmount = 0.0;
     Get.find<OrderController>().orderRefundSellerDiscount = 0.0;
     Get.find<CartController>().hasDelivery.value = false;
+    a4selected.value = false;
     update();
   }
 
