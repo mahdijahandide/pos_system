@@ -708,6 +708,7 @@ class CustomerAddressDialog {
             Get.find<CartController>().selectedProvinceId = '';
             Get.find<CartController>().selectedAreaName.value = '';
             Get.find<CartController>().selectedAreaId = '';
+            Get.find<CartController>().customerAddressForPrint = '';
             Get.find<CartController>().hasDelivery.value = false;
             Get.find<CartController>().update();
             Get.back();
