@@ -577,12 +577,12 @@ class CartController extends GetxController {
       });
 
       if (doInBackground != true) {
+        Get.back(closeOverlays: true);
         if (Get.find<CustomerController>().selectedCustomer != null) {
           CustomerAddressDialog.showCustomDialog(title: 'Province & Areas');
         } else {
           AreaProvinceDialog.showCustomDialog(title: 'Province & Areas');
         }
-        Get.back(closeOverlays: true);
       } else {
         Get.back();
       }

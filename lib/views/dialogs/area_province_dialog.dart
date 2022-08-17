@@ -27,7 +27,7 @@ class AreaProvinceDialog {
     Get.find<AddressController>().floorController.text = '';
     Get.defaultDialog(
       title: title,
-      barrierDismissible: false,
+      barrierDismissible: true,
       content: GetBuilder(builder: (CartController controller) {
         return Container(
           width: Get.width / 2,

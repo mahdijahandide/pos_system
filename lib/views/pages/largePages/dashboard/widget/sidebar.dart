@@ -526,7 +526,8 @@ class DashboardSidebar {
                                   title: 'Province & Areas');
                             }
                           } else {
-                            Get.find<CartController>().getAreas();
+                            Get.find<CartController>()
+                                .getAreas(doInBackground: false);
                           }
                         } else {
                           Snack().createSnack(

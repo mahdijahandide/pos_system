@@ -32,7 +32,7 @@ class CustomerAutoCompleteDialog {
     final FocusNode focusNode = FocusNode();
     Get.defaultDialog(
       title: title,
-      barrierDismissible: false,
+      barrierDismissible: true,
       content: GetBuilder(builder: (ProductController controller) {
         return Column(
           children: [
