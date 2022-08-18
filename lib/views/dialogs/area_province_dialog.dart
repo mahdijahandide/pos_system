@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:pos_system/services/controller/cart_controller.dart';
 import 'package:pos_system/services/model/area_model.dart';
 import 'package:pos_system/services/model/city_model.dart';
+import 'package:pos_system/services/model/customer_address_model.dart';
 import 'package:pos_system/services/model/province_model.dart';
 import 'package:pos_system/views/components/texts/customText.dart';
 import 'package:virtual_keyboard_2/virtual_keyboard_2.dart';
@@ -20,11 +21,26 @@ class AreaProvinceDialog {
   factory AreaProvinceDialog() => _instance;
 
   static void showCustomDialog({required title}) {
-    Get.find<AddressController>().streetController.text = '';
-    Get.find<AddressController>().avenueController.text = '';
-    Get.find<AddressController>().blockController.text = '';
-    Get.find<AddressController>().houseApartmanController.text = '';
-    Get.find<AddressController>().floorController.text = '';
+    if (Get.find<AddressController>().selectedAddress != null &&
+        Get.find<CartController>().hasDelivery.isTrue) {
+      Get.find<AddressController>().streetController.text =
+          Get.find<AddressController>().selectedAddress!.street.toString();
+      Get.find<AddressController>().avenueController.text =
+          Get.find<AddressController>().selectedAddress!.avenue.toString();
+      Get.find<AddressController>().blockController.text =
+          Get.find<AddressController>().selectedAddress!.block.toString();
+      Get.find<AddressController>().houseApartmanController.text =
+          Get.find<AddressController>().selectedAddress!.house.toString();
+      Get.find<AddressController>().floorController.text =
+          Get.find<AddressController>().selectedAddress!.floor.toString();
+    } else {
+      Get.find<AddressController>().selectedAddress = null;
+      Get.find<AddressController>().streetController.text = '';
+      Get.find<AddressController>().avenueController.text = '';
+      Get.find<AddressController>().blockController.text = '';
+      Get.find<AddressController>().houseApartmanController.text = '';
+      Get.find<AddressController>().floorController.text = '';
+    }
     Get.defaultDialog(
       title: title,
       barrierDismissible: true,
@@ -551,6 +567,35 @@ class AreaProvinceDialog {
               Get.find<CartController>().saveCartForSecondMonitor();
 
               Get.find<AddressController>().selectedAddress = null;
+              var data = {
+                "id": 0,
+                "country_id": Get.find<CartController>().selectedCountryId,
+                "state_id": Get.find<CartController>().selectedProvinceId,
+                "area_id": Get.find<CartController>().selectedAreaId,
+                "country_name":
+                    Get.find<CartController>().selectedCountryName.value,
+                "state_name":
+                    Get.find<CartController>().selectedProvinceName.value,
+                "area_name": Get.find<CartController>().selectedAreaName.value,
+                "block": Get.find<AddressController>().blockController.text,
+                "street": Get.find<AddressController>().streetController.text,
+                "avenue": Get.find<AddressController>().avenueController.text,
+                "house":
+                    Get.find<AddressController>().houseApartmanController.text,
+                "floor": Get.find<AddressController>().floorController.text,
+                "title": Get.find<AddressController>().titleController.text,
+                "is_default": 0,
+                "landmark": "",
+                "latitude": "",
+                "longitude": ""
+              };
+              Get.find<AddressController>().selectedAddress =
+                  CustomerAddressModel(data: data);
+
+              Get.log(Get.find<AddressController>()
+                  .selectedAddress!
+                  .avenue
+                  .toString());
 
               Get.find<CartController>().customerAddressForPrint =
                   '${Get.find<CartController>().selectedCountryName} ${Get.find<CartController>().selectedProvinceName} ${Get.find<CartController>().selectedAreaName} ave:${Get.find<AddressController>().avenueController.text} st:${Get.find<AddressController>().streetController.text} house:${Get.find<AddressController>().houseApartmanController.text} floor:${Get.find<AddressController>().floorController.text} block:${Get.find<AddressController>().blockController.text}';

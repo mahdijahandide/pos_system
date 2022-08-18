@@ -22,11 +22,27 @@ class CustomerAddressDialog {
   factory CustomerAddressDialog() => _instance;
 
   static void showCustomDialog({required title}) {
-    Get.find<AddressController>().streetController.text = '';
-    Get.find<AddressController>().avenueController.text = '';
-    Get.find<AddressController>().blockController.text = '';
-    Get.find<AddressController>().houseApartmanController.text = '';
-    Get.find<AddressController>().floorController.text = '';
+    if (Get.find<AddressController>().selectedAddress != null &&
+        Get.find<CartController>().hasDelivery.isTrue) {
+      Get.find<AddressController>().streetController.text =
+          Get.find<AddressController>().selectedAddress!.street.toString();
+      Get.find<AddressController>().avenueController.text =
+          Get.find<AddressController>().selectedAddress!.avenue.toString();
+      Get.find<AddressController>().blockController.text =
+          Get.find<AddressController>().selectedAddress!.block.toString();
+      Get.find<AddressController>().houseApartmanController.text =
+          Get.find<AddressController>().selectedAddress!.house.toString();
+      Get.find<AddressController>().floorController.text =
+          Get.find<AddressController>().selectedAddress!.floor.toString();
+    } else {
+      Get.find<AddressController>().selectedAddress = null;
+      Get.find<AddressController>().streetController.text = '';
+      Get.find<AddressController>().avenueController.text = '';
+      Get.find<AddressController>().blockController.text = '';
+      Get.find<AddressController>().houseApartmanController.text = '';
+      Get.find<AddressController>().floorController.text = '';
+    }
+
     Get.defaultDialog(
       title: title,
       barrierDismissible: true,
