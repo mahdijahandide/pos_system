@@ -27,6 +27,7 @@ import 'package:printing/printing.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:xid/xid.dart';
 import '../../views/dialogs/customer_address_dialog.dart';
+import '../../views/dialogs/discount_dialog.dart';
 import '../../views/pages/largePages/modals/area_modal.dart';
 import '../model/temp_orders_model.dart';
 import 'auth_controller.dart';
@@ -607,7 +608,8 @@ class CartController extends GetxController {
     }
   }
 
-  Future<void> checkAdminPassword({required pass}) async {
+  Future<void> checkAdminPassword(
+      {required pass, dynamic passForDiscount}) async {
     LoadingDialog.showCustomDialog(msg: 'Please wait ...');
     var url = CHECK_ADMIN_PASSWORD_ROUTE;
     final http.Response response = await http.post(Uri.parse(url),
@@ -619,7 +621,13 @@ class CartController extends GetxController {
             convert.jsonEncode(<String, String>{'password': pass.toString()}));
     if (response.statusCode == 200) {
       Get.back(closeOverlays: true);
-      RefundFactorNumDialog.showCustomDialog(title: 'Refund');
+      if (passForDiscount == true) {
+        DiscountDialog.showCustomDialog(
+          title: 'Enter Discount Amount',
+        );
+      } else {
+        RefundFactorNumDialog.showCustomDialog(title: 'Refund');
+      }
     } else {
       Get.back();
       print(response.statusCode);

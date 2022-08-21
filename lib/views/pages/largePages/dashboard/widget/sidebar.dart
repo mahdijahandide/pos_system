@@ -8,6 +8,7 @@ import 'package:pos_system/views/components/texts/customText.dart';
 import 'package:pos_system/views/dialogs/customer_address_dialog.dart';
 import 'package:pos_system/views/dialogs/discount_dialog.dart';
 import 'package:pos_system/views/dialogs/edit_qty_dialog.dart';
+import 'package:pos_system/views/dialogs/password_dialog.dart';
 import 'package:pos_system/views/pages/largePages/dashboard/widget/iconTextBox.dart';
 import 'package:pos_system/views/pages/largePages/modals/area_modal.dart';
 import 'package:pos_system/views/pages/largePages/modals/checkout_modal.dart';
@@ -345,9 +346,8 @@ class DashboardSidebar {
                       title: 'discount'.tr,
                       onTap: () {
                         if (controller.isRefund.isFalse) {
-                          DiscountDialog.showCustomDialog(
-                            title: 'Enter Discount Amount',
-                          );
+                          PasswordDialog.showCustomDialog(
+                              title: 'Password', passForDiscount: true);
                         } else {
                           Snack().createSnack(
                               title: 'Warning',

@@ -14,7 +14,7 @@ class PasswordDialog {
 
   factory PasswordDialog() => _instance;
 
-  static void showCustomDialog({required title}) {
+  static void showCustomDialog({required title, dynamic passForDiscount}) {
     Get.defaultDialog(
       title: title,
       content: GetBuilder(builder: (CartController controller) {
@@ -38,7 +38,8 @@ class PasswordDialog {
                     if (controller.passwordTxtController.text.isNotEmpty) {
                       Get.back();
                       controller.checkAdminPassword(
-                          pass: controller.passwordTxtController.text);
+                          pass: controller.passwordTxtController.text,
+                          passForDiscount: passForDiscount);
                     } else {
                       Snack().createSnack(
                           title: 'Warning',
@@ -70,7 +71,8 @@ class PasswordDialog {
               .isNotEmpty) {
             Get.back();
             Get.find<CartController>().checkAdminPassword(
-                pass: Get.find<CartController>().passwordTxtController.text);
+                pass: Get.find<CartController>().passwordTxtController.text,
+                passForDiscount: passForDiscount);
           } else {
             Snack().createSnack(
                 title: 'Warning',
