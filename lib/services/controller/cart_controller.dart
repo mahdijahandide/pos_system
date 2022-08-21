@@ -21,11 +21,13 @@ import 'package:pos_system/views/components/snackbar/snackbar.dart';
 import 'package:pos_system/views/dialogs/area_province_dialog.dart';
 import 'package:pos_system/views/dialogs/loading_dialogs.dart';
 import 'package:pos_system/views/dialogs/refund_factor_num_dialog.dart';
+import 'package:pos_system/views/pages/largePages/modals/customer_address_modal.dart';
 import 'package:pos_system/views/pages/largePages/modals/success_modal.dart';
 import 'package:printing/printing.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:xid/xid.dart';
 import '../../views/dialogs/customer_address_dialog.dart';
+import '../../views/pages/largePages/modals/area_modal.dart';
 import '../model/temp_orders_model.dart';
 import 'auth_controller.dart';
 import 'customer_controller.dart';
@@ -208,7 +210,7 @@ class CartController extends GetxController {
       Get.back(closeOverlays: true);
       AudioPlayer audioPlayer = AudioPlayer();
       const alarmAudioPath = "assets/sounds/beep.mp3";
-      // audioPlayer.play(alarmAudioPath);
+      audioPlayer.play(alarmAudioPath);
 
       var jsonObject = convert.jsonDecode(response.body);
 
@@ -579,9 +581,19 @@ class CartController extends GetxController {
       if (doInBackground != true) {
         Get.back(closeOverlays: true);
         if (Get.find<CustomerController>().selectedCustomer != null) {
-          CustomerAddressDialog.showCustomDialog(title: 'Province & Areas');
+          // CustomerAddressDialog.showCustomDialog(title: 'Province & Areas');
+          Get.bottomSheet(
+            CustomerAreaModal(title: 'Province & Areas'),
+            isScrollControlled: true,
+            ignoreSafeArea: true,
+          );
         } else {
-          AreaProvinceDialog.showCustomDialog(title: 'Province & Areas');
+          // AreaProvinceDialog.showCustomDialog(title: 'Province & Areas');
+          Get.bottomSheet(
+            AreaModal(title: 'Province & Areas'),
+            isScrollControlled: true,
+            ignoreSafeArea: true,
+          );
         }
       } else {
         Get.back();

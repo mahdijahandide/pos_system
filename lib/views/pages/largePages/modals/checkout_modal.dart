@@ -155,6 +155,14 @@ class CheckoutModal extends GetView<CartController> {
                                               .selectedCustomer !=
                                           null
                                   ? Expanded(
+                                      child: Container(
+                                      padding: const EdgeInsets.all(6.0),
+                                      decoration: BoxDecoration(
+                                          border: Border(
+                                              bottom: BorderSide(
+                                                  width: 1,
+                                                  color: Colors.black
+                                                      .withOpacity(0.4)))),
                                       child: CustomText().createText(
                                           title: Get.find<CustomerController>()
                                                   .selectedCustomer
@@ -163,7 +171,8 @@ class CheckoutModal extends GetView<CartController> {
                                                   .selectedCustomer
                                                   .mobile,
                                           size: 22,
-                                          fontWeight: FontWeight.bold))
+                                          fontWeight: FontWeight.bold),
+                                    ))
                                   : Expanded(
                                       flex: 9,
                                       child: TextFieldSearch(
@@ -242,6 +251,12 @@ class CheckoutModal extends GetView<CartController> {
                                                   hasLoading: false,
                                                   closeOverLays: false);
                                           Get.find<CartController>().update();
+
+                                          Get.find<AddressController>()
+                                              .selectedAddress = null;
+                                          Get.find<AddressController>()
+                                              .selectedCustomerAddressTitle
+                                              .value = '';
                                         },
                                       ),
                                     ),
@@ -260,8 +275,13 @@ class CheckoutModal extends GetView<CartController> {
                                         color: Colors.black,
                                       )),
                               Get.find<CustomerController>().selectedCustomer !=
-                                      null
-                                  ? const SizedBox()
+                                          null &&
+                                      Get.find<CartController>()
+                                          .hasDelivery
+                                          .isTrue
+                                  ? const SizedBox(
+                                      width: 170,
+                                    )
                                   : SizedBox(
                                       width: 120,
                                       height: 60,
@@ -309,14 +329,14 @@ class CheckoutModal extends GetView<CartController> {
                                 null
                             ? const SizedBox()
                             : Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   CustomText().createText(
                                       title: 'Select Address: ', size: 22),
                                   const SizedBox(
-                                    width: 12,
+                                    width: 75,
                                   ),
                                   Expanded(
-                                    flex: 9,
                                     child: DropdownButton<String>(
                                       isExpanded: true,
                                       focusColor: Colors.white,
@@ -327,7 +347,7 @@ class CheckoutModal extends GetView<CartController> {
                                             .toString(),
                                         style: const TextStyle(
                                             color: Colors.black,
-                                            fontWeight: FontWeight.bold),
+                                            fontWeight: FontWeight.normal),
                                       ),
                                       onChanged: (val) {
                                         Get.find<AddressController>()
@@ -456,9 +476,8 @@ class CheckoutModal extends GetView<CartController> {
                                     ),
                                   ),
                                   const SizedBox(
-                                    width: 20,
+                                    width: 170,
                                   ),
-                                  const Expanded(child: SizedBox())
                                 ],
                               );
                   }),

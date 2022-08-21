@@ -9,7 +9,9 @@ import 'package:pos_system/views/dialogs/customer_address_dialog.dart';
 import 'package:pos_system/views/dialogs/discount_dialog.dart';
 import 'package:pos_system/views/dialogs/edit_qty_dialog.dart';
 import 'package:pos_system/views/pages/largePages/dashboard/widget/iconTextBox.dart';
+import 'package:pos_system/views/pages/largePages/modals/area_modal.dart';
 import 'package:pos_system/views/pages/largePages/modals/checkout_modal.dart';
+import 'package:pos_system/views/pages/largePages/modals/customer_address_modal.dart';
 import 'package:pos_system/views/pages/largePages/modals/temp_orders_modal.dart';
 import 'package:printing/printing.dart';
 
@@ -519,11 +521,21 @@ class DashboardSidebar {
                             if (Get.find<CustomerController>()
                                     .selectedCustomer !=
                                 null) {
-                              CustomerAddressDialog.showCustomDialog(
-                                  title: 'Province & Areas');
+                              // CustomerAddressDialog.showCustomDialog(
+                              //     title: 'Province & Areas');
+                              Get.bottomSheet(
+                                CustomerAreaModal(title: 'Province & Areas'),
+                                isScrollControlled: true,
+                                ignoreSafeArea: true,
+                              );
                             } else {
-                              AreaProvinceDialog.showCustomDialog(
-                                  title: 'Province & Areas');
+                              // AreaProvinceDialog.showCustomDialog(
+                              //     title: 'Province & Areas');
+                              Get.bottomSheet(
+                                AreaModal(title: 'Province & Areas'),
+                                isScrollControlled: true,
+                                ignoreSafeArea: true,
+                              );
                             }
                           } else {
                             Get.find<CartController>()

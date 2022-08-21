@@ -104,6 +104,7 @@ class CustomerAutoCompleteDialog {
           Get.back();
 
           Get.find<CustomerController>().selectedCustomer = null;
+          Get.find<AddressController>().selectedAddress = null;
 
           Get.find<CartController>().deliveryAmount = 0.0;
           Get.find<CartController>().selectedCountryName.value = '';
