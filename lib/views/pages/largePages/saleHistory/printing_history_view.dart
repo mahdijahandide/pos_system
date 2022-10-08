@@ -206,7 +206,7 @@ class PrintingHistoryView {
               pw.Row(
                   mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
                   children: [
-                    pw.SizedBox(),
+                    pw.Text('Pay mode: ${Get.find<CartController>().selectedPaymentTypeForPrint.value}'),
                     pw.Text(
                       'Discount: ${Get.find<CartController>().discountAmountForPrint.toStringAsFixed(3)}',
                     ),

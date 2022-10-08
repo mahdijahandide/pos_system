@@ -154,6 +154,7 @@ class SaleHistory extends GetView<OrderController> {
                                     color: Colors.black),
                                 InkWell(
                                     onTap: () {
+                                      Get.find<CartController>().selectedPaymentTypeForPrint.value=currentItem.payment_type.toString();
                                       Get.find<CartController>()
                                           .customerAddressForPrint = '';
                                       Get.find<CartController>()
@@ -211,6 +212,11 @@ class SaleHistory extends GetView<OrderController> {
                                           CustomText().createText(
                                             title:
                                                 currentItem.mobile.toString(),
+                                            size: 18,
+                                          ),
+                                          CustomText().createText(
+                                            title:
+                                            'Payment Type: ${currentItem.payment_type.toString()}',
                                             size: 18,
                                           ),
                                         ],

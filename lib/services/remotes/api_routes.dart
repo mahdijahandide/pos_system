@@ -1,17 +1,29 @@
 //BASE URL
+
+//gulfweb
 // const String DOMAIN = 'http://localhost:51275';
 const String DOMAIN = 'https://possystem.gulfweb.ir';
 const String BASE_URL = 'https://kash5a2.gulfweb.ir/api/posv1/';
 const String BASE_URL_IMAGES = 'https://kash5a2.gulfweb.ir/uploads/logo/';
 const String MD5_PRINT_URL = 'https://kash5a2.gulfweb.ir/en/order-print/';
+
+//mrk
 // const String DOMAIN = 'https://pos.mrk-q8.com';
 // const String BASE_URL = 'https://mrk-q8.com/api/posv1/';
 // const String BASE_URL_IMAGES = 'https://mrk-q8.com/uploads/logo/';
 // const String MD5_PRINT_URL = 'https://kw.mrk-q8.com/en/order-print/';
+
+//kash5astore
 // const String DOMAIN = 'https://pos.kash5astore.com';
 // const String BASE_URL = 'https://kash5astore.com/api/posv1/';
 // const String BASE_URL_IMAGES = 'https://kash5astore.com/uploads/logo/';
 // const String MD5_PRINT_URL = 'https://kw.kash5astore.com/en/order-print/';
+
+//Sanam
+// const String DOMAIN = 'https://pos.sanamstore.net';
+// const String BASE_URL = 'https://sanamstore.net/api/posv1/';
+// const String BASE_URL_IMAGES = 'https://sanamstore.net/uploads/logo/';
+// const String MD5_PRINT_URL = 'https://sanamstore.net/en/order-print/';
 
 //routes
 const String GET_SETTING_DETAILS_ROUTE = BASE_URL + 'getSetting';

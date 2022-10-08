@@ -67,6 +67,7 @@ class CartController extends GetxController {
   RxString selectedNewProvinceName = ''.obs;
   RxString selectedNewAreaName = ''.obs;
   RxString selectedPaymentType = 'PCARD'.obs;
+  RxString selectedPaymentTypeForPrint = ''.obs;
   RxString balanceStatus = ''.obs;
   String selectedCountryId = '';
   String selectedProvinceId = '';
@@ -648,50 +649,7 @@ class CartController extends GetxController {
 
   Future<void> checkoutCart() async {
     LoadingDialog.showCustomDialog(msg: 'Please wait ...');
-    print(jsonEncode(<String, dynamic>{
-      'temp_uniqueid': uniqueId,
-      if (Get.find<CustomerController>()
-          .customerNumberController
-          .text
-          .isNotEmpty)
-        'customer_id': Get.find<CustomerController>()
-            .customerList
-            .where((element) =>
-                element.mobile.toString() ==
-                Get.find<CustomerController>()
-                    .customerNumberController
-                    .text
-                    .toString())
-            .first
-            .id
-            .toString(),
-      'name': Get.find<CustomerController>().customerNameController.text,
-      'mobile': Get.find<CustomerController>().customerNumberController.text,
-      'email': Get.find<CustomerController>().customerEmailController.text,
-      'area': Get.find<AddressController>().selectedAddress != null
-          ? Get.find<AddressController>().selectedAddress!.areaName.toString()
-          : '',
-      'block': Get.find<AddressController>().selectedAddress != null
-          ? Get.find<AddressController>().selectedAddress!.block.toString()
-          : '',
-      'street': Get.find<AddressController>().selectedAddress != null
-          ? Get.find<AddressController>().selectedAddress!.street.toString()
-          : '',
-      'house': Get.find<AddressController>().selectedAddress != null
-          ? Get.find<AddressController>().selectedAddress!.house.toString()
-          : '',
-      'delivery_status': deliveryAmount > 0 ? '1' : '0',
-      if (deliveryAmount > 0) 'area': selectedAreaId.toString(),
-      'user_discount': discountAmount.toString(),
-      'transactions': [
-        {
-          'type': selectedPaymentType.value,
-          'amount': (totalAmount - discountAmount + deliveryAmount)
-              .toString(), //calController.text,
-          'status': 'CAPTURED',
-        }
-      ]
-    }));
+
     var url = CHECKOUT_CART;
     final http.Response response = await http.post(Uri.parse(url),
         headers: <String, String>{
@@ -766,6 +724,7 @@ class CartController extends GetxController {
       totalAmountForPrint = totalAmount;
       deliveryAmountForPrint = deliveryAmount;
       discountAmountForPrint = discountAmount;
+      selectedPaymentTypeForPrint.value = selectedPaymentType.value;
 
       savedCustomerAddressForPrint = customerAddressForPrint;
       addToCartList.value.clear();
@@ -1264,7 +1223,7 @@ class CartController extends GetxController {
               pw.Row(
                   mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
                   children: [
-                    pw.SizedBox(),
+                    pw.Text('Pay mode: ${selectedPaymentTypeForPrint.value}'),
                     pw.Text(
                       'Discount: ${discountAmountForPrint.toStringAsFixed(3)}',
                     ),

@@ -346,8 +346,11 @@ class DashboardSidebar {
                       title: 'discount'.tr,
                       onTap: () {
                         if (controller.isRefund.isFalse) {
-                          PasswordDialog.showCustomDialog(
-                              title: 'Password', passForDiscount: true);
+                          // PasswordDialog.showCustomDialog(
+                          //     title: 'Password', passForDiscount: true);
+                          DiscountDialog.showCustomDialog(
+                            title: 'Enter Discount Amount',
+                          );
                         } else {
                           Snack().createSnack(
                               title: 'Warning',
