@@ -8,6 +8,7 @@ class Login extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
    // Get.find<AuthController>().clearProject();
+  //  print(Uri.base.host);
     return ScreenTypeLayout(
         desktop: DesktopLogin(),
         mobile:  MobileLogin(),
